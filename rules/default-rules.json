@@ -50,51 +50,51 @@
     },
     "oval_needs_pro": {
       "enabled": true, "category": "A", "severity": "auto",
-      "title": "官方弱點資料：{usns} 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-      "detail": "重大與高風險公告 {crit_high} 則；{breakdown}；修補來源：{pockets}",
-      "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新"
+      "title": "{n_packages} 個套件的安全修補，要訂閱 Ubuntu Pro 才拿得到",
+      "detail": "要更新的套件：{packages}。對應 {usns} 則官方安全公告，其中重大或高風險 {crit_high} 則；修補放在 {pockets}，沒有訂閱的主機用 apt 也裝不到{reboot_note}",
+      "action": "訂閱 Ubuntu Pro，在主機上執行 sudo pro attach 註冊，再執行 sudo apt update 與 sudo apt upgrade"
     },
     "oval_pro_not_applied": {
       "enabled": true, "category": "D", "severity": "auto",
-      "title": "已訂閱 Ubuntu Pro，但有 {usns} 則安全公告的修補尚未套用",
-      "detail": "重大與高風險公告 {crit_high} 則；{breakdown}",
-      "action": "排定修補時段套用"
+      "title": "已訂閱 Ubuntu Pro，但有 {n_packages} 個套件的安全修補還沒安裝",
+      "detail": "要更新的套件：{packages}。對應 {usns} 則官方安全公告，其中重大或高風險 {crit_high} 則{reboot_note}",
+      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段"
     },
     "oval_free_not_applied": {
       "enabled": true, "category": "D", "severity": "auto",
-      "title": "官方弱點資料：{usns} 則安全公告有免費修補，但尚未套用",
-      "detail": "重大與高風險公告 {crit_high} 則；{breakdown}。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
-      "action": "排定修補時段套用；長期可導入集中管理工具"
+      "title": "{n_packages} 個套件有免費的安全修補，還沒安裝",
+      "detail": "要更新的套件：{packages}。對應 {usns} 則官方安全公告，其中重大或高風險 {crit_high} 則。這些修補放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro{reboot_note}",
+      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新"
     },
     "pro_client_pending": {
       "enabled": true, "category": "A", "severity": "高",
       "title": "有 {n} 個套件的安全更新，要訂閱 Ubuntu Pro 才拿得到",
       "detail": "esm-infra（Main 套件）{infra} 個、esm-apps（Universe 套件）{apps} 個（來源：主機上的 Ubuntu Pro 用戶端）",
-      "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新"
+      "action": "訂閱 Ubuntu Pro，在主機上執行 sudo pro attach 註冊，再執行 sudo apt update 與 sudo apt upgrade"
     },
     "pro_client_not_applied": {
       "enabled": true, "category": "D", "severity": "高",
-      "title": "已訂閱 Ubuntu Pro，但有 {n} 個套件的安全更新尚未套用",
+      "title": "已訂閱 Ubuntu Pro，但有 {n} 個套件的安全更新還沒安裝",
       "detail": "更新已經可以取得，只是還沒安裝（來源：主機上的 Ubuntu Pro 用戶端）",
-      "action": "排定修補時段套用"
+      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段"
     },
     "pro_client_free_not_applied": {
       "enabled": true, "category": "D", "severity": "高",
-      "title": "有 {n} 個套件的免費安全更新尚未套用",
-      "detail": "這些更新不需要 Ubuntu Pro，是例行修補沒有執行（來源：主機上的 Ubuntu Pro 用戶端）",
-      "action": "排定修補時段套用；長期可導入集中管理工具"
+      "title": "有 {n} 個套件的免費安全更新還沒安裝",
+      "detail": "這些更新放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro（來源：主機上的 Ubuntu Pro 用戶端）",
+      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新"
     },
     "kernel_not_running_newest": {
       "enabled": true, "category": "B", "severity": "高",
       "title": "已安裝新核心，但機器還在跑舊核心",
       "detail": "執行中：{running}；已安裝最新：{newest}。核心修補要重開機才生效",
-      "action": "排定重開機；若停機困難，Ubuntu Pro 的 Livepatch 可在不重開機下套用高風險核心修補"
+      "action": "排定時段重開機（sudo reboot）；若停機困難，Ubuntu Pro 的 Livepatch 可在不重開機下套用高風險核心修補"
     },
     "reboot_required": {
       "enabled": true, "category": "B", "severity": "中",
       "title": "系統標示需要重開機",
       "detail": "有更新等待重開機才生效",
-      "action": "排定重開機；或評估 Livepatch"
+      "action": "排定時段重開機（sudo reboot）；或評估 Livepatch"
     },
     "long_uptime": {
       "enabled": true, "category": "B", "severity": "中",
@@ -110,44 +110,44 @@
     },
     "ssh_root_login": {
       "enabled": true, "category": "D", "severity": "高",
-      "title": "SSH 允許 root 直接登入", "detail": "permitrootlogin yes",
-      "action": "改為 no 或 prohibit-password"
+      "title": "SSH 允許 root 直接登入", "detail": "SSH 設定 PermitRootLogin 為 yes",
+      "action": "在 /etc/ssh/sshd_config（或 /etc/ssh/sshd_config.d/ 裡的設定檔）把 PermitRootLogin 改為 no，再執行 sudo systemctl reload ssh"
     },
     "ssh_empty_passwords": {
       "enabled": true, "category": "D", "severity": "高",
-      "title": "SSH 允許空密碼登入", "detail": "permitemptypasswords yes",
-      "action": "改為 no"
+      "title": "SSH 允許空密碼登入", "detail": "SSH 設定 PermitEmptyPasswords 為 yes",
+      "action": "把 PermitEmptyPasswords 改為 no，再執行 sudo systemctl reload ssh"
     },
     "ssh_password_auth": {
       "enabled": true, "category": "D", "severity": "中",
-      "title": "SSH 允許密碼登入", "detail": "passwordauthentication yes",
-      "action": "評估改用金鑰登入"
+      "title": "SSH 允許密碼登入", "detail": "SSH 設定 PasswordAuthentication 為 yes，帳號可能被猜密碼",
+      "action": "先確認每位管理者都能用金鑰登入，再把 PasswordAuthentication 改為 no，執行 sudo systemctl reload ssh"
     },
     "ufw_inactive": {
       "enabled": true, "category": "D", "severity": "中",
-      "title": "主機防火牆（ufw）未啟用", "detail": "ufw status: inactive",
-      "action": "確認是否由網路層防火牆保護；必要時啟用"
+      "title": "主機防火牆（ufw）未啟用", "detail": "ufw 狀態為 inactive",
+      "action": "先確認是否已由網路層防火牆保護。要啟用時，先執行 sudo ufw allow OpenSSH 保留遠端登入，再執行 sudo ufw enable"
     },
     "extra_uid0": {
       "enabled": true, "category": "D", "severity": "高",
-      "title": "有 root 以外的最高權限帳號", "detail": "共 {n} 個",
-      "action": "確認用途，不需要就移除"
+      "title": "有 root 以外的最高權限帳號", "detail": "共 {n} 個（UID 為 0 的帳號都有 root 權限）",
+      "action": "在主機上執行 awk -F: '$3==0{print $1}' /etc/passwd 找出帳號，確認用途，不需要就移除"
     },
     "empty_password_accounts": {
       "enabled": true, "category": "D", "severity": "高",
       "title": "有空密碼帳號", "detail": "共 {n} 個",
-      "action": "設定密碼或鎖定帳號"
+      "action": "在主機上執行 sudo awk -F: '$2==\"\"{print $1}' /etc/shadow 找出帳號，設定密碼，或用 sudo passwd -l 帳號 鎖定"
     },
     "no_auto_updates": {
       "enabled": true, "category": "D", "severity": "低",
-      "title": "未啟用自動安全更新", "detail": "unattended-upgrades 未設定為每日執行",
-      "action": "依單位的變更管理規定決定是否啟用"
+      "title": "未啟用自動安全更新", "detail": "unattended-upgrades 沒有設定為每天執行",
+      "action": "依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades"
     },
     "third_party_packages": {
       "enabled": true, "category": "D", "severity": "中",
       "title": "有 {n} 個非 Ubuntu 官方來源的套件",
-      "detail": "第三方或來源不明的套件不在 Ubuntu Pro 的修補範圍",
-      "action": "盤點來源，向原廠確認更新方式"
+      "detail": "第三方或來源不明的套件，不在 Ubuntu 與 Ubuntu Pro 的修補範圍",
+      "action": "在主機上執行 pro security-status --thirdparty 與 pro security-status --unavailable 列出這些套件，盤點來源並向原廠確認更新方式"
     }
   },
 
@@ -164,7 +164,7 @@
       "本健檢只讀取系統資訊，不做弱點利用測試、不修改設定，不等同滲透測試。",
       "只涵蓋 Ubuntu 官方套件庫的套件；第三方軟體（例如自行安裝的應用程式）的弱點不在比對範圍。",
       "官方弱點資料以「已安裝的套件版本」比對：舊核心套件若仍留在系統上，也可能被列入；實際執行中的核心請看 B 類。",
-      "核心公告常一則就涵蓋上千個 CVE，報告中的 CVE 數只計算核心以外的套件。",
+      "建議欄的指令是一般做法，執行前請依單位的變更管理規定評估，並先在測試環境確認。",
       "標示「未能檢查」的項目，代表收集時權限不足或主機沒有對應工具，不代表沒有問題。",
       "結果反映收集當下的狀態，以及報告上所列官方資料日期之前公布的弱點。"
     ]

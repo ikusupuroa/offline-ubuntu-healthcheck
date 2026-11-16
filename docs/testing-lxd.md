@@ -28,10 +28,10 @@ cd offline-ubuntu-healthcheck
 tests/lxd-quicktest.sh
 ```
 
-預設測 20.04、22.04、24.04、26.04。要指定版本：
+預設只測 20.04 和 24.04。要測其他版本，把版本號列在後面，例如連 22.04、26.04 一起測：
 
 ```bash
-tests/lxd-quicktest.sh 18.04 20.04
+tests/lxd-quicktest.sh 20.04 22.04 24.04 26.04
 ```
 
 第一次要下載映像檔、建立虛擬機，每個版本約 3 到 5 分鐘。虛擬機會保留下來，之後重跑快很多。
@@ -42,12 +42,12 @@ tests/lxd-quicktest.sh 18.04 20.04
 |---|---|
 | 下載並核對官方資料 | T13 |
 | 建立虛擬機，裝一個 Universe 套件（nginx） | |
-| 一般使用者與 sudo 各收集一次 | T1、T6 |
+| 一般使用者與 sudo 各收集一次 | T1、T6、T12 |
 | 檢查收集時有沒有寫入其他檔案 | T2 |
 | 關掉網路再收集一次，記錄花多久 | T3 |
 | 檢查收集結果裡有沒有主機名稱與 IP | T7 |
 | 兩個比對引擎各算一次，比較結果 | T10、T11 |
-| 26.04 的維護狀態 | T15 |
+| 26.04 的維護狀態（有指定 26.04 時） | T15 |
 
 ## 3. 看結果
 
@@ -113,7 +113,21 @@ lxc exec t-2204 -- su - ubuntu -c 'bash -s -- --tag T-2204 --stdout' < collect.s
 ./hc report runs/hc-T-2204.tar.gz --engine both
 ```
 
-注意：
+## 附錄：測試使用者流程（./hc scan）
+
+快速測試腳本不走 SSH。要照使用者手冊測 `./hc scan`，需要先讓測試主機能用 SSH 連進測試機：
+
+1. 測試主機沒有金鑰時，先建一把（問題都按 Enter）：`ssh-keygen -t ed25519`
+2. 把公鑰放進測試機：
+
+   ```bash
+   lxc exec t-2004 -- su - ubuntu -c 'mkdir -p -m 700 ~/.ssh && cat >> ~/.ssh/authorized_keys && chmod 600 ~/.ssh/authorized_keys' < ~/.ssh/id_ed25519.pub
+   ```
+
+3. 查測試機 IP：`lxc list t-2004 -c n4`。`hosts.txt` 要寫 IP，測試主機查不到 LXD 測試機的名稱。
+4. 刪掉測試機再重建時，新測試機可能拿到同一個 IP，SSH 會出現「REMOTE HOST IDENTIFICATION HAS CHANGED」。確定是自己剛建的測試機後，執行 `ssh-keygen -R 測試機IP` 刪掉舊紀錄再連。
+
+## 注意
 
 - `lxc console --show-log` 只能用在容器，虛擬機不能用。
 - 用 cloud-init 放 SSH 公鑰，對 16.04 的虛擬機沒有效果。

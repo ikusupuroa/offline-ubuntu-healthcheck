@@ -27,7 +27,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:861510000000",
@@ -72,7 +73,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:866610000000",
@@ -126,7 +128,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:885110000000",
@@ -151,7 +154,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:891910000000",
@@ -182,7 +186,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:903010000000",
@@ -210,7 +215,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:758510000000",
@@ -263,7 +269,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:760420000000",
@@ -285,7 +292,8 @@
        "1.8.31-1ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:767110000000",
@@ -318,7 +326,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:770110000000",
@@ -347,7 +356,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:775410000000",
@@ -371,7 +381,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:787410000000",
@@ -401,7 +412,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:792210000000",
@@ -438,7 +450,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:799010000000",
@@ -463,7 +476,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:809810000000",
@@ -493,7 +507,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:820010000000",
@@ -520,7 +535,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:827310000000",
@@ -545,7 +561,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:828010000000",
@@ -573,7 +590,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:837510000000",
@@ -606,7 +624,8 @@
        "1.18.0-0ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:838910000000",
@@ -631,7 +650,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:841420000000",
@@ -657,7 +677,8 @@
        "1.1.1f-1ubuntu2"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:871410000000",
@@ -684,7 +705,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:884720000000",
@@ -709,7 +731,8 @@
        "1.1.1f-1ubuntu2"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:896410000000",
@@ -733,7 +756,8 @@
        "5.4.0-169.179"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:573620000000",
@@ -755,7 +779,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:662110000000",
@@ -777,7 +802,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:772810000000",
@@ -801,7 +827,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:775610000000",
@@ -825,7 +852,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:778610000000",
@@ -847,7 +875,8 @@
        "1.1.1f-1ubuntu2"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:781210000000",
@@ -870,7 +899,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:787610000000",
@@ -892,7 +922,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:798020000000",
@@ -920,7 +951,8 @@
        "1.1.1f-1ubuntu2"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:800710000000",
@@ -944,7 +976,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:802110000000",
@@ -966,7 +999,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:806910000000",
@@ -994,7 +1028,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:812710000000",
@@ -1025,7 +1060,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:826310000000",
@@ -1053,7 +1089,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:839840000000",
@@ -1075,7 +1112,8 @@
        "1.18.0-0ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:846810000000",
@@ -1102,7 +1140,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:855810000000",
@@ -1127,7 +1166,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:859210000000",
@@ -1152,7 +1192,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:867820000000",
@@ -1175,7 +1216,8 @@
        "1.1.1f-1ubuntu2"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:873910000000",
@@ -1209,7 +1251,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:881010000000",
@@ -1236,7 +1279,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:885910000000",
@@ -1262,7 +1306,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:889520000000",
@@ -1284,7 +1329,8 @@
        "1.8.31-1ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:895520000000",
@@ -1309,7 +1355,8 @@
        "1.18.0-0ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:639310000000",
@@ -1331,7 +1378,8 @@
        "8:6.9.10.23+dfsg-2.1ubuntu11"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:815520000000",
@@ -1356,7 +1404,8 @@
        "1.1.1f-1ubuntu2"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.focal:def:654810000000",
@@ -4272,7 +4321,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:779710000000",
@@ -4303,7 +4353,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:854820000000",
@@ -4344,7 +4395,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:866210000000",
@@ -4381,7 +4433,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:872510000000",
@@ -4410,7 +4463,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:886410000000",
@@ -4434,7 +4488,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:501410000000",
@@ -4456,7 +4511,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:503910000000",
@@ -4478,7 +4534,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:506210000000",
@@ -4500,7 +4557,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:521110000000",
@@ -4522,7 +4580,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:531910000000",
@@ -4545,7 +4604,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:534310000000",
@@ -4596,7 +4656,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:536110000000",
@@ -4630,7 +4691,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:541310000000",
@@ -4657,7 +4719,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:546510000000",
@@ -4680,7 +4743,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:550010000000",
@@ -4709,7 +4773,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:554010000000",
@@ -4734,7 +4799,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:555710000000",
@@ -4757,7 +4823,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:565010000000",
@@ -4792,7 +4859,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:575810000000",
@@ -4826,7 +4894,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:580210000000",
@@ -4851,7 +4920,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:592610000000",
@@ -4878,7 +4948,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:601410000000",
@@ -4949,7 +5020,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:604510000000",
@@ -4975,7 +5047,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:614910000000",
@@ -5002,7 +5075,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:622110000000",
@@ -5030,7 +5104,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:625410000000",
@@ -5063,7 +5138,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:630910000000",
@@ -5090,7 +5166,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:638810000000",
@@ -5120,7 +5197,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:643910000000",
@@ -5152,7 +5230,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:653210000000",
@@ -5182,7 +5261,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:660210000000",
@@ -5208,7 +5288,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:664610000000",
@@ -5232,7 +5313,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:670010000000",
@@ -5260,7 +5342,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:673910000000",
@@ -5298,7 +5381,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:677810000000",
@@ -5333,7 +5417,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:686510000000",
@@ -5362,7 +5447,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:693810000000",
@@ -5414,7 +5500,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:697610000000",
@@ -5462,7 +5549,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:703910000000",
@@ -5505,7 +5593,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:711010000000",
@@ -5546,7 +5635,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:714810000000",
@@ -5607,7 +5697,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:718310000000",
@@ -5661,7 +5752,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:726210000000",
@@ -5692,7 +5784,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:742910000000",
@@ -5734,7 +5827,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:750610000000",
@@ -5787,7 +5881,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:755410000000",
@@ -5819,7 +5914,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:760420000000",
@@ -5841,7 +5937,8 @@
        "1.8.16-0ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:760710000000",
@@ -5871,7 +5968,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:768410000000",
@@ -5897,7 +5995,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:772710000000",
@@ -5927,7 +6026,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:786310000000",
@@ -5958,7 +6058,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:793010000000",
@@ -5996,7 +6097,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:798710000000",
@@ -6023,7 +6125,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:807010000000",
@@ -6053,7 +6156,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:814310000000",
@@ -6081,7 +6185,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:836130000000",
@@ -6103,7 +6208,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:892310000000",
@@ -6126,7 +6232,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:896610000000",
@@ -6149,7 +6256,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:903310000000",
@@ -6189,7 +6297,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:529910000000",
@@ -6223,7 +6332,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:531020000000",
@@ -6247,7 +6357,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:557910000000",
@@ -6271,7 +6382,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:581120000000",
@@ -6293,7 +6405,8 @@
        "1.8.16-0ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:600520000000",
@@ -6316,7 +6429,8 @@
        "1.8.16-0ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:624220000000",
@@ -6338,7 +6452,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:654110000000",
@@ -6361,7 +6476,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:656020000000",
@@ -6383,7 +6499,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:656030000000",
@@ -6405,7 +6522,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:676210000000",
@@ -6427,7 +6545,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:680410000000",
@@ -6452,7 +6571,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:725920000000",
@@ -6474,7 +6594,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:727020000000",
@@ -6496,7 +6617,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:729810000000",
@@ -6518,7 +6640,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:800510000000",
@@ -6542,7 +6665,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:827410000000",
@@ -6568,7 +6692,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:851410000000",
@@ -6590,7 +6715,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:857710000000",
@@ -6612,7 +6738,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:880410000000",
@@ -6639,7 +6766,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:538010000000",
@@ -6661,7 +6789,8 @@
        "4.3-14ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:566610000000",
@@ -6683,7 +6812,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:569910000000",
@@ -6706,7 +6836,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:576810000000",
@@ -6731,7 +6862,8 @@
        "2.23-0ubuntu3"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:508610000000",
@@ -6751,7 +6883,8 @@
        "4.4.0-210.220"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:627910000000",
@@ -6771,7 +6904,8 @@
        "1:7.2p2-4ubuntu2.8"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.xenial:def:330410000000",
@@ -7130,7 +7264,8 @@
        "5:6.0.16-1ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.jammy:def:732110000000",
@@ -7153,7 +7288,8 @@
        "5:6.0.16-1ubuntu1"
       ]
      }
-    ]
+    ],
+    "subscribed": false
    },
    {
     "id": "oval:com.ubuntu.jammy:def:716610000000",

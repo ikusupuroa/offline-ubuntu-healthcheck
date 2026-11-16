@@ -1,13 +1,13 @@
 #!/bin/bash
 # offline-ubuntu-healthcheck｜LXD 快速測試（tests/lxd-quicktest.sh）
-# 版本：0.4
+# 版本：0.5
 #
 # 在一台裝好 LXD 的 Ubuntu（例如 Desktop 26.04）上，一個指令完成：
 #   建立虛擬機 → 裝一個 Universe 套件 → 一般使用者與 sudo 各收集一次 → 斷網再收集一次並計時
 #   → 檢查有沒有寫入其他檔案 → 檢查收集檔有沒有主機名稱與 IP → 兩個比對引擎分析並對照 → 印出測試結果表
 #
 # 用法（在專案根目錄或任何地方都可以）：
-#   tests/lxd-quicktest.sh                       # 預設測 20.04 22.04 24.04 26.04
+#   tests/lxd-quicktest.sh                       # 預設只測 20.04 24.04（其他版本用參數指定）
 #   tests/lxd-quicktest.sh 16.04 20.04           # 指定版本
 #   tests/lxd-quicktest.sh --allow-container 16.04   # 建不了虛擬機時改用容器（核心相關項目不準）
 #   tests/lxd-quicktest.sh --keep 22.04          # 測完保留虛擬機（預設也保留，方便重跑）
@@ -38,7 +38,7 @@ for a in "$@"; do
     *) echo "不認得的參數：$a（版本請寫成 22.04 這種格式）"; exit 2 ;;
   esac
 done
-[ ${#VERSIONS[@]} -eq 0 ] && VERSIONS=(20.04 22.04 24.04 26.04)
+[ ${#VERSIONS[@]} -eq 0 ] && VERSIONS=(20.04 24.04)
 
 command -v lxc >/dev/null || { echo "找不到 lxc。請先安裝：sudo snap install lxd && sudo lxd init --minimal"; exit 1; }
 command -v python3 >/dev/null || { echo "找不到 python3"; exit 1; }
@@ -178,6 +178,9 @@ for h in d["hosts"]:
         need = [x for x in h["unchecked"] if "sudo" in x]
         print("%s\tT6\t%s\t一般使用者有 %d 項列為「未能檢查」（應為 SSH、防火牆、空密碼帳號）" % (v, "通過" if len(need) >= 2 else "記錄", len(need)))
     if tag.endswith("-sudo"):
+        ssh_un = [x for x in h["unchecked"] if x.startswith("SSH")]
+        print("%s\tT12\t%s\t%s" % (v, "不通過" if ssh_un else "通過",
+                                    "用 sudo 仍讀不到 SSH 設定，見收集檔裡的 sshd.txt" if ssh_un else "用 sudo 讀到 SSH 設定"))
         p = h["patches"]
         print("%s\tT8-摘要\t人工核對\t%s；需 Pro %s、免費未套用 %s（%s）" % (v, h["support_text"], p["needs_pro"], p["free_not_applied"], p.get("unit", "")))
         if v == "26.04":

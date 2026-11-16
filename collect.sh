@@ -1,14 +1,17 @@
 #!/bin/bash
 # offline-ubuntu-healthcheck｜收集腳本（collect.sh）
-# 版本：0.4
+# 版本：0.5
 #
 # 在受檢主機上執行，只讀取系統資訊，產出一個 tar.gz 交給分析電腦。
 # 弱點比對不在主機上做，主機上不需要安裝任何東西，也不需要連網。
 #
 # 設計目標（以實機測試紀錄為準）：
 #   - 不安裝套件、不改設定、不重啟服務、不執行 apt update，不主動連網。
-#   - 寫入的位置：系統暫存目錄（執行中暫存，結束時刪除），以及目前目錄的 hc-<代號>-<日期>.tar.gz。
-#   - 注意：pro 指令本身可能寫入自己的記錄檔，已註冊的主機也可能嘗試連線原廠伺服器；
+#   - 本腳本寫入的位置：系統暫存目錄（執行中暫存，結束時刪除），以及目前目錄的 hc-<代號>-<日期>.tar.gz
+#     （透過 SSH 收集時連這個檔也不寫）。
+#   - 其他程式會寫自己的記錄（2026-11 實機測試確認）：pro 指令會更新自己的記錄檔與快取
+#     （~/.cache/ubuntu-pro/、/var/log/ubuntu-advantage.log、/var/lib/ubuntu-advantage/status.json）；
+#     登入與 sudo 會寫進系統記錄（auth.log、journal）。已註冊的主機也可能嘗試連線原廠伺服器；
 #     離線環境每個 pro 指令最多等 60 秒。
 #
 # 權限：一般使用者即可執行（預設）。用 sudo 執行時，另外檢查 SSH 設定、防火牆（ufw）、空密碼帳號三項；
@@ -25,7 +28,7 @@
 #   bash collect.sh --tag H01 --stdout  # 不寫檔，收集結果直接輸出到標準輸出（hc scan 透過 SSH 使用）
 #   代號由受檢單位自訂，代號與主機的對照表只留在受檢單位。
 #
-# 透過 SSH 使用時，整支腳本由標準輸入送進主機（bash -s），主機上不會留下腳本或收集檔：
+# 透過 SSH 使用時，整支腳本由標準輸入送進主機（bash -s），主機上不會留下這支腳本或收集檔：
 #   ssh 帳號@主機 'bash -s -- --tag H01 --stdout' < collect.sh > hc-H01.tar.gz
 
 set -u
@@ -72,9 +75,38 @@ while i>=0:
         i=raw.find("{",i+1)
 if not isinstance(d,dict): d={}
 print(json.dumps({"attached":d.get("attached"),"services":[{"name":s.get("name"),"status":s.get("status"),"entitled":s.get("entitled")} for s in d.get("services",[]) if isinstance(s,dict)]}))'
+# 讀 SSH 設定檔（sshd -T 失敗時才用）：照 sshd 的規則，同一個設定以第一次出現的為準，
+# 展開 Include，遇到 Match 區塊就停；沒寫的設定用 OpenSSH 預設值。接受「關鍵字=值」與加引號的值。
+# 限制：引入的檔案裡有 Match 時，後面的全域設定都不再讀，和 sshd 實際行為可能不同（未查證），報告會註明「依設定檔判斷」。
+SSHD_PY='import glob,os
+want={"permitrootlogin":"prohibit-password","passwordauthentication":"yes","permitemptypasswords":"no"}
+got={}
+def read(p,depth=0):
+    if depth>8: return None
+    try: lines=open(p,encoding="utf-8",errors="replace").read().splitlines()
+    except OSError: return None
+    for ln in lines:
+        s=ln.strip()
+        if not s or s.startswith("#"): continue
+        kv=s.split(None,1)[0]
+        if "=" in kv or (len(s.split(None,1))>1 and s.split(None,1)[1].lstrip().startswith("=")):
+            s=s.replace("="," ",1)
+        parts=s.split(None,1)
+        k=parts[0].lower(); v=parts[1].strip() if len(parts)>1 else ""
+        if k=="match": return "stop"
+        if k=="include":
+            for pat in v.split():
+                if not os.path.isabs(pat): pat=os.path.join("/etc/ssh",pat)
+                for f in sorted(glob.glob(pat)):
+                    if read(f,depth+1)=="stop": return "stop"
+            continue
+        if k in want and k not in got and v: got[k]=v.split()[0].strip("\x22").lower()
+    return None
+read("/etc/ssh/sshd_config")
+for k,d in want.items(): print(k,got.get(k,d))'
 
 {
-  echo "collector_version=0.4"
+  echo "collector_version=0.5"
   echo "collected_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "tag=${TAG}"
   echo "uid=$(id -u)"
@@ -122,7 +154,14 @@ fi
 
 # 6. 基本設定
 if have sshd; then
-  run sshd.txt sh -c 'out=$(sshd -T 2>&1); rc=$?; printf "%s\n" "$out" | grep -Ei "^(permitrootlogin|passwordauthentication|permitemptypasswords) "; exit $rc'
+  # 失敗時保留錯誤訊息第一行，才看得出原因
+  run sshd.txt sh -c 'out=$(sshd -T 2>&1); rc=$?; printf "%s\n" "$out" | grep -Ei "^(permitrootlogin|passwordauthentication|permitemptypasswords) "; [ $rc -ne 0 ] && printf "# 錯誤：%s\n" "$(printf "%s\n" "$out" | head -n 1)"; exit $rc'
+  # sshd -T 有時無法執行（例如 24.04 的 ssh 改成有連線才啟動，執行期目錄還不存在）。
+  # 這時改讀設定檔：只在 root 時做，因為 sshd_config.d 裡的檔案一般使用者常常讀不到，讀一半會判斷錯。
+  if [ "$(id -u)" = 0 ] && ! tail -n 1 "${D}/sshd.txt" | grep -qx '__EXIT__=0' && have python3; then
+    err="$(sshd -T 2>&1 >/dev/null | head -n 1)"
+    { echo "# sshd -T 無法執行（${err:-原因不明}），改讀設定檔判斷"; python3 -c "$SSHD_PY"; echo "__EXIT__=$?"; } > "${D}/sshd.txt" 2>&1
+  fi
 fi
 # 只留第一行「Status: active／inactive」：防火牆規則常含來源 IP 或網段，不收
 have ufw && run ufw.txt sh -c 'out=$(ufw status 2>&1); rc=$?; printf "%s\n" "$out" | head -n 1; exit $rc'

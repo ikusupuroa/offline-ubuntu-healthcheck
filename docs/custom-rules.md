@@ -32,7 +32,7 @@
 | `categories` | A 到 D 四類的名稱，以及「Ubuntu Pro 能否解決」的寫法 |
 | `thresholds.uptime_days_warn` | 連續運作幾天以上要提醒（預設 90） |
 | `thresholds.data_max_age_days` | 官方資料超過幾天要警告（預設 7） |
-| `thresholds.detail_rows_per_host` | report.md 附錄每台主機列幾個套件（預設 30） |
+| `thresholds.detail_rows_per_host` | report.md 附錄每台主機「免費」與「需 Pro」各列幾個套件；report.html 套件數不超過這個數字時，「免費就能修補」明細預設展開（預設 30） |
 | `usg_versions` | 哪些版本要提出 C 類「未使用 USG」建議 |
 | `severity_names` | 官方嚴重度的中文名稱 |
 | `findings.<代號>` | 每一種發現的開關、類別、嚴重度、標題、說明、建議 |
@@ -68,7 +68,7 @@
 
 | 發現 | 可用變數 |
 |---|---|
-| `oval_*` | `{usns}` 公告則數、`{crit_high}` 重大與高風險公告數、`{breakdown}` 核心與其他套件的則數與 CVE 數（例如「核心 20 則、其他套件 29 則（涉及 CVE 120 個）」）、`{kernel_usns}`、`{other_usns}`、`{cves_other}` 核心以外的 CVE 數、`{cves}` 全部 CVE 數（含核心，數字常很大）、`{pockets}` 修補來源（只有 `oval_needs_pro`） |
+| `oval_*` | `{packages}` 要更新的套件名稱（依嚴重度排列，超過 8 個寫「等 N 個」）、`{n_packages}` 套件數、`{usns}` 公告則數、`{crit_high}` 重大與高風險公告數、`{reboot_note}` 含核心更新時的重開機提醒（沒有時是空字串）、`{breakdown}` 核心與其他套件的則數與 CVE 數、`{kernel_usns}`、`{other_usns}`、`{cves_other}` 核心以外的 CVE 數、`{cves}` 全部 CVE 數（含核心，數字常很大）、`{pockets}` 修補來源（只有 `oval_needs_pro`） |
 | `pro_client_pending` | `{n}`、`{infra}`、`{apps}` |
 | `kernel_not_running_newest` | `{running}`、`{newest}` |
 | `long_uptime` | `{days}` |
@@ -78,4 +78,4 @@
 
 ## 更進一步
 
-規則檔處理的是「分類與文字」。要依單位的資安政策產出更完整的建議，可以把 `findings.json` 交給 AI，搭配 [ai-skill/SKILL.md](../ai-skill/SKILL.md) 的指引，再加上自己單位的規範一起分析。
+規則檔處理的是「分類與文字」。要依單位的資安政策產出更完整的建議，可以把 `findings.json` 交給 AI，搭配 [skill/offline-ubuntu-healthcheck/SKILL.md](../skill/offline-ubuntu-healthcheck/SKILL.md) 的指引（做法見使用者手冊第 6 章），再加上自己單位的規範一起分析。

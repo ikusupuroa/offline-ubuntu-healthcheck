@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜分析程式（analyze.py）
 
-版本：0.4
+版本：0.5
 在分析用的電腦執行（Python 3.6 以上，只用標準函式庫，不需連網）。
 
 用法：
@@ -19,7 +19,8 @@
 
 產出：
   report.md         健檢報告
-  findings.json     結構化結果摘要，可交給 AI 分析指引（ai-skill/SKILL.md）使用
+  report.html       同一份報告的網頁版，用瀏覽器打開
+  findings.json     結構化結果摘要，可交給 AI 分析（skill/offline-ubuntu-healthcheck/SKILL.md）
   oval-detail.json  官方弱點比對的完整明細（含每則公告的 CVE 清單與套件版本）
 
 判讀規則（分類、嚴重度、建議文字、維護時程）在 rules/default-rules.json，可用 --rules 覆蓋。
@@ -42,7 +43,7 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from html import escape as html_escape
 
-TOOL_VERSION = "0.4"
+TOOL_VERSION = "0.5"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -557,8 +558,17 @@ def is_kernel(hit):
     return any(p["source"].startswith("linux") for p in hit["packages"])
 
 
+def package_names(hits, limit=8):
+    """依嚴重度列出要更新的來源套件名稱；超過 limit 個時加上「等 N 個」。"""
+    rows = group_by_package(hits)
+    names = [e["source"] for e in rows]
+    text = "、".join(names[:limit]) + (" 等 %d 個" % len(names) if len(names) > limit else "")
+    return names, text
+
+
 def summarize_hits(hits):
-    """公告統計。核心公告常一則帶上千個 CVE，CVE 數只算核心以外的套件，避免數字誤導。"""
+    """公告統計與套件清單，給發現事項的文字使用。
+    核心公告常一則帶上千個 CVE，所以 CVE 數另外算「核心以外」的版本。"""
     crit = sum(1 for h in hits if h["severity"] in ("Critical", "High"))
     kern = [h for h in hits if is_kernel(h)]
     other = [h for h in hits if not is_kernel(h)]
@@ -568,10 +578,14 @@ def summarize_hits(hits):
         parts.append("核心 %d 則" % len(kern))
     if other:
         parts.append("其他套件 %d 則（%s）" % (len(other), "涉及 CVE %d 個" % cves_other if cves_other
-                                             else "都是沒有 CVE 編號的維護更新"))
+                                             else "官方資料沒有列出 CVE 編號"))
+    names, text = package_names(hits)
     return {"usns": len(hits), "cves": len({c for h in hits for c in h["cves"]}), "crit_high": crit,
             "kernel_usns": len(kern), "other_usns": len(other), "cves_other": cves_other,
-            "breakdown": "、".join(parts), "severity": "高" if crit else "中"}
+            "breakdown": "、".join(parts), "packages": text, "n_packages": len(names),
+            "package_list": names,
+            "reboot_note": "。其中包含核心更新，安裝後要重開機才生效" if kern else "",
+            "severity": "高" if crit else "中"}
 
 
 def analyze_host(files, args, rules, datasets):
@@ -655,6 +669,8 @@ def analyze_host(files, args, rules, datasets):
         pro_ok = [h for h in need_pro if all(p in enabled for p in h["pockets"] if p.startswith("esm"))
                   and any(p.startswith("esm") for p in h["pockets"])]
         pro_missing = [h for h in need_pro if h not in pro_ok]
+        for h in need_pro:  # 報告明細分組用：已訂閱、只是還沒安裝
+            h["subscribed"] = h in pro_ok
         if pro_missing and status not in ("eol", "nonlts"):
             s = summarize_hits(pro_missing)
             pockets = {}
@@ -662,7 +678,7 @@ def analyze_host(files, args, rules, datasets):
                 for p in h["pockets"]:
                     if p.startswith("esm"):
                         pockets[p] = pockets.get(p, 0) + 1
-            s["pockets"] = "、".join("%s %d 則" % (k, v) for k, v in sorted(pockets.items())) or "Ubuntu Pro"
+            s["pockets"] = "、".join("%s（%d 則）" % (k, v) for k, v in sorted(pockets.items())) or "Ubuntu Pro"
             ctx.add("oval_needs_pro", s.pop("severity"), **s)
             if attrs is not None:
                 ctx.findings[-1]["detail"] += "。主機上的 Ubuntu Pro 用戶端另外回報 %d 個套件待取得，可互相對照" % len(pc_pending)
@@ -673,7 +689,10 @@ def analyze_host(files, args, rules, datasets):
             s = summarize_hits(free)
             ctx.add("oval_free_not_applied", s.pop("severity"), **s)
         patch.update(needs_pro=len(pro_missing), pro_not_applied=len(pro_ok), free_not_applied=len(free),
-                     needs_pro_crit_high=sum(1 for h in pro_missing if h["severity"] in ("Critical", "High")))
+                     needs_pro_crit_high=sum(1 for h in pro_missing if h["severity"] in ("Critical", "High")),
+                     packages_needs_pro=package_names(pro_missing)[0],
+                     packages_pro_not_applied=package_names(pro_ok)[0],
+                     packages_free=package_names(free)[0])
     elif attrs is not None:
         if pc_pending and status not in ("nonlts", "eol"):
             infra = sum(1 for u in pc_pending if u.get("provided_by") == "esm-infra")
@@ -722,16 +741,30 @@ def analyze_host(files, args, rules, datasets):
         ctx.add("usg_not_used")
 
     # --- D：設定與其他 ---
+    sshd_raw = strip_exit(files.get("sshd.txt", ""))
+    sshd_notes = [ln[1:].strip() for ln in sshd_raw.splitlines() if ln.startswith("#")]
     if not ok("sshd.txt"):
-        unchecked.append("SSH 設定（需要 sudo，或主機未安裝 SSH 服務）")
+        if "sshd.txt" not in files:
+            unchecked.append("SSH 設定（主機沒有安裝 SSH 服務）")
+        elif meta.get("uid") == "0":
+            why = ("主機也沒有 python3 可改讀設定檔" if meta.get("collector_version", "0") >= "0.5"
+                   else "請改用 0.5 版以後的收集腳本，會改讀設定檔")
+            unchecked.append("SSH 設定（已用 sudo，但 sshd -T 無法執行；%s%s）"
+                             % (why, "。錯誤訊息：" + sshd_notes[0][:120] if sshd_notes else ""))
+        else:
+            unchecked.append("SSH 設定（需要 sudo）")
     else:
-        sshd = strip_exit(files["sshd.txt"]).lower()
+        sshd = sshd_raw.lower()
+        n0 = len(ctx.findings)
         if re.search(r"^permitrootlogin yes", sshd, re.M):
             ctx.add("ssh_root_login")
         if re.search(r"^permitemptypasswords yes", sshd, re.M):
             ctx.add("ssh_empty_passwords")
         if re.search(r"^passwordauthentication yes", sshd, re.M):
             ctx.add("ssh_password_auth")
+        if any("改讀設定檔" in x for x in sshd_notes):  # 不是 sshd 實際生效的值，要註明
+            for x in ctx.findings[n0:]:
+                x["detail"] += "（sshd -T 無法執行，依設定檔判斷，請在主機上確認）"
     if not ok("ufw.txt"):
         unchecked.append("主機防火牆（ufw）狀態（需要 sudo，或主機未安裝 ufw）")
     elif "inactive" in strip_exit(files["ufw.txt"]):
@@ -829,6 +862,21 @@ def group_by_package(matches):
     rows = list(g.values())
     rows.sort(key=lambda e: (not e["needs_pro"], SEV_RANK.get(e["severity"], 9), -len(e["usns"]), e["source"]))
     return rows
+
+
+def detail_groups(matches):
+    """報告明細的分組：免費的放前面，再來是已訂閱但還沒安裝，最後是要訂閱才拿得到。"""
+    return [g for g in (
+        ("免費就能修補", [m for m in matches if not m["needs_pro"]], True),
+        ("已訂閱 Ubuntu Pro，還沒安裝", [m for m in matches if m["needs_pro"] and m.get("subscribed")], True),
+        ("要訂閱 Ubuntu Pro 才能修補", [m for m in matches if m["needs_pro"] and not m.get("subscribed")], False),
+    ) if g[1]]
+
+
+def pocket_label(pockets):
+    """修補來源：延伸維護照寫（esm-infra 等），一般套件庫寫成「Ubuntu 一般更新」。"""
+    out = sorted({p if p.startswith("esm") else "Ubuntu 一般更新" for p in pockets})
+    return "、".join(out) or "?"
 
 
 def dedupe_tags(hosts):
@@ -970,21 +1018,24 @@ def render_report(hosts, args, rules, datasets, warnings=()):
     n = rules["thresholds"]["detail_rows_per_host"]
     if any(h.get("oval_matches") for h in hosts):
         w("## 附錄：官方弱點資料比對（依套件彙整）\n")
-        w("每台主機最多列 %d 個套件，需要 Ubuntu Pro 的排前面；逐則公告的完整清單在 oval-detail.json 與 report.html。\n" % n)
+        w("免費就能修補的排前面，每一組最多列 %d 個套件；逐則公告的完整清單在 oval-detail.json 與 report.html。\n" % n)
         for h in hosts:
-            rows = group_by_package(h.get("oval_matches") or [])
-            if not rows:
+            matches = h.get("oval_matches") or []
+            if not matches:
                 continue
             w("### %s\n" % _m(h["tag"]))
-            w("| 套件 | 公告數 | 最高嚴重度 | 需要 Pro | 修補來源 | 已安裝 → 最新修補版本 |\n|---|---|---|---|---|---|")
-            for e in rows[:n]:
-                w("| %s | %d | %s | %s | %s | %s → %s |" % (
-                    _m(e["source"]), len(e["usns"]), sevname.get(e["severity"], e["severity"]),
-                    "是" if e["needs_pro"] else "否", "、".join(sorted(e["pockets"])) or "?",
-                    "/".join(sorted(e["installed"])[:2]) or "?", e["fixed"] or "?"))
-            if len(rows) > n:
-                w("\n（另有 %d 個套件未列出）" % (len(rows) - n))
-            w("")
+            for label, group, _ in detail_groups(matches):
+                rows = group_by_package(group)
+                w("**%s**：%d 個套件、%d 則公告\n" % (label, len(rows), len(group)))
+                w("| 套件（原始碼套件名稱） | 最高嚴重度 | 公告數 | 修補來源 | 已安裝 → 修補版本 |\n|---|---|---|---|---|")
+                for e in rows[:n]:
+                    w("| %s | %s | %d | %s | %s → %s |" % (
+                        _m(e["source"]), sevname.get(e["severity"], e["severity"]), len(e["usns"]),
+                        pocket_label(e["pockets"]),
+                        _m("/".join(sorted(e["installed"])[:2]) or "?"), _m(e["fixed"] or "?")))
+                if len(rows) > n:
+                    w("\n（另有 %d 個套件未列出）" % (len(rows) - n))
+                w("")
     return "\n".join(L)
 
 
@@ -1041,7 +1092,8 @@ def render_html(hosts, args, rules, datasets, warnings=()):
     for c in sorted(cats):
         w('<div class="card %s"><span class="tag t%s">%s</span><b>%d</b>%s<br><span class="mut">Ubuntu Pro 能否解決：%s</span></div>'
           % (c, c, c, cnt.get(c, 0), _e(cats[c]["name"]), _e(cats[c]["pro_helps"])))
-    w("</div><p class=\"mut\">D 類與 Ubuntu Pro 無關，同樣列出，讓受檢單位掌握完整風險。</p>")
+    w("</div><p class=\"mut\">D 類與 Ubuntu Pro 無關，同樣列出，讓受檢單位掌握完整風險。"
+      "每一項發現的「建議」欄寫了處理方式；各類別的意思與處理步驟，見使用者手冊（docs/user-guide.pdf）第 5 章。</p>")
     # 主機總覽
     w("<h2>二、主機總覽</h2><div class=\"tw\"><table><tr><th>主機</th><th>版本</th><th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th>"
       "<th>需 Pro 才能取得的修補</th><th>未套用的免費修補</th><th>執行中核心</th><th>未重開機天數</th></tr>")
@@ -1079,22 +1131,24 @@ def render_html(hosts, args, rules, datasets, warnings=()):
             w('<p class="mut">比對引擎對照：OpenSCAP %d 則、內建 %d 則，%s。</p>' % (
                 e["oscap"], e["builtin"], "結果一致" if same else "有差異（只有 OpenSCAP 有 %d 則、只有內建有 %d 則）"
                 % (len(e["only_oscap"]), len(e["only_builtin"]))))
-        rows = group_by_package(h.get("oval_matches") or [])
-        if rows:
-            w("<details><summary>官方弱點資料比對：%d 個套件、%d 則公告（展開）</summary>" % (len(rows), len(h["oval_matches"])))
-            w("<div class=\"tw\"><table><tr><th>套件</th><th>公告數</th><th>最高嚴重度</th><th>需要 Pro</th><th>修補來源</th><th>已安裝 → 最新修補版本</th></tr>")
+        matches = h.get("oval_matches") or []
+        for label, group, opened in detail_groups(matches):
+            rows = group_by_package(group)
+            w("<details%s><summary>%s：%d 個套件、%d 則公告</summary>"
+              % (" open" if opened and len(rows) <= n else "", label, len(rows), len(group)))
+            w("<div class=\"tw\"><table><tr><th>套件（原始碼套件名稱）</th><th>最高嚴重度</th><th>公告數</th><th>修補來源</th><th>已安裝 → 修補版本</th></tr>")
             for e in rows:
-                w("<tr><td>%s</td><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s → %s</td></tr>" % (
-                    _e(e["source"]), len(e["usns"]), _e(sevname.get(e["severity"], e["severity"])),
-                    "是" if e["needs_pro"] else "否", _e("、".join(sorted(e["pockets"])) or "?"),
+                w("<tr><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s → %s</td></tr>" % (
+                    _e(e["source"]), _e(sevname.get(e["severity"], e["severity"])), len(e["usns"]),
+                    _e(pocket_label(e["pockets"])),
                     _e("/".join(sorted(e["installed"])[:2]) or "?"), _e(e["fixed"] or "?")))
             w("</table></div>")
-            w("<details><summary>逐則公告（%d 則）</summary><div class=\"tw\"><table><tr><th>安全公告</th><th>嚴重度</th><th>CVE 數</th><th>修補來源</th><th>需要 Pro</th></tr>"
-              % len(h["oval_matches"]))
-            for m in h["oval_matches"]:
-                w("<tr><td>%s</td><td>%s</td><td>%d</td><td>%s</td><td>%s</td></tr>" % (
+            w("<details><summary>逐則公告（%d 則）</summary><div class=\"tw\"><table><tr><th>安全公告</th><th>嚴重度</th><th>CVE 數</th><th>修補來源</th></tr>"
+              % len(group))
+            for m in group:
+                w("<tr><td>%s</td><td>%s</td><td>%d</td><td>%s</td></tr>" % (
                     _e(m["title"]), _e(sevname.get(m["severity"], m["severity"])), len(m["cves"]),
-                    _e("、".join(m["pockets"]) or "?"), "是" if m["needs_pro"] else "否"))
+                    _e(pocket_label(m["pockets"]))))
             w("</table></div></details></details>")
     w("<h2>四、建議處理順序</h2><ol>%s</ol>" % "".join("<li>%s</li>" % _e(s) for s in rt["priority_steps"]))
     w("<h2>五、檢查範圍與限制</h2><ul>%s</ul>" % "".join("<li>%s</li>" % _e(s) for s in rt["limitations"]))
@@ -1246,7 +1300,7 @@ def run_analysis(loaded, args, rules, log=None):
                               "pockets": m["pockets"], "cve_count": len(m["cves"]),
                               "packages": sorted({p["source"] for p in m["packages"]})}
                              for m in h.get("oval_matches", [])]
-    out = {"schema": "offline-ubuntu-healthcheck/0.4", "tool_version": TOOL_VERSION, "basis_month": args.date,
+    out = {"schema": "offline-ubuntu-healthcheck/0.5", "tool_version": TOOL_VERSION, "basis_month": args.date,
            "deidentified": args.deidentify, "warnings": warnings,
            "engine": args.engine_label if any(ds.get("used") for ds in datasets.values()) else None,
            "data": {c: ds["info"] for c, ds in datasets.items() if ds.get("used")},
@@ -1279,7 +1333,7 @@ def print_summary(hosts, datasets, warnings, args, rules, stream=None):
         line = "  " + pad(h["tag"], 16) + pad(h.get("version_id", "?"), 8) + pad(STATUS_LABEL.get(h["support_status"], "?"), 16) + \
             "A %d｜B %d｜C %d｜D %d" % (c["A"], c["B"], c["C"], c["D"])
         if pt["source"] != "none":
-            line += "｜需 Pro 修補 %d %s" % (pt["needs_pro"], pt.get("unit", ""))
+            line += "｜需 Pro %d、免費可修 %d %s" % (pt["needs_pro"], pt["free_not_applied"], pt.get("unit", ""))
         e = h.get("engine_check")
         if e:
             line += "｜引擎對照%s" % ("一致" if not e["only_oscap"] and not e["only_builtin"] else "有差異")
@@ -1299,6 +1353,7 @@ def print_summary(hosts, datasets, warnings, args, rules, stream=None):
     p()
     p("報告：%s　← 用瀏覽器打開" % os.path.join(args.out, "report.html"))
     p("其他：report.md（可編輯）、findings.json（給 AI 分析）、oval-detail.json（完整明細）")
+    p("怎麼看報告：使用者手冊 docs/user-guide.pdf 第 5 章")
 
 
 def default_out():

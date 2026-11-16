@@ -1,6 +1,6 @@
 {
-  "schema": "offline-ubuntu-healthcheck/0.4",
-  "tool_version": "0.4",
+  "schema": "offline-ubuntu-healthcheck/0.5",
+  "tool_version": "0.5",
   "basis_month": "2026-11",
   "deidentified": false,
   "warnings": [],
@@ -8,23 +8,23 @@
   "data": {
     "focal": {
       "file": "oci.com.ubuntu.focal.usn.oval.xml.bz2",
-      "sha256": "0c19f01aa12892fb8ac9a09d0c80b64a745028b2297dd6f8d1386c330fae06d5",
-      "timestamp": "2026-11-13T08:05:53",
-      "age_days": 3,
+      "sha256": "d1a222aa36a2ea79c3f8e4b005aaba6c2f97bb9f3f78f7f2307c1c08e81e84e5",
+      "timestamp": "2026-11-15T21:06:47",
+      "age_days": 1,
       "recorded": true
     },
     "jammy": {
       "file": "oci.com.ubuntu.jammy.usn.oval.xml.bz2",
-      "sha256": "f607d2519c354baddab4f2198c97e5a7ea2f7e2b927d8b6aceecf5aee371740c",
-      "timestamp": "2026-11-13T08:05:17",
-      "age_days": 3,
+      "sha256": "e3bec427b1d302cab0c633cd8941bcd1ebd3cbb0d4e2b7919ee421ac8e005c0f",
+      "timestamp": "2026-11-15T21:06:14",
+      "age_days": 1,
       "recorded": true
     },
     "xenial": {
       "file": "oci.com.ubuntu.xenial.usn.oval.xml.bz2",
-      "sha256": "6ec62355ee76851f4acd0d71d30c6aa15d75350c23a34ab3614db0328ec365d5",
-      "timestamp": "2026-11-13T08:06:56",
-      "age_days": 3,
+      "sha256": "856c45d708e71b2c71e715c594f2d7cbaa2ead9fdf2377150ae41fd26659175d",
+      "timestamp": "2026-11-15T21:07:39",
+      "age_days": 1,
       "recorded": true
     }
   },
@@ -50,7 +50,7 @@
     {
       "tag": "demo-ap01",
       "collected_at": "2026-11-16T02:00:00Z",
-      "collector_version": "0.4",
+      "collector_version": "0.5",
       "run_as_root": true,
       "os": "Ubuntu 20.04.6 LTS",
       "version_id": "20.04",
@@ -80,7 +80,23 @@
         "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
         "data_file": "oci.com.ubuntu.focal.usn.oval.xml.bz2",
         "pro_client_pending_packages": 5,
-        "needs_pro_crit_high": 24
+        "needs_pro_crit_high": 24,
+        "packages_needs_pro": [
+          "linux",
+          "openssl",
+          "nginx",
+          "sudo",
+          "imagemagick"
+        ],
+        "packages_pro_not_applied": [],
+        "packages_free": [
+          "linux",
+          "openssl",
+          "sudo",
+          "imagemagick",
+          "nginx",
+          "bash"
+        ]
       },
       "oval_matches": [
         {
@@ -1576,9 +1592,9 @@
           "id": "oval_needs_pro",
           "category": "A",
           "severity": "高",
-          "title": "官方弱點資料：49 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-          "detail": "重大與高風險公告 24 則；核心 20 則、其他套件 29 則（涉及 CVE 120 個）；修補來源：esm-apps 18 則、esm-infra 31 則。主機上的 Ubuntu Pro 用戶端另外回報 5 個套件待取得，可互相對照",
-          "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新",
+          "title": "5 個套件的安全修補，要訂閱 Ubuntu Pro 才拿得到",
+          "detail": "要更新的套件：linux、openssl、nginx、sudo、imagemagick。對應 49 則官方安全公告，其中重大或高風險 24 則；修補放在 esm-apps（18 則）、esm-infra（31 則），沒有訂閱的主機用 apt 也裝不到。其中包含核心更新，安裝後要重開機才生效。主機上的 Ubuntu Pro 用戶端另外回報 5 個套件待取得，可互相對照",
+          "action": "訂閱 Ubuntu Pro，在主機上執行 sudo pro attach 註冊，再執行 sudo apt update 與 sudo apt upgrade",
           "pro_helps": "是"
         },
         {
@@ -1587,7 +1603,7 @@
           "severity": "高",
           "title": "已安裝新核心，但機器還在跑舊核心",
           "detail": "執行中：5.4.0-150-generic；已安裝最新：5.4.0-169-generic。核心修補要重開機才生效",
-          "action": "排定重開機；若停機困難，Ubuntu Pro 的 Livepatch 可在不重開機下套用高風險核心修補",
+          "action": "排定時段重開機（sudo reboot）；若停機困難，Ubuntu Pro 的 Livepatch 可在不重開機下套用高風險核心修補",
           "pro_helps": "部分"
         },
         {
@@ -1612,9 +1628,9 @@
           "id": "oval_free_not_applied",
           "category": "D",
           "severity": "高",
-          "title": "官方弱點資料：74 則安全公告有免費修補，但尚未套用",
-          "detail": "重大與高風險公告 43 則；核心 41 則、其他套件 33 則（涉及 CVE 94 個）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
-          "action": "排定修補時段套用；長期可導入集中管理工具",
+          "title": "6 個套件有免費的安全修補，還沒安裝",
+          "detail": "要更新的套件：linux、openssl、sudo、imagemagick、nginx、bash。對應 74 則官方安全公告，其中重大或高風險 43 則。這些修補放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro。其中包含核心更新，安裝後要重開機才生效",
+          "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新",
           "pro_helps": "否"
         },
         {
@@ -1622,8 +1638,8 @@
           "category": "D",
           "severity": "高",
           "title": "SSH 允許 root 直接登入",
-          "detail": "permitrootlogin yes",
-          "action": "改為 no 或 prohibit-password",
+          "detail": "SSH 設定 PermitRootLogin 為 yes",
+          "action": "在 /etc/ssh/sshd_config（或 /etc/ssh/sshd_config.d/ 裡的設定檔）把 PermitRootLogin 改為 no，再執行 sudo systemctl reload ssh",
           "pro_helps": "否"
         },
         {
@@ -1631,8 +1647,8 @@
           "category": "D",
           "severity": "中",
           "title": "SSH 允許密碼登入",
-          "detail": "passwordauthentication yes",
-          "action": "評估改用金鑰登入",
+          "detail": "SSH 設定 PasswordAuthentication 為 yes，帳號可能被猜密碼",
+          "action": "先確認每位管理者都能用金鑰登入，再把 PasswordAuthentication 改為 no，執行 sudo systemctl reload ssh",
           "pro_helps": "否"
         },
         {
@@ -1640,8 +1656,8 @@
           "category": "D",
           "severity": "中",
           "title": "主機防火牆（ufw）未啟用",
-          "detail": "ufw status: inactive",
-          "action": "確認是否由網路層防火牆保護；必要時啟用",
+          "detail": "ufw 狀態為 inactive",
+          "action": "先確認是否已由網路層防火牆保護。要啟用時，先執行 sudo ufw allow OpenSSH 保留遠端登入，再執行 sudo ufw enable",
           "pro_helps": "否"
         },
         {
@@ -1649,8 +1665,8 @@
           "category": "D",
           "severity": "中",
           "title": "有 3 個非 Ubuntu 官方來源的套件",
-          "detail": "第三方或來源不明的套件不在 Ubuntu Pro 的修補範圍",
-          "action": "盤點來源，向原廠確認更新方式",
+          "detail": "第三方或來源不明的套件，不在 Ubuntu 與 Ubuntu Pro 的修補範圍",
+          "action": "在主機上執行 pro security-status --thirdparty 與 pro security-status --unavailable 列出這些套件，盤點來源並向原廠確認更新方式",
           "pro_helps": "否"
         },
         {
@@ -1658,8 +1674,8 @@
           "category": "D",
           "severity": "低",
           "title": "未啟用自動安全更新",
-          "detail": "unattended-upgrades 未設定為每日執行",
-          "action": "依單位的變更管理規定決定是否啟用",
+          "detail": "unattended-upgrades 沒有設定為每天執行",
+          "action": "依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades",
           "pro_helps": "否"
         }
       ]
@@ -1667,7 +1683,7 @@
     {
       "tag": "demo-db01",
       "collected_at": "2026-11-16T02:00:00Z",
-      "collector_version": "0.4",
+      "collector_version": "0.5",
       "run_as_root": true,
       "os": "Ubuntu 16.04.7 LTS",
       "version_id": "16.04",
@@ -1697,7 +1713,21 @@
         "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
         "data_file": "oci.com.ubuntu.xenial.usn.oval.xml.bz2",
         "pro_client_pending_packages": 2,
-        "needs_pro_crit_high": 60
+        "needs_pro_crit_high": 60,
+        "packages_needs_pro": [
+          "linux",
+          "sudo",
+          "openssh",
+          "glibc",
+          "bash"
+        ],
+        "packages_pro_not_applied": [],
+        "packages_free": [
+          "glibc",
+          "sudo",
+          "bash",
+          "linux"
+        ]
       },
       "oval_matches": [
         {
@@ -2905,9 +2935,9 @@
           "id": "oval_needs_pro",
           "category": "A",
           "severity": "高",
-          "title": "官方弱點資料：85 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-          "detail": "重大與高風險公告 60 則；核心 64 則、其他套件 21 則（涉及 CVE 38 個）；修補來源：esm-infra 75 則、esm-infra-legacy 10 則。主機上的 Ubuntu Pro 用戶端另外回報 2 個套件待取得，可互相對照",
-          "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新",
+          "title": "5 個套件的安全修補，要訂閱 Ubuntu Pro 才拿得到",
+          "detail": "要更新的套件：linux、sudo、openssh、glibc、bash。對應 85 則官方安全公告，其中重大或高風險 60 則；修補放在 esm-infra（75 則）、esm-infra-legacy（10 則），沒有訂閱的主機用 apt 也裝不到。其中包含核心更新，安裝後要重開機才生效。主機上的 Ubuntu Pro 用戶端另外回報 2 個套件待取得，可互相對照",
+          "action": "訂閱 Ubuntu Pro，在主機上執行 sudo pro attach 註冊，再執行 sudo apt update 與 sudo apt upgrade",
           "pro_helps": "是"
         },
         {
@@ -2923,9 +2953,9 @@
           "id": "oval_free_not_applied",
           "category": "D",
           "severity": "高",
-          "title": "官方弱點資料：14 則安全公告有免費修補，但尚未套用",
-          "detail": "重大與高風險公告 3 則；核心 1 則、其他套件 13 則（涉及 CVE 35 個）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
-          "action": "排定修補時段套用；長期可導入集中管理工具",
+          "title": "4 個套件有免費的安全修補，還沒安裝",
+          "detail": "要更新的套件：glibc、sudo、bash、linux。對應 14 則官方安全公告，其中重大或高風險 3 則。這些修補放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro。其中包含核心更新，安裝後要重開機才生效",
+          "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新",
           "pro_helps": "否"
         },
         {
@@ -2933,8 +2963,8 @@
           "category": "D",
           "severity": "中",
           "title": "SSH 允許密碼登入",
-          "detail": "passwordauthentication yes",
-          "action": "評估改用金鑰登入",
+          "detail": "SSH 設定 PasswordAuthentication 為 yes，帳號可能被猜密碼",
+          "action": "先確認每位管理者都能用金鑰登入，再把 PasswordAuthentication 改為 no，執行 sudo systemctl reload ssh",
           "pro_helps": "否"
         },
         {
@@ -2942,8 +2972,8 @@
           "category": "D",
           "severity": "低",
           "title": "未啟用自動安全更新",
-          "detail": "unattended-upgrades 未設定為每日執行",
-          "action": "依單位的變更管理規定決定是否啟用",
+          "detail": "unattended-upgrades 沒有設定為每天執行",
+          "action": "依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades",
           "pro_helps": "否"
         }
       ]
@@ -2951,7 +2981,7 @@
     {
       "tag": "demo-web01",
       "collected_at": "2026-11-16T02:00:00Z",
-      "collector_version": "0.4",
+      "collector_version": "0.5",
       "run_as_root": false,
       "os": "Ubuntu 22.04.5 LTS",
       "version_id": "22.04",
@@ -2981,7 +3011,18 @@
         "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
         "data_file": "oci.com.ubuntu.jammy.usn.oval.xml.bz2",
         "pro_client_pending_packages": 1,
-        "needs_pro_crit_high": 0
+        "needs_pro_crit_high": 0,
+        "packages_needs_pro": [
+          "redis"
+        ],
+        "packages_pro_not_applied": [],
+        "packages_free": [
+          "linux",
+          "curl",
+          "openssl",
+          "redis",
+          "bash"
+        ]
       },
       "oval_matches": [
         {
@@ -3923,7 +3964,7 @@
       ],
       "engine_check": null,
       "unchecked": [
-        "SSH 設定（需要 sudo，或主機未安裝 SSH 服務）",
+        "SSH 設定（主機沒有安裝 SSH 服務）",
         "主機防火牆（ufw）狀態（需要 sudo，或主機未安裝 ufw）",
         "空密碼帳號（需要 sudo）"
       ],
@@ -3932,9 +3973,9 @@
           "id": "oval_needs_pro",
           "category": "A",
           "severity": "中",
-          "title": "官方弱點資料：2 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-          "detail": "重大與高風險公告 0 則；其他套件 2 則（涉及 CVE 8 個）；修補來源：esm-apps 2 則。主機上的 Ubuntu Pro 用戶端另外回報 1 個套件待取得，可互相對照",
-          "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新",
+          "title": "1 個套件的安全修補，要訂閱 Ubuntu Pro 才拿得到",
+          "detail": "要更新的套件：redis。對應 2 則官方安全公告，其中重大或高風險 0 則；修補放在 esm-apps（2 則），沒有訂閱的主機用 apt 也裝不到。主機上的 Ubuntu Pro 用戶端另外回報 1 個套件待取得，可互相對照",
+          "action": "訂閱 Ubuntu Pro，在主機上執行 sudo pro attach 註冊，再執行 sudo apt update 與 sudo apt upgrade",
           "pro_helps": "是"
         },
         {
@@ -3943,7 +3984,7 @@
           "severity": "高",
           "title": "已安裝新核心，但機器還在跑舊核心",
           "detail": "執行中：5.15.0-125-generic；已安裝最新：5.15.0-130-generic。核心修補要重開機才生效",
-          "action": "排定重開機；若停機困難，Ubuntu Pro 的 Livepatch 可在不重開機下套用高風險核心修補",
+          "action": "排定時段重開機（sudo reboot）；若停機困難，Ubuntu Pro 的 Livepatch 可在不重開機下套用高風險核心修補",
           "pro_helps": "部分"
         },
         {
@@ -3959,9 +4000,9 @@
           "id": "oval_free_not_applied",
           "category": "D",
           "severity": "高",
-          "title": "官方弱點資料：76 則安全公告有免費修補，但尚未套用",
-          "detail": "重大與高風險公告 43 則；核心 41 則、其他套件 35 則（涉及 CVE 98 個）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
-          "action": "排定修補時段套用；長期可導入集中管理工具",
+          "title": "5 個套件有免費的安全修補，還沒安裝",
+          "detail": "要更新的套件：linux、curl、openssl、redis、bash。對應 76 則官方安全公告，其中重大或高風險 43 則。這些修補放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro。其中包含核心更新，安裝後要重開機才生效",
+          "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新",
           "pro_helps": "否"
         },
         {
@@ -3969,8 +4010,8 @@
           "category": "D",
           "severity": "中",
           "title": "有 12 個非 Ubuntu 官方來源的套件",
-          "detail": "第三方或來源不明的套件不在 Ubuntu Pro 的修補範圍",
-          "action": "盤點來源，向原廠確認更新方式",
+          "detail": "第三方或來源不明的套件，不在 Ubuntu 與 Ubuntu Pro 的修補範圍",
+          "action": "在主機上執行 pro security-status --thirdparty 與 pro security-status --unavailable 列出這些套件，盤點來源並向原廠確認更新方式",
           "pro_helps": "否"
         },
         {
@@ -3978,8 +4019,8 @@
           "category": "D",
           "severity": "低",
           "title": "未啟用自動安全更新",
-          "detail": "unattended-upgrades 未設定為每日執行",
-          "action": "依單位的變更管理規定決定是否啟用",
+          "detail": "unattended-upgrades 沒有設定為每天執行",
+          "action": "依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades",
           "pro_helps": "否"
         }
       ]

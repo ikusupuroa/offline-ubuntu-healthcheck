@@ -1,13 +1,13 @@
 ---
-name: ubuntu-healthcheck-advisor
+name: offline-ubuntu-healthcheck
 description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產出的 findings.json，用機關主管與資訊人員看得懂的話說明風險、排出處理順序，並明確標示哪些問題訂閱 Ubuntu Pro 可以解決、哪些不行。使用者提供 findings.json 或健檢報告並要求分析、解讀、提出資安建議時使用。
 ---
 
 # Ubuntu 健檢結果分析指引
 
-版本：0.3（2026-11-16，對應工具 0.4）
+版本：0.4（2026-11-16，對應工具 0.5）
 
-**用在 Claude 以外的 AI 工具**：把本檔「## 指引」以下的全部內容貼進對話，再附上 `findings.json`。
+**怎麼放到自己的 AI 平台**：見使用者手冊（docs/user-guide.pdf）第 6 章。沒辦法安裝 skill 的平台，把本檔和 `findings.json` 一起上傳到同一則對話即可。
 
 **使用前請確認**：只提供加了 `--deidentify` 產出的 `findings.json`（主機代號為 H01、H02…，`deidentified` 為 true）。若 `deidentified` 為 false，先提醒使用者：依機關規定，含主機名稱的結果可能不能輸入雲端 AI，請改用去識別化版本，或改用機關內部的 AI。
 
@@ -27,6 +27,7 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
     - `needs_pro`：要訂閱 Ubuntu Pro 才拿得到的修補數
     - `free_not_applied`：免費、但還沒套用的修補數
     - `pro_not_applied`：已訂閱 Ubuntu Pro、但還沒套用的修補數
+    - `packages_needs_pro`、`packages_free`、`packages_pro_not_applied`：上面三種各自要更新的套件名稱（原始碼套件名稱，依嚴重度排列；只有 `source` 為 `oval` 時才有）
   - `oval_matches[]`：每則尚未修補的安全公告摘要：`title`、`severity`（Critical／High／Medium／Low／Negligible／None）、`needs_pro`、`pockets`（修補來源，例如 esm-infra、esm-apps、esm-infra-legacy 或版本代號）、`cve_count`、`packages`
   - `unchecked[]`：收集時沒有權限或資料不足、沒有檢查到的項目
   - `running_kernel`、`newest_installed_kernel`、`uptime_days`、`livepatch_enabled`
@@ -41,7 +42,7 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 ### 二、必須遵守
 
-1. **只根據檔案內容**。不要自己補 CVE 編號、弱點名稱、套件版本或攻擊情境；檔案裡沒有的，寫「健檢資料未包含」。
+1. **只根據檔案內容**。不要自己補 CVE 編號、弱點名稱、套件版本或攻擊情境；檔案裡沒有的，寫「健檢資料未包含」。建議做法以 `findings[].action` 寫的指令與步驟為準，不要另外編指令。
 2. **分類以檔案為準**。不可以把 D 類說成買 Ubuntu Pro 就能解決，也不可以省略 D 類。
 3. **年限寫完整**：標準維護 5 年；訂閱 Ubuntu Pro（ESM）共 10 年；加購 Legacy 最長 15 年。不要寫「Ubuntu Pro 提供 15 年」。
 4. **Livepatch 的限制要講**：只處理高風險與重大的核心漏洞，不含一般程式庫，也不能取代所有重開機。
@@ -64,11 +65,11 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 **3. Ubuntu Pro 能解決的部分**（獨立一節，明確標示）
 - 列出哪些主機、哪些發現屬於 A 類與 B、C 類中 Pro 可協助的部分
-- 用數字說明，並寫出單位：例如「H01 有 49 則安全公告的修補要訂閱才拿得到」（`patches.unit` 是「個套件」時就寫套件）
+- 用數字說明，並寫出單位：例如「H01 有 49 則安全公告的修補要訂閱才拿得到，涉及 openssl、curl 等 30 個套件」（`patches.unit` 是「個套件」時就寫套件）
 - 版本為 legacy 的主機，註明需要加購 Legacy
 - 同時寫出替代方案（升級新版 LTS），讓機關自己比較
 
-**4. Ubuntu Pro 解決不了的部分**：D 類全部列出，說明由誰處理（機關資訊人員或維護廠商）。
+**4. Ubuntu Pro 解決不了的部分**：D 類全部列出，說明由誰處理（機關資訊人員或維護廠商）。免費修補沒裝的，列出 `packages_free` 的套件名稱，並附上 `action` 裡的更新指令。
 
 **5. 維護責任建議**：依問題類型，建議由機關、維護廠商或原廠支援負責，並建議多久再健檢一次。
 

@@ -14,7 +14,7 @@ Canonical 的安全團隊為每個仍在支援的 Ubuntu 版本，發布機器�
 
 ## 比對怎麼做
 
-1. `collect.sh` 在受檢主機用 `dpkg-query` 列出已安裝套件，內容和 `dpkg-query -W` 的輸出相同。用 `./hc scan` 時，腳本經 SSH 送進主機執行，主機上不留檔案。
+1. `collect.sh` 在受檢主機用 `dpkg-query` 列出已安裝套件，內容和 `dpkg-query -W` 的輸出相同。用 `./hc scan` 時，腳本經 SSH 送進主機執行，主機上不留下腳本與收集檔。
 2. 分析程式把狀態為「已安裝」的套件整理成 `manifest` 檔，格式為每行「套件名稱、Tab、版本」。
 3. 依主機版本挑選對應的 OVAL 檔（例如 20.04 用 focal），逐則檢查：
    - OVAL 用正規表示式在 manifest 裡找出受影響的套件與版本；
