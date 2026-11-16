@@ -23,7 +23,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - name: 取出程式
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: 從 Canonical 官方網站下載並檢查
         run: python3 update-data.py --dest data-out
