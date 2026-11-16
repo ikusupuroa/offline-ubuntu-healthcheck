@@ -1,6 +1,6 @@
 #!/bin/bash
 # offline-ubuntu-healthcheck｜收集腳本（collect.sh）
-# 版本：0.3
+# 版本：0.4
 #
 # 在受檢主機上執行，只讀取系統資訊，產出一個 tar.gz 交給分析電腦。
 # 弱點比對不在主機上做，主機上不需要安裝任何東西，也不需要連網。
@@ -20,22 +20,37 @@
 #   防火牆只記啟用狀態（不收規則）；UID 0 帳號只記數量。
 #
 # 用法：
-#   bash collect.sh --tag H01           # 一般使用者
+#   bash collect.sh --tag H01           # 一般使用者；在目前目錄產出 hc-H01-<時間>.tar.gz
 #   sudo bash collect.sh --tag H01      # 加做三項設定檢查
+#   bash collect.sh --tag H01 --stdout  # 不寫檔，收集結果直接輸出到標準輸出（hc scan 透過 SSH 使用）
 #   代號由受檢單位自訂，代號與主機的對照表只留在受檢單位。
+#
+# 透過 SSH 使用時，整支腳本由標準輸入送進主機（bash -s），主機上不會留下腳本或收集檔：
+#   ssh 帳號@主機 'bash -s -- --tag H01 --stdout' < collect.sh > hc-H01.tar.gz
 
 set -u
 umask 077
 export LC_ALL=C
 
-TAG="UNTAGGED"
-if [ "${1:-}" = "--tag" ] && [ -n "${2:-}" ]; then TAG="$2"; else
-  echo "提醒：未指定 --tag，輸出檔將以 UNTAGGED 命名。建議用 --tag H01 這類代號。"
-fi
+# 整段包在 main 裡：用「bash -s」從標準輸入執行時，bash 會先讀完整個函式再執行，
+# 下面才能安全地把標準輸入切到 /dev/null，避免其中的指令把還沒執行的腳本內容讀走。
+main() {
+exec </dev/null
+TAG="UNTAGGED"; TO_STDOUT=0
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --tag) TAG="${2:-UNTAGGED}"; shift ;;
+    --stdout) TO_STDOUT=1 ;;
+    -h|--help) sed -n '2,30p' "$0" 2>/dev/null; return 0 ;;
+    *) echo "不認得的參數：$1" >&2; return 2 ;;
+  esac
+  shift
+done
+[ "$TAG" = "UNTAGGED" ] && echo "提醒：未指定 --tag，將以 UNTAGGED 命名。建議用 --tag H01 這類代號。" >&2
 TAG="$(printf '%s' "$TAG" | tr -c 'A-Za-z0-9._-' '_')"
 STAMP="$(date +%Y%m%d-%H%M%S)"
 OUTNAME="hc-${TAG}-${STAMP}"
-WORK="$(mktemp -d 2>/dev/null)" || { echo "無法建立暫存目錄"; exit 1; }
+WORK="$(mktemp -d 2>/dev/null)" || { echo "無法建立暫存目錄" >&2; return 1; }
 trap 'rm -rf "$WORK"' EXIT
 D="${WORK}/${OUTNAME}"
 mkdir -p "$D"
@@ -59,7 +74,7 @@ if not isinstance(d,dict): d={}
 print(json.dumps({"attached":d.get("attached"),"services":[{"name":s.get("name"),"status":s.get("status"),"entitled":s.get("entitled")} for s in d.get("services",[]) if isinstance(s,dict)]}))'
 
 {
-  echo "collector_version=0.3"
+  echo "collector_version=0.4"
   echo "collected_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "tag=${TAG}"
   echo "uid=$(id -u)"
@@ -119,9 +134,14 @@ if [ -r /etc/shadow ]; then
 fi
 
 # 打包
-if tar -czf "./${OUTNAME}.tar.gz" -C "$WORK" "$OUTNAME"; then
+if [ "$TO_STDOUT" = 1 ]; then
+  tar -czf - -C "$WORK" "$OUTNAME" || { echo "打包失敗" >&2; return 1; }
+elif tar -czf "./${OUTNAME}.tar.gz" -C "$WORK" "$OUTNAME"; then
   echo "完成：$(pwd)/${OUTNAME}.tar.gz"
-  echo "檔案內含套件清單與設定摘要，請依機關資料分級規定保管。"
+  echo "請把這個檔案交給健檢執行人員。檔案內含套件清單與設定摘要，請依單位的資料分級規定保管。"
 else
-  echo "打包失敗，請確認目前目錄可以寫入。"; exit 1
+  echo "打包失敗，請確認目前目錄可以寫入。" >&2; return 1
 fi
+}
+
+main "$@"

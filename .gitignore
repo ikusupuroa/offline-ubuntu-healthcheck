@@ -9,3 +9,6 @@ hc-report*/
 __pycache__/
 *.pyc
 .DS_Store
+/reports/
+/test-results/
+hosts.txt

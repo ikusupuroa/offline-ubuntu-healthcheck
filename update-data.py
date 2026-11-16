@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜官方資料更新（update-data.py）
 
-版本：0.3
+版本：0.4
 在「能上網」的電腦執行（Python 3.6 以上，只用標準函式庫）。從 Canonical 官方網站下載
 套件清單版的 OVAL 弱點資料，並留下來源紀錄，方便帶進離線環境後核對。
 
 用法：
   python3 update-data.py                     # 下載所有 LTS 版本到 data/（已是最新就跳過）
-  python3 update-data.py --releases focal,jammy
+  python3 update-data.py --releases 20.04,22.04     # 用版本號或代號（focal,jammy）都可以
   python3 update-data.py --verify            # 核對 data/ 內檔案與下載紀錄是否一致（離線環境也能跑）
   python3 update-data.py --list              # 列出目前資料的日期
 
@@ -33,9 +33,22 @@ import tempfile
 import urllib.error
 import urllib.request
 
-VERSION = "0.3"
+VERSION = "0.4"
 BASE = "https://security-metadata.canonical.com/oval/"
-LTS = ["trusty", "xenial", "bionic", "focal", "jammy", "noble", "resolute"]
+# LTS 版本代號與版本號（使用者多半記版本號，畫面上兩個一起顯示）
+LTS_VERSIONS = {"trusty": "14.04", "xenial": "16.04", "bionic": "18.04", "focal": "20.04",
+                "jammy": "22.04", "noble": "24.04", "resolute": "26.04"}
+LTS = list(LTS_VERSIONS)
+
+
+def label(code):
+    v = LTS_VERSIONS.get(code)
+    return "%s（%s）" % (code, v) if v else code
+
+
+def label_of_file(name):
+    m = re.match(r"oci\.com\.ubuntu\.([a-z]+)\.", name)
+    return label(m.group(1)) if m else name
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -121,12 +134,12 @@ def download(code, dest, src, timeout, quiet):
     except urllib.error.HTTPError as e:
         if e.code == 304:
             if not quiet:
-                print("  %-9s 已是最新（官方更新時間 %s）" % (code, rec.get("last_modified")))
+                print("  %s 已是最新（官方更新時間 %s）" % (label(code), rec.get("last_modified")))
             return True
-        print("  %-9s 下載失敗：HTTP %d" % (code, e.code), file=sys.stderr)
+        print("  %s 下載失敗：HTTP %d" % (label(code), e.code), file=sys.stderr)
         return False
     except (urllib.error.URLError, OSError) as e:
-        print("  %-9s 下載失敗：%s" % (code, e), file=sys.stderr)
+        print("  %s 下載失敗：%s" % (label(code), e), file=sys.stderr)
         return False
     fd, tmp = tempfile.mkstemp(prefix=".dl-", dir=dest)
     try:
@@ -141,7 +154,7 @@ def download(code, dest, src, timeout, quiet):
         os.replace(tmp, target)
     except Exception as e:
         os.path.exists(tmp) and os.remove(tmp)
-        print("  %-9s 內容檢查失敗，保留舊檔：%s" % (code, e), file=sys.stderr)
+        print("  %s 內容檢查失敗，保留舊檔：%s" % (label(code), e), file=sys.stderr)
         return False
     src["files"][name] = {
         "url": url,
@@ -152,7 +165,7 @@ def download(code, dest, src, timeout, quiet):
         "sha256": sha256(target),
     }
     if not quiet:
-        print("  %-9s 已下載（官方產生時間 %s）" % (code, stamp))
+        print("  %s 已下載（官方產生時間 %s）" % (label(code), stamp))
     return True
 
 
@@ -165,20 +178,20 @@ def verify(dest):
     for name, r in sorted(src["files"].items()):
         p = os.path.join(dest, name)
         if not os.path.isfile(p):
-            print("  缺檔    %s" % name)
+            print("  缺檔    %s　%s" % (label_of_file(name), name))
             bad += 1
         elif sha256(p) != r.get("sha256"):
-            print("  不一致  %s（檔案在下載後被改過或損毀，請重新下載）" % name)
+            print("  不一致  %s　%s（檔案在下載後被改過或損毀，請重新下載）" % (label_of_file(name), name))
             bad += 1
         else:
-            print("  一致    %s（官方產生時間 %s）" % (name, r.get("generator_timestamp", "?")))
+            print("  一致    %s　官方產生時間 %s" % (label_of_file(name), r.get("generator_timestamp", "?")))
     return 1 if bad else 0
 
 
 def main():
     ap = argparse.ArgumentParser(description="下載或核對 Canonical 官方 OVAL 弱點資料")
     ap.add_argument("--dest", default=os.path.join(HERE, "data"), help="存放資料的資料夾（預設：程式旁的 data/）")
-    ap.add_argument("--releases", default=",".join(LTS), help="版本代號，以逗號分隔（預設：%s）" % ",".join(LTS))
+    ap.add_argument("--releases", default=",".join(LTS), help="版本號或代號，以逗號分隔，例如 20.04,22.04（預設：全部 LTS）")
     ap.add_argument("--verify", action="store_true", help="只核對，不下載")
     ap.add_argument("--list", action="store_true", help="列出目前資料的日期")
     ap.add_argument("--timeout", type=int, default=120)
@@ -190,12 +203,13 @@ def main():
         return verify(args.dest)
     if args.list:
         for n, r in sorted(load_sources(args.dest)["files"].items()):
-            print("%-45s 官方產生 %s　下載 %s" % (n, r.get("generator_timestamp", "?"), r.get("downloaded_at", "?")))
+            print("%s　官方產生 %s　下載 %s" % (label_of_file(n), r.get("generator_timestamp", "?"), r.get("downloaded_at", "?")))
         return 0
-    codes = [c.strip() for c in args.releases.split(",") if c.strip()]
+    by_ver = {v: c for c, v in LTS_VERSIONS.items()}
+    codes = [by_ver.get(c.strip(), c.strip()) for c in args.releases.split(",") if c.strip()]
     bad = [c for c in codes if not re.match(r"^[a-z]+$", c)]
     if bad:
-        ap.error("版本代號格式不對：%s" % ", ".join(bad))
+        ap.error("看不懂的版本：%s（請用 20.04 這類版本號或 focal 這類代號）" % ", ".join(bad))
     src = load_sources(args.dest)
     if not args.quiet:
         print("來源：%s" % BASE)

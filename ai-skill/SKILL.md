@@ -5,7 +5,7 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 # Ubuntu 健檢結果分析指引
 
-版本：0.2（2026-11-16，對應工具 0.3）
+版本：0.3（2026-11-16，對應工具 0.4）
 
 **用在 Claude 以外的 AI 工具**：把本檔「## 指引」以下的全部內容貼進對話，再附上 `findings.json`。
 
@@ -31,7 +31,8 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
   - `unchecked[]`：收集時沒有權限或資料不足、沒有檢查到的項目
   - `running_kernel`、`newest_installed_kernel`、`uptime_days`、`livepatch_enabled`
   - `findings[]`：每項有 `category`（A/B/C/D）、`severity`（高/中/低）、`title`、`detail`、`action`、`pro_helps`（是/部分/否）
-- 最上層的 `data` 列出使用的官方資料檔與產生時間，`engine` 是比對引擎；`data` 為空代表沒有用官方資料比對。
+- 最上層的 `data` 列出使用的官方資料檔與產生時間，`engine` 是比對引擎；`data` 為空代表沒有用官方資料比對。`warnings` 是分析時的提醒（例如主機代號重複），要轉告使用者。
+- 核心公告（套件名稱以 linux 開頭）常一則就涵蓋上千個 CVE。說明風險時以「公告則數」與「重大／高風險則數」為主，不要用 CVE 總數渲染嚴重程度。
 - 分類定義：
   - A 修補取不到：訂閱 Ubuntu Pro 可解決
   - B 修補需要停機：Ubuntu Pro 的 Livepatch 可降低，但不能取代所有重開機
@@ -63,7 +64,7 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 **3. Ubuntu Pro 能解決的部分**（獨立一節，明確標示）
 - 列出哪些主機、哪些發現屬於 A 類與 B、C 類中 Pro 可協助的部分
-- 用數字說明：例如「H01 有 5 個安全更新要訂閱才拿得到」
+- 用數字說明，並寫出單位：例如「H01 有 49 則安全公告的修補要訂閱才拿得到」（`patches.unit` 是「個套件」時就寫套件）
 - 版本為 legacy 的主機，註明需要加購 Legacy
 - 同時寫出替代方案（升級新版 LTS），讓機關自己比較
 

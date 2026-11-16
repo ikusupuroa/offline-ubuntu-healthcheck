@@ -1,8 +1,9 @@
 {
-  "schema": "offline-ubuntu-healthcheck/0.3",
-  "tool_version": "0.3",
+  "schema": "offline-ubuntu-healthcheck/0.4",
+  "tool_version": "0.4",
   "basis_month": "2026-11",
   "deidentified": false,
+  "warnings": [],
   "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
   "data": {
     "focal": {
@@ -49,7 +50,7 @@
     {
       "tag": "demo-ap01",
       "collected_at": "2026-11-16T02:00:00Z",
-      "collector_version": "0.3",
+      "collector_version": "0.4",
       "run_as_root": true,
       "os": "Ubuntu 20.04.6 LTS",
       "version_id": "20.04",
@@ -78,7 +79,8 @@
         "free_not_applied": 74,
         "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
         "data_file": "oci.com.ubuntu.focal.usn.oval.xml.bz2",
-        "pro_client_pending_packages": 5
+        "pro_client_pending_packages": 5,
+        "needs_pro_crit_high": 24
       },
       "oval_matches": [
         {
@@ -1575,7 +1577,7 @@
           "category": "A",
           "severity": "高",
           "title": "官方弱點資料：49 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-          "detail": "涉及 CVE 307 個（重大與高風險公告 24 則）；來源：esm-apps 18 則、esm-infra 31 則。主機上的 Ubuntu Pro 用戶端另外回報 5 個套件待取得，可互相對照",
+          "detail": "重大與高風險公告 24 則；核心 20 則、其他套件 29 則（涉及 CVE 120 個）；修補來源：esm-apps 18 則、esm-infra 31 則。主機上的 Ubuntu Pro 用戶端另外回報 5 個套件待取得，可互相對照",
           "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新",
           "pro_helps": "是"
         },
@@ -1611,7 +1613,7 @@
           "category": "D",
           "severity": "高",
           "title": "官方弱點資料：74 則安全公告有免費修補，但尚未套用",
-          "detail": "涉及 CVE 1273 個（重大與高風險公告 43 則）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
+          "detail": "重大與高風險公告 43 則；核心 41 則、其他套件 33 則（涉及 CVE 94 個）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
           "action": "排定修補時段套用；長期可導入集中管理工具",
           "pro_helps": "否"
         },
@@ -1665,7 +1667,7 @@
     {
       "tag": "demo-db01",
       "collected_at": "2026-11-16T02:00:00Z",
-      "collector_version": "0.3",
+      "collector_version": "0.4",
       "run_as_root": true,
       "os": "Ubuntu 16.04.7 LTS",
       "version_id": "16.04",
@@ -1694,7 +1696,8 @@
         "free_not_applied": 14,
         "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
         "data_file": "oci.com.ubuntu.xenial.usn.oval.xml.bz2",
-        "pro_client_pending_packages": 2
+        "pro_client_pending_packages": 2,
+        "needs_pro_crit_high": 60
       },
       "oval_matches": [
         {
@@ -2903,7 +2906,7 @@
           "category": "A",
           "severity": "高",
           "title": "官方弱點資料：85 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-          "detail": "涉及 CVE 772 個（重大與高風險公告 60 則）；來源：esm-infra 75 則、esm-infra-legacy 10 則。主機上的 Ubuntu Pro 用戶端另外回報 2 個套件待取得，可互相對照",
+          "detail": "重大與高風險公告 60 則；核心 64 則、其他套件 21 則（涉及 CVE 38 個）；修補來源：esm-infra 75 則、esm-infra-legacy 10 則。主機上的 Ubuntu Pro 用戶端另外回報 2 個套件待取得，可互相對照",
           "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新",
           "pro_helps": "是"
         },
@@ -2921,7 +2924,7 @@
           "category": "D",
           "severity": "高",
           "title": "官方弱點資料：14 則安全公告有免費修補，但尚未套用",
-          "detail": "涉及 CVE 35 個（重大與高風險公告 3 則）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
+          "detail": "重大與高風險公告 3 則；核心 1 則、其他套件 13 則（涉及 CVE 35 個）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
           "action": "排定修補時段套用；長期可導入集中管理工具",
           "pro_helps": "否"
         },
@@ -2948,7 +2951,7 @@
     {
       "tag": "demo-web01",
       "collected_at": "2026-11-16T02:00:00Z",
-      "collector_version": "0.3",
+      "collector_version": "0.4",
       "run_as_root": false,
       "os": "Ubuntu 22.04.5 LTS",
       "version_id": "22.04",
@@ -2977,7 +2980,8 @@
         "free_not_applied": 76,
         "engine": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
         "data_file": "oci.com.ubuntu.jammy.usn.oval.xml.bz2",
-        "pro_client_pending_packages": 1
+        "pro_client_pending_packages": 1,
+        "needs_pro_crit_high": 0
       },
       "oval_matches": [
         {
@@ -3929,7 +3933,7 @@
           "category": "A",
           "severity": "中",
           "title": "官方弱點資料：2 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-          "detail": "涉及 CVE 8 個（重大與高風險公告 0 則）；來源：esm-apps 2 則。主機上的 Ubuntu Pro 用戶端另外回報 1 個套件待取得，可互相對照",
+          "detail": "重大與高風險公告 0 則；其他套件 2 則（涉及 CVE 8 個）；修補來源：esm-apps 2 則。主機上的 Ubuntu Pro 用戶端另外回報 1 個套件待取得，可互相對照",
           "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新",
           "pro_helps": "是"
         },
@@ -3956,7 +3960,7 @@
           "category": "D",
           "severity": "高",
           "title": "官方弱點資料：76 則安全公告有免費修補，但尚未套用",
-          "detail": "涉及 CVE 4675 個（重大與高風險公告 43 則）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
+          "detail": "重大與高風險公告 43 則；核心 41 則、其他套件 35 則（涉及 CVE 98 個）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
           "action": "排定修補時段套用；長期可導入集中管理工具",
           "pro_helps": "否"
         },

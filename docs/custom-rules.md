@@ -19,7 +19,7 @@
 執行時加上 `--rules`：
 
 ```bash
-python3 analyze.py hc-*.tar.gz --rules my-rules.json
+./hc report hc-*.tar.gz --rules my-rules.json
 ```
 
 程式會把自訂檔覆蓋在預設值上：物件逐層合併，清單整個取代。報告表頭會註明有使用自訂規則。
@@ -32,7 +32,7 @@ python3 analyze.py hc-*.tar.gz --rules my-rules.json
 | `categories` | A 到 D 四類的名稱，以及「Ubuntu Pro 能否解決」的寫法 |
 | `thresholds.uptime_days_warn` | 連續運作幾天以上要提醒（預設 90） |
 | `thresholds.data_max_age_days` | 官方資料超過幾天要警告（預設 7） |
-| `thresholds.detail_rows_per_host` | 附錄每台主機列幾則公告（預設 30） |
+| `thresholds.detail_rows_per_host` | report.md 附錄每台主機列幾個套件（預設 30） |
 | `usg_versions` | 哪些版本要提出 C 類「未使用 USG」建議 |
 | `severity_names` | 官方嚴重度的中文名稱 |
 | `findings.<代號>` | 每一種發現的開關、類別、嚴重度、標題、說明、建議 |
@@ -68,7 +68,7 @@ python3 analyze.py hc-*.tar.gz --rules my-rules.json
 
 | 發現 | 可用變數 |
 |---|---|
-| `oval_*` | `{usns}` 公告則數、`{cves}` CVE 數、`{crit_high}` 重大與高風險公告數、`{pockets}` 修補來源（只有 `oval_needs_pro`） |
+| `oval_*` | `{usns}` 公告則數、`{crit_high}` 重大與高風險公告數、`{breakdown}` 核心與其他套件的則數與 CVE 數（例如「核心 20 則、其他套件 29 則（涉及 CVE 120 個）」）、`{kernel_usns}`、`{other_usns}`、`{cves_other}` 核心以外的 CVE 數、`{cves}` 全部 CVE 數（含核心，數字常很大）、`{pockets}` 修補來源（只有 `oval_needs_pro`） |
 | `pro_client_pending` | `{n}`、`{infra}`、`{apps}` |
 | `kernel_not_running_newest` | `{running}`、`{newest}` |
 | `long_uptime` | `{days}` |

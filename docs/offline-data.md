@@ -13,12 +13,12 @@
 
 ## 自動更新（能上網的電腦）
 
-`update-data.py` 會先問官方伺服器檔案有沒有更新；沒更新就不重複下載，可以放心每天排程執行。
+`./hc update` 會先問官方伺服器檔案有沒有更新，沒更新就不重複下載，所以可以放心每天排程執行。
 
 Linux 用 cron 每天早上 6 點更新（路徑請換成實際位置）：
 
 ```
-0 6 * * * cd /opt/offline-ubuntu-healthcheck && python3 update-data.py --quiet
+0 6 * * * cd /opt/offline-ubuntu-healthcheck && ./hc update --quiet
 ```
 
 `--quiet` 只在出錯時輸出訊息。需要經過 Proxy 時，在排程裡設定 `https_proxy` 環境變數。
@@ -28,7 +28,7 @@ Linux 用 cron 每天早上 6 點更新（路徑請換成實際位置）：
 1. 在能上網的電腦執行：
 
    ```bash
-   python3 update-data.py
+   ./hc update
    ```
 
 2. 把整個 `data/` 資料夾複製到隨身碟，或走受檢單位規定的媒體匯入程序（例如掃毒、單向傳輸設備）。資料夾內有：
@@ -39,7 +39,7 @@ Linux 用 cron 每天早上 6 點更新（路徑請換成實際位置）：
 3. 在離線的分析電腦上核對：
 
    ```bash
-   python3 update-data.py --verify
+   ./hc update --verify
    ```
 
    或用系統內建指令：
@@ -52,6 +52,16 @@ Linux 用 cron 每天早上 6 點更新（路徑請換成實際位置）：
 
 4. 要更嚴謹時，可以在下載當下把 `SHA256SUMS` 的內容另外記錄下來（例如印出或寫進交接單），匯入後再拿來比對。這樣能確認雜湊值清單本身在搬運途中也沒被換掉。
 
+## 改用自己保管的資料
+
+資料不一定要放在程式旁的 `data/`。放在任何資料夾都可以，掃描時加上 `--data`：
+
+```bash
+./hc report hc-H01-*.tar.gz --data /media/usb/oval
+```
+
+只想用某一個檔案時，改用 `--oval 檔案路徑`。
+
 ## 不用本工具也能下載
 
 在瀏覽器打開 <https://security-metadata.canonical.com/oval/>，下載需要的版本，檔名開頭必須是 `oci.`。例如 20.04 是 `oci.com.ubuntu.focal.usn.oval.xml.bz2`。
@@ -62,7 +72,14 @@ Linux 用 cron 每天早上 6 點更新（路徑請換成實際位置）：
 
 ## 資料多新才算夠新
 
-報告表頭會列出每個資料檔的「官方產生時間」和「距分析日幾天」。超過規則檔的 `data_max_age_days`（預設 7 天）時，報告會出現警告。
+開始收集前，工具會先檢查官方資料的日期。分析前，畫面會列出這次用到的各版本資料是哪一天產生的，例如：
+
+```
+官方弱點資料（data）：
+  focal（20.04）：官方產生於 2026-11-13（3 天前）
+```
+
+超過規則檔的 `data_max_age_days`（預設 7 天），或缺少某個版本的資料時，會問你要不要先更新；報告上也會出現警告。不想被問，可以加 `--update no`（不更新）或 `--update yes`（自動更新）。
 
 天數可以在自訂規則檔裡調整，見 [custom-rules.md](custom-rules.md)。
 

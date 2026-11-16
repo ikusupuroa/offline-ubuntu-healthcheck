@@ -51,19 +51,19 @@
     "oval_needs_pro": {
       "enabled": true, "category": "A", "severity": "auto",
       "title": "官方弱點資料：{usns} 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到",
-      "detail": "涉及 CVE {cves} 個（重大與高風險公告 {crit_high} 則）；來源：{pockets}",
+      "detail": "重大與高風險公告 {crit_high} 則；{breakdown}；修補來源：{pockets}",
       "action": "訂閱 Ubuntu Pro 並註冊主機後，用 apt 套用更新"
     },
     "oval_pro_not_applied": {
       "enabled": true, "category": "D", "severity": "auto",
       "title": "已訂閱 Ubuntu Pro，但有 {usns} 則安全公告的修補尚未套用",
-      "detail": "涉及 CVE {cves} 個（重大與高風險公告 {crit_high} 則）",
+      "detail": "重大與高風險公告 {crit_high} 則；{breakdown}",
       "action": "排定修補時段套用"
     },
     "oval_free_not_applied": {
       "enabled": true, "category": "D", "severity": "auto",
       "title": "官方弱點資料：{usns} 則安全公告有免費修補，但尚未套用",
-      "detail": "涉及 CVE {cves} 個（重大與高風險公告 {crit_high} 則）。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
+      "detail": "重大與高風險公告 {crit_high} 則；{breakdown}。這些修補不需要 Ubuntu Pro，是例行修補沒有執行",
       "action": "排定修補時段套用；長期可導入集中管理工具"
     },
     "pro_client_pending": {
@@ -164,6 +164,7 @@
       "本健檢只讀取系統資訊，不做弱點利用測試、不修改設定，不等同滲透測試。",
       "只涵蓋 Ubuntu 官方套件庫的套件；第三方軟體（例如自行安裝的應用程式）的弱點不在比對範圍。",
       "官方弱點資料以「已安裝的套件版本」比對：舊核心套件若仍留在系統上，也可能被列入；實際執行中的核心請看 B 類。",
+      "核心公告常一則就涵蓋上千個 CVE，報告中的 CVE 數只計算核心以外的套件。",
       "標示「未能檢查」的項目，代表收集時權限不足或主機沒有對應工具，不代表沒有問題。",
       "結果反映收集當下的狀態，以及報告上所列官方資料日期之前公布的弱點。"
     ]

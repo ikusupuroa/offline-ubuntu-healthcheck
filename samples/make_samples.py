@@ -82,7 +82,7 @@ for tag, h in HOSTS.items():
     os.makedirs(d, exist_ok=True)
     w = lambda n, t: open(os.path.join(d, n), "w").write(t + "\n__EXIT__=0\n")
     open(os.path.join(d, "meta.txt"), "w").write(
-        "collector_version=0.3\ncollected_at=2026-11-16T02:00:00Z\ntag=%s\nuid=%s\n" % (tag, "0" if h["root"] else "1000"))
+        "collector_version=0.4\ncollected_at=2026-11-16T02:00:00Z\ntag=%s\nuid=%s\n" % (tag, "0" if h["root"] else "1000"))
     w("os-release.txt", h["os"])
     w("kernel-release.txt", h["uname"].split()[2])
     w("uname.txt", "Linux %s x86_64" % h["uname"].split()[2])
