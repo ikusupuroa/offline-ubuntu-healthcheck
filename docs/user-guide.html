@@ -36,6 +36,25 @@ img{max-width:100%;border:1px solid var(--line);border-radius:6px;margin:8px 0 1
 .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
 .flow span{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:6px 10px}
 .tag{display:inline-block;border-radius:4px;padding:0 6px;font-size:12px;font-weight:700;color:#fff}
+figure.arch{margin:14px 0 18px}
+figure.arch svg{display:block;width:100%;height:auto}
+figure.arch figcaption{font-weight:600;margin:6px 0 4px}
+figure.arch ol.legend{list-style:none;padding-left:0;margin:4px 0}
+figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
+.arch .z{fill:none;stroke:#9aa0a6;stroke-width:1.5;stroke-dasharray:6 4}
+.arch .zw{fill:#fff8ef;stroke:var(--warnb);stroke-width:1.5;stroke-dasharray:6 4}
+.arch .bx{fill:var(--card);stroke:var(--fg);stroke-width:1.2}
+.arch .wb{fill:#fff;stroke:var(--fg);stroke-width:1}
+.arch .hl{fill:#fff;stroke:var(--acc);stroke-width:1.5}
+.arch .ln{fill:none;stroke:var(--fg);stroke-width:1.6}
+.arch .lr{fill:none;stroke:var(--acc);stroke-width:1.6}
+.arch text{font-size:13px;fill:var(--fg)}
+.arch .t{font-size:14px;font-weight:700}
+.arch .s{font-size:12px;fill:var(--mut)}
+.arch .c{font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12px}
+.arch .zl{font-size:12.5px;font-weight:700;fill:var(--mut)}
+.arch .bd{fill:var(--acc)}
+.arch .bn{font-size:12px;font-weight:700;fill:#fff}
 .tA{background:#c62828}.tB{background:#ef6c00}.tC{background:#1565c0}.tD{background:#546e7a}
 @media print{
   main{max-width:none;padding:0}
@@ -88,6 +107,7 @@ img{max-width:100%;border:1px solid var(--line);border-radius:6px;margin:8px 0 1
 
 <h3>整個流程</h3>
 <div class="flow"><span>① 準備分析電腦</span>→<span>② 準備主機清單</span>→<span>③ 收集並產生報告</span>→<span>④ 看報告</span>→<span>⑤（選用）交給 AI 分析</span></div>
+<p>各步驟在哪台電腦上做、資料怎麼流動，請看第 2 章的圖 1（下載與更新）和第 4 章的圖 2（掃描主機）。</p>
 
 <h3>會做與不會做的事</h3>
 <div class="tw"><table>
@@ -108,6 +128,71 @@ img{max-width:100%;border:1px solid var(--line);border-radius:6px;margin:8px 0 1
 </ul>
 
 <h3>2.2 下載工具</h3>
+
+<p>從下載、更新到帶進封閉環境，整個過程如圖 1。2.2 與 2.3 節會逐步說明。</p>
+
+<figure class="arch keep">
+<svg viewBox="0 0 680 425" role="img" aria-label="圖 1：下載、更新工具並帶進封閉環境">
+<defs><marker id="ah1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#1d1d1f"/></marker></defs>
+<!-- 網際網路 -->
+<rect class="z" x="10" y="10" width="660" height="100" rx="10"/>
+<text class="zl" x="22" y="30">網際網路</text>
+<rect class="bx" x="30" y="40" width="280" height="56" rx="8"/>
+<text class="t" x="170" y="63" text-anchor="middle">GitHub（本專案）</text>
+<text class="s" x="170" y="84" text-anchor="middle">工具程式＋每天更新的官方資料副本</text>
+<rect class="bx" x="370" y="40" width="280" height="56" rx="8"/>
+<text class="t" x="510" y="63" text-anchor="middle">Canonical 官方網站</text>
+<text class="s" x="510" y="84" text-anchor="middle">OVAL 弱點資料（原始來源）</text>
+<!-- 能上網的地方 -->
+<rect class="z" x="10" y="165" width="300" height="250" rx="10"/>
+<text class="zl" x="22" y="402">能上網的地方（例如辦公室）</text>
+<rect class="bx" x="30" y="200" width="260" height="105" rx="8"/>
+<text class="t" x="160" y="223" text-anchor="middle">你的分析電腦</text>
+<text class="c" x="160" y="244" text-anchor="middle">offline-ubuntu-healthcheck/</text>
+<text class="s" x="160" y="263" text-anchor="middle">工具＋data/（官方資料）</text>
+<circle class="bd" cx="52" cy="286" r="10"/><text class="bn" x="52" y="290" text-anchor="middle">3</text>
+<text class="c" x="68" y="290">./hc update --list</text><text class="s" x="206" y="290">看日期</text>
+<!-- 封閉環境 -->
+<rect class="zw" x="410" y="165" width="260" height="250" rx="10"/>
+<text class="zl" x="422" y="185">封閉環境（客戶現場）</text>
+<rect class="bx" x="430" y="200" width="220" height="90" rx="8"/>
+<text class="t" x="540" y="223" text-anchor="middle">封閉環境裡的電腦</text>
+<text class="c" x="540" y="248" text-anchor="middle">./hc update --verify</text>
+<text class="s" x="540" y="270" text-anchor="middle">每一行都是「一致」才正常</text>
+<text class="s" x="425" y="385">不用隨身碟：分析電腦整台帶進場</text>
+<text class="s" x="425" y="402">也可以，進場後一樣做第 5 步</text>
+<!-- 隨身碟 -->
+<rect class="wb" x="320" y="320" width="80" height="50" rx="8"/>
+<text class="t" x="360" y="343" text-anchor="middle">隨身碟</text>
+<text class="s" x="360" y="361" text-anchor="middle">（選用）</text>
+<!-- ① 下載 -->
+<path class="ln" d="M120 96V197" marker-end="url(#ah1)"/>
+<circle class="bd" cx="138" cy="132" r="10"/><text class="bn" x="138" y="136" text-anchor="middle">1</text>
+<text class="c" x="154" y="136">git clone</text>
+<text class="s" x="154" y="154">下載工具，含一份資料</text>
+<!-- ② 更新 -->
+<path class="ln" d="M480 96L278 197" marker-end="url(#ah1)"/>
+<circle class="bd" cx="420" cy="130" r="10"/><text class="bn" x="420" y="134" text-anchor="middle">2</text>
+<text class="c" x="436" y="134">./hc update</text><text class="s" x="522" y="134">向官方更新</text>
+<text class="s" x="436" y="152">連不到官方時，改從 GitHub 用 git pull</text>
+<!-- ④ 複製 -->
+<path class="ln" d="M160 305V345H317" marker-end="url(#ah1)"/>
+<circle class="bd" cx="182" cy="329" r="10"/><text class="bn" x="182" y="333" text-anchor="middle">4</text>
+<text class="s" x="198" y="333">複製整個資料夾</text>
+<!-- ⑤ 帶進場 -->
+<path class="ln" d="M400 345H540V293" marker-end="url(#ah1)"/>
+<circle class="bd" cx="434" cy="329" r="10"/><text class="bn" x="434" y="333" text-anchor="middle">5</text>
+<text class="s" x="450" y="333">帶進場後核對</text>
+</svg>
+<figcaption>圖 1　下載、更新，帶進封閉環境</figcaption>
+<ol class="legend">
+  <li>① 用 <code>git clone</code> 下載工具，同時會帶回一份官方資料（本節步驟 1）。</li>
+  <li>② 執行 <code>./hc update</code>，向 Canonical 官方網站取得最新資料。連不到官方網站、但能連 GitHub 時，改用 <code>git pull</code>（2.3 節）。</li>
+  <li>③ 執行 <code>./hc update --list</code>，確認資料日期在 7 天內。</li>
+  <li>④（選用）把整個 <code>offline-ubuntu-healthcheck</code> 資料夾複製到隨身碟。</li>
+  <li>⑤ 在封閉環境的電腦上執行 <code>./hc update --verify</code>，確認檔案沒被改過或損毀。</li>
+</ol>
+</figure>
 
 <div class="step"><b class="n">1</b><div>
 <p>在能上網的電腦上下載：</p>
@@ -168,6 +253,82 @@ H02   ops@10.0.0.6     -p 2222</pre>
 <p>依你的情況選一種。三種做法產生的報告完全一樣。</p>
 
 <h3>情況一：分析電腦能用 SSH 連到主機（建議）</h3>
+<p>一次掃描多台主機的過程如圖 2。</p>
+
+<figure class="arch keep">
+<svg viewBox="0 0 680 450" role="img" aria-label="圖 2：用 SSH 掃描多台主機">
+<defs>
+<marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#1d1d1f"/></marker>
+<marker id="ah2r" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#b33a1f"/></marker>
+</defs>
+<!-- 分析電腦 -->
+<rect class="z" x="10" y="10" width="280" height="430" rx="10"/>
+<text class="zl" x="22" y="30">你的分析電腦（掃描時不必上網）</text>
+<rect class="hl" x="28" y="44" width="244" height="40" rx="8"/>
+<circle class="bd" cx="46" cy="64" r="10"/><text class="bn" x="46" y="68" text-anchor="middle">2</text>
+<text class="c" x="62" y="68">./hc scan hosts.txt --sudo</text>
+<rect class="bx" x="28" y="100" width="244" height="252" rx="8"/>
+<text class="c" x="40" y="120">offline-ubuntu-healthcheck/</text>
+<rect class="wb" x="40" y="130" width="220" height="40" rx="6"/>
+<circle class="bd" cx="56" cy="150" r="10"/><text class="bn" x="56" y="154" text-anchor="middle">1</text>
+<text class="c" x="72" y="146">hosts.txt</text>
+<text class="s" x="72" y="163">主機清單：代號 帳號@IP</text>
+<rect class="wb" x="40" y="178" width="220" height="40" rx="6"/>
+<text class="c" x="72" y="194">collect.sh</text>
+<text class="s" x="72" y="211">收集腳本</text>
+<rect class="wb" x="40" y="226" width="220" height="40" rx="6"/>
+<text class="c" x="72" y="242">data/</text>
+<text class="s" x="72" y="259">官方弱點資料</text>
+<path class="ln" d="M150 266V287" marker-end="url(#ah2)"/>
+<circle class="bd" cx="172" cy="276" r="10"/><text class="bn" x="172" y="280" text-anchor="middle">5</text>
+<text class="s" x="188" y="281">在本機比對</text>
+<rect class="wb" x="40" y="290" width="220" height="54" rx="6"/>
+<circle class="bd" cx="56" cy="317" r="10"/><text class="bn" x="56" y="321" text-anchor="middle">6</text>
+<text class="c" x="72" y="306">reports/日期時間/</text>
+<text class="s" x="72" y="322">report.html、findings.json</text>
+<text class="s" x="72" y="337">collected/（收集到的資料）</text>
+<path class="ln" d="M150 344V375" marker-end="url(#ah2)"/>
+<rect class="hl" x="28" y="378" width="244" height="44" rx="8"/>
+<circle class="bd" cx="46" cy="400" r="10"/><text class="bn" x="46" y="404" text-anchor="middle">7</text>
+<text x="62" y="405">用瀏覽器打開 report.html</text>
+<!-- 受檢主機 -->
+<rect class="z" x="420" y="10" width="250" height="430" rx="10"/>
+<text class="zl" x="432" y="30">受檢主機（單位內部網路）</text>
+<rect class="bx" x="450" y="56" width="205" height="56" rx="8"/>
+<text class="t" x="552" y="79" text-anchor="middle">H01　Ubuntu 20.04</text>
+<text class="c" x="552" y="100" text-anchor="middle">admin@10.0.0.5</text>
+<rect class="bx" x="450" y="128" width="205" height="56" rx="8"/>
+<text class="t" x="552" y="151" text-anchor="middle">H02　Ubuntu 22.04</text>
+<text class="c" x="552" y="172" text-anchor="middle">ops@10.0.0.6</text>
+<rect class="bx" x="450" y="200" width="205" height="56" rx="8"/>
+<text class="t" x="552" y="223" text-anchor="middle">H03　Ubuntu 24.04</text>
+<text class="c" x="552" y="244" text-anchor="middle">admin@10.0.0.7</text>
+<text class="s" x="552" y="290" text-anchor="middle">⋯ 其他主機</text>
+<path class="ln" d="M444 60H434V318H444"/>
+<text class="s" x="545" y="372" text-anchor="middle">主機上不安裝任何東西</text>
+<text class="s" x="545" y="390" text-anchor="middle">也不必連網際網路</text>
+<!-- ③ 送進 -->
+<path class="lr" d="M260 198H430" marker-end="url(#ah2r)"/>
+<circle class="bd" cx="308" cy="166" r="10"/><text class="bn" x="308" y="170" text-anchor="middle">3</text>
+<text class="s" x="324" y="171">經 SSH 逐台</text>
+<text class="s" x="300" y="189">送進 collect.sh 執行</text>
+<!-- ④ 傳回 -->
+<path class="lr" d="M432 314H262" marker-end="url(#ah2r)"/>
+<circle class="bd" cx="308" cy="290" r="10"/><text class="bn" x="308" y="294" text-anchor="middle">4</text>
+<text class="s" x="324" y="295">結果傳回</text>
+<text class="s" x="300" y="334">主機上不留檔</text>
+</svg>
+<figcaption>圖 2　用 SSH 一次掃描多台主機</figcaption>
+<ol class="legend">
+  <li>① 把要檢查的主機寫進 <code>hosts.txt</code>（3.1 節），並設好免密碼登入（3.2 節）。</li>
+  <li>② 在分析電腦上執行 <code>./hc scan hosts.txt --sudo</code>。</li>
+  <li>③ 工具經 SSH 逐台登入，把 <code>collect.sh</code> 送進主機執行。不安裝套件、不改設定（主機上會留下哪些紀錄見 4.3 節）。</li>
+  <li>④ 收集結果傳回分析電腦，主機上不會留下腳本或收集檔。</li>
+  <li>⑤ 在分析電腦上和 <code>data/</code> 裡的官方資料比對，不必上網。</li>
+  <li>⑥ 報告與相關檔案存進 <code>reports/日期時間/</code>（4.2 節）。</li>
+  <li>⑦ 用瀏覽器打開 <code>report.html</code>，第 5 章說明怎麼看。</li>
+</ol>
+</figure>
 <div class="step"><b class="n">1</b><div><p>在 <code>offline-ubuntu-healthcheck</code> 資料夾裡執行：</p><pre>./hc scan hosts.txt --sudo</pre><p>不需要 sudo 就把 <code>--sudo</code> 拿掉。</p></div></div>
 <div class="step"><b class="n">2</b><div><p>等它跑完。每台主機通常 3 到 15 秒。畫面會像這樣（實測輸出）：</p>
 <pre class="out">開始收集 1 台主機（收集檔存放在 reports/2026-11-16-151406/collected，內含套件清單，請妥善保管）
@@ -185,7 +346,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 </div></div>
 <div class="step"><b class="n">3</b><div><p>用瀏覽器打開最後一行的 <code>report.html</code>。</p></div></div>
 
-<p>收集時，腳本透過 SSH 直接送進主機執行，結果直接傳回分析電腦。主機上不會留下收集腳本或收集檔。</p>
+<p>收集時，腳本經 SSH 送進主機執行，結果直接傳回分析電腦。主機上不會留下收集腳本或收集檔。</p>
 
 <h3>情況二：只能請主機管理者自己收集</h3>
 <div class="step"><b class="n">1</b><div><p>把 <code>collect.sh</code> 這個檔案交給主機管理者（隨身碟、內部檔案分享都可以）。</p></div></div>
@@ -194,6 +355,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 
 <h3>情況三：只想檢查分析電腦自己</h3>
 <pre>./hc local --sudo</pre>
+<p>只有分析電腦本身是 Ubuntu 時才能用。macOS 沒有 Ubuntu 的套件清單，可以用來掃別台主機，但不能掃自己。</p>
 
 <h3>4.1 報告表頭與去識別化</h3>
 <p>這些參數三種情況都能加：</p>
@@ -220,7 +382,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <p>不論哪種做法，2026 年 11 月的實機測試發現，收集時其他程式會寫自己的紀錄：</p>
 <ul>
   <li>Ubuntu Pro 用戶端（<code>pro</code> 指令）會更新自己的記錄檔與快取。</li>
-  <li>SSH 登入與 sudo 會寫進系統的登入紀錄（<code>auth.log</code>、journal）。這對受檢單位是好事，事後查得到誰在什麼時候檢查過。</li>
+  <li>SSH 登入與 sudo 會寫進系統的登入紀錄（<code>auth.log</code>、journal）。受檢單位事後可以從這些紀錄查到誰在什麼時候檢查過。</li>
 </ul>
 
 <h2>5. 看懂報告</h2>
@@ -251,7 +413,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 
 <h3>5.3 發現事項：每一列怎麼讀</h3>
 <img src="images/report-findings.png" alt="報告的發現事項表">
-<p>每台主機一張表，一列是一項發現。<b>最重要的是「建議」欄</b>，裡面寫了處理方式，多數附上可以直接執行的指令。</p>
+<p>每台主機一張表，一列是一項發現。<b>最重要的是「建議」欄</b>，裡面寫了處理方式，大多附有可以直接執行的指令。</p>
 <div class="tw"><table>
 <tr><th>欄位</th><th>怎麼看</th></tr>
 <tr><td>類別</td><td>A、B、C、D，見 5.1</td></tr>
@@ -377,7 +539,7 @@ cp -r skill/offline-ubuntu-healthcheck ~/.claude/skills/</pre>
 
 <h3>6.5 AI 會給你什麼</h3>
 <p>依分析指引，AI 會依序輸出：三句話總結、處理清單（含優先順序、要不要停機、要不要採購）、Ubuntu Pro 能解決的部分、Ubuntu Pro 解決不了的部分、維護責任建議、需要人工確認的事。</p>
-<div class="note">AI 的分析只是參考。指引已經要求 AI 只根據檔案內容、不要自己編 CVE 或指令，但交付前仍請人工核對，特別是數字與建議的指令。</div>
+<div class="note">交付前請人工核對 AI 的分析，特別是數字與建議的指令。分析指引已要求 AI 只根據檔案內容、不自己編 CVE 或指令，但仍可能出錯。</div>
 
 <h2>7. 更新官方資料與常見問題</h2>
 
