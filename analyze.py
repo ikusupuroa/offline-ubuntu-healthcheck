@@ -1,0 +1,1026 @@
+#!/usr/bin/env python3
+"""offline-ubuntu-healthcheck｜分析程式（analyze.py）
+
+版本：0.3
+在分析用的電腦執行（Python 3.6 以上，只用標準函式庫，不需連網）。
+
+用法：
+  python3 analyze.py hc-H01-*.tar.gz [更多收集檔 ...] [--data data] \
+      [--engine auto|oscap|builtin|both] [--rules my-rules.json] [--deidentify] \
+      [--agency "受檢單位"] [--assessor "執行單位"] [--date 2026-11] [--out 輸出資料夾]
+
+比對資料：Canonical 官方 OVAL 的套件清單版（檔名 oci.com.ubuntu.<代號>.usn.oval.xml.bz2），
+  用 update-data.py 下載到 data/。每台主機依版本代號自動挑選對應的檔案。
+比對引擎：
+  oscap    呼叫 OpenSCAP（Canonical 文件示範的工具），需先安裝 oscap
+  builtin  本程式內建的比對，依同一份官方 OVAL 的判斷條件實作
+  auto     有 oscap 就用 oscap，否則用 builtin（預設）
+  both     兩個都跑並比較結果，用來驗證內建比對（需要 oscap）
+
+產出：
+  report.md         健檢報告
+  findings.json     結構化結果摘要，可交給 AI 分析指引（ai-skill/SKILL.md）使用
+  oval-detail.json  官方弱點比對的完整明細（含每則公告的 CVE 清單與套件版本）
+
+判讀規則（分類、嚴重度、建議文字、維護時程）在 rules/default-rules.json，可用 --rules 覆蓋。
+"""
+import argparse
+import bz2
+import copy
+import datetime
+import hashlib
+import io
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tarfile
+import tempfile
+import xml.etree.ElementTree as ET
+
+TOOL_VERSION = "0.3"
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+
+# ---------------------------------------------------------------------------
+# 1. 規則檔
+# ---------------------------------------------------------------------------
+def deep_merge(base, over):
+    for k, v in over.items():
+        if isinstance(v, dict) and isinstance(base.get(k), dict):
+            deep_merge(base[k], v)
+        else:
+            base[k] = v
+    return base
+
+
+def load_rules(extra):
+    with open(os.path.join(HERE, "rules", "default-rules.json"), encoding="utf-8") as f:
+        rules = json.load(f)
+    if extra:
+        with open(extra, encoding="utf-8") as f:
+            deep_merge(rules, json.load(f))
+    return rules
+
+
+# ---------------------------------------------------------------------------
+# 2. Debian 版本比較（dpkg 的規則）
+# ---------------------------------------------------------------------------
+def _order(c):
+    if c.isdigit():
+        return 0
+    if c.isalpha():
+        return ord(c)
+    if c == "~":
+        return -1
+    if c:
+        return ord(c) + 256
+    return 0
+
+
+def _cmp_part(a, b):
+    while a or b:
+        while (a and not a[0].isdigit()) or (b and not b[0].isdigit()):
+            ac = _order(a[0]) if a else 0
+            bc = _order(b[0]) if b else 0
+            if ac != bc:
+                return ac - bc
+            a, b = a[1:], b[1:]
+        da = re.match(r"\d*", a).group()
+        db = re.match(r"\d*", b).group()
+        a, b = a[len(da):], b[len(db):]
+        ia, ib = int(da or 0), int(db or 0)
+        if ia != ib:
+            return ia - ib
+    return 0
+
+
+def _split_ver(v):
+    epoch = 0
+    if ":" in v:
+        e, v = v.split(":", 1)
+        epoch = int(e or 0)
+    if "-" in v:
+        up, rev = v.rsplit("-", 1)
+    else:
+        up, rev = v, "0"
+    return epoch, up, rev
+
+
+def vercmp(a, b):
+    ea, ua, ra = _split_ver(a)
+    eb, ub, rb = _split_ver(b)
+    if ea != eb:
+        return ea - eb
+    c = _cmp_part(ua, ub)
+    if c:
+        return c
+    return _cmp_part(ra, rb)
+
+
+# ---------------------------------------------------------------------------
+# 3. 讀取收集結果
+# ---------------------------------------------------------------------------
+def load_bundle(path):
+    """回傳 {檔名: 內容文字}。支援 tar.gz 或已解壓的資料夾。"""
+    files = {}
+    if os.path.isdir(path):
+        for root, _, names in os.walk(path):
+            for n in names:
+                with open(os.path.join(root, n), "r", encoding="utf-8", errors="replace") as f:
+                    files[n] = f.read()
+    else:
+        with tarfile.open(path, "r:gz") as tf:
+            for m in tf.getmembers():
+                if m.isfile():
+                    files[os.path.basename(m.name)] = tf.extractfile(m).read().decode("utf-8", "replace")
+    return files
+
+
+def strip_exit(text):
+    return re.sub(r"\n?__EXIT__=\d+\s*$", "", text or "").strip()
+
+
+def exit_code(text):
+    m = re.search(r"__EXIT__=(\d+)\s*$", text or "")
+    return int(m.group(1)) if m else None
+
+
+def parse_kv(text):
+    out = {}
+    for line in (text or "").splitlines():
+        if "=" in line:
+            k, v = line.split("=", 1)
+            out[k.strip()] = v.strip().strip('"')
+    return out
+
+
+def load_json(text):
+    """回傳 dict；找不到合法的 JSON 物件就回傳 None（某些版本會在 JSON 前印警告文字）。"""
+    body = strip_exit(text)
+    dec = json.JSONDecoder()
+    i = body.find("{")
+    while i >= 0:
+        try:
+            obj, _ = dec.raw_decode(body[i:])
+            return obj if isinstance(obj, dict) else None
+        except ValueError:
+            i = body.find("{", i + 1)
+    return None
+
+
+def to_int(v):
+    try:
+        return int(v)
+    except (TypeError, ValueError):
+        return 0
+
+
+def api_attrs(text):
+    d = load_json(text)
+    if not d or d.get("result") != "success":
+        return None
+    attrs = (d.get("data") or {}).get("attributes")
+    return attrs if isinstance(attrs, dict) else None
+
+
+def parse_dpkg(text):
+    """回傳 [(套件, 版本, 來源套件)]，只含已安裝的套件。"""
+    out = []
+    for line in strip_exit(text).splitlines():
+        parts = line.split("\t")
+        if len(parts) < 3 or not parts[2].endswith(" installed") or "not-installed" in parts[2]:
+            continue
+        src = (parts[3] if len(parts) > 3 and parts[3] else parts[0]).split(" ")[0]
+        out.append((parts[0], parts[1], src))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# 4. 官方 OVAL（套件清單版）
+#    Canonical 的 oci.com.ubuntu.<代號>.usn.oval.xml 以「目前目錄的 manifest 檔」為比對對象：
+#    每行「套件名稱 版本」，用正規表示式取出版本，與修補版本比較（debian_evr_string less than）。
+# ---------------------------------------------------------------------------
+def _local(tag):
+    return tag.split("}", 1)[-1]
+
+
+def file_sha256(path):
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def read_oval_bytes(path):
+    raw = open(path, "rb").read()
+    return bz2.decompress(raw) if path.endswith(".bz2") else raw
+
+
+def _parse_criteria(el):
+    node = {"op": (el.get("operator") or "AND").upper(), "negate": el.get("negate") == "true", "children": []}
+    for c in el:
+        t = _local(c.tag)
+        if t == "criteria":
+            node["children"].append(_parse_criteria(c))
+        elif t == "criterion":
+            node["children"].append({"test": c.get("test_ref"), "comment": c.get("comment", ""),
+                                     "negate": c.get("negate") == "true"})
+    return node
+
+
+def load_oval(path):
+    raw = read_oval_bytes(path)
+    root = ET.parse(io.BytesIO(raw)).getroot()
+    o = {"path": path, "variables": {}, "objects": {}, "states": {}, "tests": {}, "defs": [],
+         "timestamp": "", "product": "", "manifest_based": False}
+    for el in root.iter():
+        t = _local(el.tag)
+        if t == "timestamp" and not o["timestamp"]:
+            o["timestamp"] = (el.text or "").strip()
+        elif t == "product_name" and not o["product"]:
+            o["product"] = (el.text or "").strip()
+        elif t == "constant_variable":
+            o["variables"][el.get("id")] = [v.text for v in el if _local(v.tag) == "value" and v.text]
+        elif t == "textfilecontent54_object":
+            fn = pat = None
+            for c in el:
+                if _local(c.tag) == "filename":
+                    fn = (c.text or "").strip()
+                elif _local(c.tag) == "pattern":
+                    pat = ("var", c.get("var_ref")) if c.get("var_ref") else ("txt", c.text or "")
+            if fn == "manifest":
+                o["manifest_based"] = True
+            o["objects"][el.get("id")] = pat
+        elif t == "textfilecontent54_state":
+            for c in el:
+                if _local(c.tag) == "subexpression":
+                    o["states"][el.get("id")] = (c.get("operation", "equals"), c.get("datatype", ""),
+                                                 (c.text or "").strip())
+        elif t == "textfilecontent54_test":
+            ob = st = None
+            for c in el:
+                if _local(c.tag) == "object":
+                    ob = c.get("object_ref")
+                elif _local(c.tag) == "state":
+                    st = c.get("state_ref")
+            o["tests"][el.get("id")] = {"object": ob, "state": st, "check": el.get("check", "all"),
+                                        "existence": el.get("check_existence", "at_least_one_exists")}
+        elif t == "definition" and el.get("class") in ("patch", "vulnerability"):
+            d = {"id": el.get("id"), "title": "", "severity": "", "cves": [], "pro": False, "criteria": None}
+            for c in el.iter():
+                lt = _local(c.tag)
+                if lt == "title" and not d["title"]:
+                    d["title"] = (c.text or "").strip()
+                elif lt == "severity" and not d["severity"]:
+                    d["severity"] = (c.text or "").strip()
+                elif lt == "cve" and c.text:
+                    d["cves"].append(c.text.strip())
+                elif lt == "description" and "Available with Ubuntu Pro" in (c.text or ""):
+                    d["pro"] = True
+            for c in el:
+                if _local(c.tag) == "criteria":
+                    d["criteria"] = _parse_criteria(c)
+            d["cves"] = sorted(set(d["cves"]))
+            o["defs"].append(d)
+    for oid, pat in list(o["objects"].items()):
+        if pat is None:
+            o["objects"][oid] = []
+        elif pat[0] == "var":
+            o["objects"][oid] = o["variables"].get(pat[1], [])
+        else:
+            o["objects"][oid] = [pat[1]]
+    o["compiled"] = {}
+    return o
+
+
+def oval_info(path, rules):
+    """資料檔的來源資訊：雜湊值、官方產生時間、距今天數、是否與下載紀錄一致。"""
+    info = {"file": os.path.basename(path), "sha256": file_sha256(path), "timestamp": "", "age_days": None,
+            "recorded": None}
+    src = os.path.join(os.path.dirname(path), "SOURCES.json")
+    if os.path.isfile(src):
+        try:
+            rec = json.load(open(src, encoding="utf-8")).get("files", {}).get(info["file"])
+            if rec:
+                info["recorded"] = (rec.get("sha256") == info["sha256"])
+        except ValueError:
+            info["recorded"] = False
+    return info
+
+
+# 官方 OVAL 的套件樣式幾乎都是 ^套件名稱(?::\w+|)\s+(.*)$；能拆出套件名稱的就直接查表，
+# 拆不出來的才逐行比對正規表示式（結果相同，只是比較快）。
+SIMPLE_PAT = re.compile(r"^\^((?:[A-Za-z0-9]|\\[.+\-])+)\(\?::\\w\+\|\)\\s\+\(\.\*\)\$$")
+
+
+class Manifest:
+    def __init__(self, lines):
+        self.lines = lines
+        self.by_name = {}
+        for line in lines:
+            parts = line.split("\t", 1)
+            if len(parts) == 2:
+                self.by_name.setdefault(parts[0].split(":", 1)[0], []).append(parts[1])
+
+
+def _items(oval, oid, man):
+    """物件比對：回傳 manifest 中符合的版本字串。"""
+    if oid not in oval["compiled"]:
+        names, regexes = [], []
+        for p in oval["objects"].get(oid, []):
+            m = SIMPLE_PAT.match(p)
+            if m:
+                names.append(re.sub(r"\\(.)", r"\1", m.group(1)))
+                continue
+            try:
+                regexes.append(re.compile(p))
+            except re.error:
+                pass
+        oval["compiled"][oid] = (names, regexes)
+    names, regexes = oval["compiled"][oid]
+    out = []
+    for n in names:
+        out.extend(man.by_name.get(n, []))
+    if regexes:
+        for line in man.lines:
+            for rx in regexes:
+                m = rx.search(line)
+                if m:
+                    out.append(m.group(1) if m.groups() else line)
+                    break
+    return out
+
+
+def _test_builtin(oval, tid, man, cache):
+    if tid in cache:
+        return cache[tid]
+    t = oval["tests"].get(tid)
+    res = (False, [])
+    if t:
+        items = _items(oval, t["object"], man)
+        op, dtype, evr = oval["states"].get(t["state"], ("", "", ""))
+        ex = t["existence"]
+        if ex == "none_exist":
+            res = (not items, [])
+        elif items or ex in ("any_exist",):
+            if op == "less than" and evr:
+                hits = [v for v in items if vercmp(v, evr) < 0]
+                if t["check"] == "at least one":
+                    ok = bool(hits)
+                elif t["check"] == "none satisfy":
+                    ok = not hits
+                else:  # all（OVAL 預設）
+                    ok = bool(items) and len(hits) == len(items)
+                res = (ok, hits)
+            elif not t["state"]:
+                res = (bool(items), items)
+    cache[tid] = res
+    return res
+
+
+def _eval(node, testres):
+    """依 criteria 樹計算結果；回傳 (結果, 成立的 criterion 清單)。"""
+    if "test" in node:
+        ok = testres(node["test"])
+        ok = (not ok) if node["negate"] else ok
+        return ok, ([node] if ok and not node["negate"] else [])
+    vals, leaves = [], []
+    for c in node["children"]:
+        v, lv = _eval(c, testres)
+        vals.append(v)
+        if v:
+            leaves.extend(lv)
+    if not vals:
+        r = False
+    elif node["op"] == "OR":
+        r = any(vals)
+    elif node["op"] == "ONE":
+        r = sum(vals) == 1
+    elif node["op"] == "XOR":
+        r = sum(vals) % 2 == 1
+    else:
+        r = all(vals)
+    if node["negate"]:
+        r = not r
+    return r, (leaves if r else [])
+
+
+# 修補來源有兩種寫法：「in esm-apps/focal,」（延伸維護）與「in jammy,」（一般套件庫）
+POCKET_RX = re.compile(r"source package in ([a-z0-9.+-]+)")
+PKG_RX = re.compile(r"^(\S+) source package")
+FIXED_RX = re.compile(r"note: '([^']+)'")
+
+
+def _hit(oval, d, leaves, hits_by_test):
+    pockets, pkgs = set(), []
+    for lf in leaves:
+        cm = lf["comment"]
+        m = POCKET_RX.search(cm)
+        pocket = m.group(1) if m else ""
+        pockets.add(pocket)
+        t = oval["tests"].get(lf["test"], {})
+        fixed = oval["states"].get(t.get("state"), ("", "", ""))[2]
+        pm, fm = PKG_RX.search(cm), FIXED_RX.search(cm)
+        pkgs.append({"source": pm.group(1) if pm else "?", "pocket": pocket,
+                     "fixed": fm.group(1) if fm else fixed,
+                     "installed": sorted(set(hits_by_test.get(lf["test"], [])))[:3]})
+    known = [p for p in pockets if p]
+    # 只看「這台主機實際缺的」那幾個修補；來源都讀不到時，才退回公告說明裡的「Available with Ubuntu Pro」
+    needs_pro = any(p.startswith("esm") for p in known) if known else d["pro"]
+    return {"id": d["id"], "title": d["title"], "severity": d["severity"] or "None", "cves": d["cves"],
+            "pockets": sorted(p for p in pockets if p), "needs_pro": needs_pro, "packages": pkgs}
+
+
+def match_builtin(oval, manifest_lines):
+    man = Manifest(manifest_lines)
+    cache = {}
+    hits = []
+    for d in oval["defs"]:
+        if not d["criteria"]:
+            continue
+        ok, leaves = _eval(d["criteria"], lambda tid: _test_builtin(oval, tid, man, cache)[0])
+        if ok:
+            hits.append(_hit(oval, d, leaves, {k: v[1] for k, v in cache.items()}))
+    return hits
+
+
+def oscap_version():
+    try:
+        out = subprocess.run(["oscap", "--version"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                             timeout=30).stdout.decode("utf-8", "replace")
+        m = re.search(r"OpenSCAP[^\n]*?(\d+\.\d+\.\d+)", out)
+        return m.group(1) if m else "?"
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def match_oscap(oval, manifest_lines):
+    """用 OpenSCAP 評估同一份 OVAL；在暫存資料夾放 manifest 與解壓後的 OVAL。"""
+    tmp = tempfile.mkdtemp(prefix="hc-oscap-")
+    try:
+        with open(os.path.join(tmp, "manifest"), "w", encoding="utf-8") as f:
+            f.write("\n".join(manifest_lines) + "\n")
+        defs = os.path.join(tmp, "oval.xml")
+        with open(defs, "wb") as f:
+            f.write(read_oval_bytes(oval["path"]))
+        p = subprocess.run(["oscap", "oval", "eval", "--results", "results.xml", "oval.xml"], cwd=tmp,
+                           stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=1800)
+        res = os.path.join(tmp, "results.xml")
+        if not os.path.isfile(res):
+            raise RuntimeError("oscap 沒有產生結果（結束碼 %d）：%s" % (
+                p.returncode, p.stderr.decode("utf-8", "replace")[-300:]))
+        droot = ET.parse(res).getroot()
+        def_res, test_res = {}, {}
+        for el in droot.iter():
+            t = _local(el.tag)
+            if t == "definition" and el.get("definition_id"):
+                def_res[el.get("definition_id")] = el.get("result")
+            elif t == "test" and el.get("test_id"):
+                test_res[el.get("test_id")] = el.get("result")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    hits = []
+    man = Manifest(manifest_lines)
+    for d in oval["defs"]:
+        if def_res.get(d["id"]) != "true" or not d["criteria"]:
+            continue
+        _, leaves = _eval(d["criteria"], lambda tid: test_res.get(tid) == "true")
+        # 已安裝版本由內建比對補上（oscap 結果檔不直接列出）
+        hb = {}
+        for lf in leaves:
+            hb[lf["test"]] = _test_builtin(oval, lf["test"], man, {})[1]
+        hits.append(_hit(oval, d, leaves, hb))
+    return hits
+
+
+# ---------------------------------------------------------------------------
+# 5. 單台主機分析
+# ---------------------------------------------------------------------------
+class Ctx:
+    def __init__(self, rules):
+        self.rules = rules
+        self.findings = []
+
+    def add(self, fid, severity=None, **kw):
+        r = self.rules["findings"].get(fid)
+        if not r or not r.get("enabled", True):
+            return
+        cat = r["category"]
+        sev = severity if r.get("severity") == "auto" and severity else r.get("severity", "中")
+        if sev == "auto":
+            sev = "中"
+        class _Keep(dict):
+            def __missing__(self, k):
+                return "{" + k + "}"
+
+        def fmt(s):
+            try:
+                return s.format_map(_Keep(kw)) if s else ""
+            except (ValueError, IndexError):
+                return s
+        self.findings.append({
+            "id": fid, "category": cat, "severity": sev, "title": fmt(r.get("title")),
+            "detail": fmt(r.get("detail")) or kw.get("detail", ""), "action": fmt(r.get("action")),
+            "pro_helps": self.rules["categories"][cat]["pro_helps"]})
+
+
+def support_status(rules, version_id, is_lts, ym):
+    lc = rules["lifecycle"].get(version_id)
+    if version_id in ("", "?"):
+        return ("unknown", "沒有取得作業系統版本資訊，無法判斷維護狀態", None)
+    if not lc:
+        if is_lts:
+            return ("unknown", "規則檔的時程表沒有這個版本，請到官方版本時程頁確認", None)
+        return ("nonlts", "非 LTS 版本：Ubuntu Pro 不適用，只能升級到 LTS", None)
+    std, esm, leg = lc["standard_end"], lc["esm_end"], lc["legacy_end"]
+    if ym <= std:
+        return ("standard", "標準維護期內（到 %s）" % std, lc)
+    if ym <= esm:
+        return ("esm", "標準維護已於 %s 結束；訂閱 Ubuntu Pro（ESM）才有安全更新，到 %s" % (std, esm), lc)
+    if ym <= leg:
+        return ("legacy", "ESM 已於 %s 結束；需 Ubuntu Pro 加購 Legacy，最長到 %s" % (esm, leg), lc)
+    return ("eol", "所有官方維護（含 Legacy）都已結束，只能升級", lc)
+
+
+def kernel_of(pkgname):
+    m = re.match(r"linux-image-(?:unsigned-)?(\d+\.\d+\.\d+-\d+)-(\S+)$", pkgname)
+    return (m.group(1), m.group(2)) if m else None
+
+
+def summarize_hits(hits):
+    crit = sum(1 for h in hits if h["severity"] in ("Critical", "High"))
+    return {"usns": len(hits), "cves": len({c for h in hits for c in h["cves"]}), "crit_high": crit,
+            "severity": "高" if crit else "中"}
+
+
+def analyze_host(files, args, rules, datasets):
+    ctx = Ctx(rules)
+    unchecked = []
+
+    def ok(name):
+        return name in files and exit_code(files[name]) in (0, None)
+
+    osr = parse_kv(strip_exit(files.get("os-release.txt", "")))
+    meta = parse_kv(files.get("meta.txt", ""))
+    vid = osr.get("VERSION_ID", "?")
+    pretty = osr.get("PRETTY_NAME", vid)
+    is_lts = "LTS" in osr.get("VERSION", "") or "LTS" in pretty
+    status, status_text, lc = support_status(rules, vid, is_lts, args.date)
+    codename = (lc or {}).get("codename") or osr.get("VERSION_CODENAME", "")
+    pkglist = parse_dpkg(files.get("dpkg.txt", ""))
+    pkgs = {n: v for n, v, _ in pkglist}
+    if not pkglist:
+        unchecked.append("已安裝套件清單（套件相關檢查都沒有執行）")
+    pro_status = load_json(files.get("pro-status.json", "")) or {}
+    attached = bool(pro_status.get("attached"))
+    services = {s.get("name"): s for s in pro_status.get("services", []) or [] if isinstance(s, dict)}
+    if not services:
+        unchecked.append("Ubuntu Pro 註冊與服務啟用狀態（若主機其實已訂閱，維護狀態與 Livepatch 的判斷可能不準）")
+    enabled = {n for n, s in services.items() if attached and s.get("status") == "enabled"}
+
+    # --- 版本維護狀態 ---
+    if status == "esm" and "esm-infra" not in enabled:
+        ctx.add("os_esm_period", detail=status_text)
+    elif status == "legacy":
+        if not any("legacy" in n for n in enabled):  # 已啟用 Legacy 服務就不再提示（服務名稱待實機確認）
+            ctx.add("os_legacy_period", detail=status_text)
+    elif status in ("eol", "nonlts"):
+        ctx.add("os_no_support", detail=status_text)
+    elif status == "unknown":
+        unchecked.append("作業系統維護狀態：" + status_text)
+
+    # --- Pro 用戶端的更新清單（當作對照；沒有官方資料時才作為主要依據） ---
+    attrs = api_attrs(files.get("pro-api-updates.json", ""))
+    pc_pending, pc_not_applied, pc_free = [], [], []
+    if attrs is not None:
+        for u in attrs.get("updates", []) or []:
+            if not isinstance(u, dict):
+                continue
+            prov, st = str(u.get("provided_by", "")), str(u.get("status", ""))
+            if prov.startswith("esm") and st in ("pending_attach", "pending_enable"):
+                pc_pending.append(u)
+            elif prov.startswith("esm") and st == "upgrade_available":
+                pc_not_applied.append(u)
+            elif prov == "standard-security" and st == "upgrade_available":
+                pc_free.append(u)
+
+    # --- 官方 OVAL 比對 ---
+    patch = {"source": "none", "unit": "", "needs_pro": 0, "pro_not_applied": 0, "free_not_applied": 0,
+             "engine": "", "data_file": "", "pro_client_pending_packages": len(pc_pending) if attrs else None}
+    hits, engine_check = [], None
+    ds = datasets.get(codename) if codename else None
+    if pkglist and ds and ds.get("oval"):
+        manifest = ["%s\t%s" % (n, v) for n, v, _ in pkglist]
+        try:
+            if args.engine_used == "oscap":
+                hits = match_oscap(ds["oval"], manifest)
+            elif args.engine_used == "both":
+                hits = match_oscap(ds["oval"], manifest)
+                b = match_builtin(ds["oval"], manifest)
+                a_ids, b_ids = {h["id"] for h in hits}, {h["id"] for h in b}
+                engine_check = {"oscap": len(a_ids), "builtin": len(b_ids),
+                                "only_oscap": sorted(a_ids - b_ids)[:50], "only_builtin": sorted(b_ids - a_ids)[:50]}
+            else:
+                hits = match_builtin(ds["oval"], manifest)
+            patch.update(source="oval", unit="則安全公告", engine=args.engine_label, data_file=ds["info"]["file"])
+        except Exception as e:  # 比對失敗不影響其他檢查
+            unchecked.append("官方弱點資料比對（%s：%s）" % (type(e).__name__, str(e)[:120]))
+    elif pkglist and status not in ("eol",):
+        unchecked.append("官方弱點資料比對（缺少 %s 版本的資料檔，請用 update-data.py 下載）" % (codename or vid))
+
+    if patch["source"] == "oval":
+        need_pro = [h for h in hits if h["needs_pro"]]
+        free = [h for h in hits if not h["needs_pro"]]
+        pro_ok = [h for h in need_pro if all(p in enabled for p in h["pockets"] if p.startswith("esm"))
+                  and any(p.startswith("esm") for p in h["pockets"])]
+        pro_missing = [h for h in need_pro if h not in pro_ok]
+        if pro_missing and status not in ("eol", "nonlts"):
+            s = summarize_hits(pro_missing)
+            pockets = {}
+            for h in pro_missing:
+                for p in h["pockets"]:
+                    if p.startswith("esm"):
+                        pockets[p] = pockets.get(p, 0) + 1
+            s["pockets"] = "、".join("%s %d 則" % (k, v) for k, v in sorted(pockets.items())) or "Ubuntu Pro"
+            ctx.add("oval_needs_pro", s.pop("severity"), **s)
+            if attrs is not None:
+                ctx.findings[-1]["detail"] += "。主機上的 Ubuntu Pro 用戶端另外回報 %d 個套件待取得，可互相對照" % len(pc_pending)
+        if pro_ok:
+            s = summarize_hits(pro_ok)
+            ctx.add("oval_pro_not_applied", s.pop("severity"), **s)
+        if free:
+            s = summarize_hits(free)
+            ctx.add("oval_free_not_applied", s.pop("severity"), **s)
+        patch.update(needs_pro=len(pro_missing), pro_not_applied=len(pro_ok), free_not_applied=len(free))
+    elif attrs is not None:
+        if pc_pending and status not in ("nonlts", "eol"):
+            infra = sum(1 for u in pc_pending if u.get("provided_by") == "esm-infra")
+            ctx.add("pro_client_pending", n=len(pc_pending), infra=infra, apps=len(pc_pending) - infra)
+        if pc_not_applied:
+            ctx.add("pro_client_not_applied", n=len(pc_not_applied))
+        if pc_free:
+            ctx.add("pro_client_free_not_applied", n=len(pc_free))
+        patch.update(source="pro-client", unit="個套件", needs_pro=len(pc_pending),
+                     pro_not_applied=len(pc_not_applied), free_not_applied=len(pc_free))
+    else:
+        unchecked.append("Ubuntu Pro 用戶端的更新清單（主機沒有 pro 用戶端、版本不支援，或執行失敗）")
+
+    # --- B：核心 ---
+    running = strip_exit(files.get("kernel-release.txt", "")).strip()
+    if not running:
+        parts = strip_exit(files.get("uname.txt", "")).split()
+        running = parts[1] if len(parts) > 1 and parts[0] == "Linux" and re.match(r"\d", parts[1]) else ""
+    newest = ""
+    rk = re.match(r"(\d+\.\d+)\.\d+-\d+-(\S+)$", running or "")
+    if rk:
+        series, flavor = rk.group(1), rk.group(2)
+        for name in pkgs:
+            k = kernel_of(name)
+            if not k or k[1] != flavor or not k[0].startswith(series + "."):
+                continue
+            if not newest or vercmp(k[0], newest.rsplit("-", 1)[0]) > 0:
+                newest = k[0] + "-" + k[1]
+    uptime_days = None
+    try:
+        uptime_days = int(float(strip_exit(files.get("uptime.txt", "")).split()[0]) // 86400)
+    except (ValueError, IndexError):
+        unchecked.append("連續運作天數")
+    lp_on = "livepatch" in enabled
+    if not running:
+        unchecked.append("執行中的核心版本")
+    elif newest and running != newest and vercmp(newest.rsplit("-", 1)[0], running.rsplit("-", 1)[0]) > 0:
+        ctx.add("kernel_not_running_newest", running=running, newest=newest)
+    elif "reboot-required.txt" in files:
+        ctx.add("reboot_required")
+    if uptime_days is not None and uptime_days >= rules["thresholds"]["uptime_days_warn"] and not lp_on:
+        ctx.add("long_uptime", days=uptime_days)
+
+    # --- C：合規 ---
+    if pkglist and "usg" not in pkgs and vid in rules.get("usg_versions", []):
+        ctx.add("usg_not_used")
+
+    # --- D：設定與其他 ---
+    if not ok("sshd.txt"):
+        unchecked.append("SSH 設定（需要 sudo，或主機未安裝 SSH 服務）")
+    else:
+        sshd = strip_exit(files["sshd.txt"]).lower()
+        if re.search(r"^permitrootlogin yes", sshd, re.M):
+            ctx.add("ssh_root_login")
+        if re.search(r"^permitemptypasswords yes", sshd, re.M):
+            ctx.add("ssh_empty_passwords")
+        if re.search(r"^passwordauthentication yes", sshd, re.M):
+            ctx.add("ssh_password_auth")
+    if not ok("ufw.txt"):
+        unchecked.append("主機防火牆（ufw）狀態（需要 sudo，或主機未安裝 ufw）")
+    elif "inactive" in strip_exit(files["ufw.txt"]):
+        ctx.add("ufw_inactive")
+    u0 = strip_exit(files.get("uid0.txt", ""))
+    if "uid0_accounts=" in u0:  # v0.3 起只記數量
+        n_extra = max(to_int(parse_kv(u0).get("uid0_accounts")) - 1, 0)
+    else:  # 舊版收集檔記的是帳號名稱
+        n_extra = len([u for u in u0.split() if u != "root"])
+    if n_extra:
+        ctx.add("extra_uid0", n=n_extra)
+    if "shadow-summary.txt" not in files:
+        unchecked.append("空密碼帳號（需要 sudo）")
+    else:
+        n = to_int(parse_kv(files["shadow-summary.txt"]).get("empty_password_accounts"))
+        if n:
+            ctx.add("empty_password_accounts", n=n)
+    if 'Unattended-Upgrade "1"' not in strip_exit(files.get("unattended-upgrades.txt", "")):
+        ctx.add("no_auto_updates")
+    sattrs = api_attrs(files.get("pro-api-summary.json", ""))
+    if sattrs:
+        s = sattrs.get("summary") if isinstance(sattrs.get("summary"), dict) else {}
+        third = to_int(s.get("num_third_party_packages")) + to_int(s.get("num_unknown_packages"))
+        if third:
+            ctx.add("third_party_packages", n=third)
+
+    order = {"高": 0, "中": 1, "低": 2}
+    ctx.findings.sort(key=lambda x: (x["category"], order.get(x["severity"], 9)))
+    sev_rank = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3, "Negligible": 4, "None": 5}
+    hits.sort(key=lambda h: (not h["needs_pro"], sev_rank.get(h["severity"], 9), h["title"]))
+    return {
+        "tag": meta.get("tag", "?"),
+        "collected_at": meta.get("collected_at", "?"),
+        "collector_version": meta.get("collector_version", "?"),
+        "run_as_root": meta.get("uid") == "0",
+        "os": pretty, "version_id": vid, "codename": codename, "lts": is_lts,
+        "support_status": status, "support_text": status_text,
+        "lifecycle": lc,
+        "pro_attached": attached, "pro_services_enabled": sorted(enabled),
+        "livepatch_enabled": lp_on,
+        "running_kernel": running, "newest_installed_kernel": newest,
+        "uptime_days": uptime_days,
+        "package_count": len(pkglist),
+        "patches": patch,
+        "oval_matches": hits,
+        "engine_check": engine_check,
+        "unchecked": unchecked,
+        "findings": ctx.findings,
+    }
+
+
+def error_host(path, err):
+    return {"tag": os.path.basename(str(path)), "error": "資料損壞或格式不符，未分析（%s）" % type(err).__name__,
+            "os": "?", "version_id": "?", "codename": "", "support_status": "unknown", "support_text": "未分析",
+            "running_kernel": "", "uptime_days": None, "run_as_root": True,
+            "patches": {"source": "none", "unit": "", "needs_pro": 0, "pro_not_applied": 0, "free_not_applied": 0},
+            "oval_matches": [], "engine_check": None, "unchecked": [], "findings": []}
+
+
+# ---------------------------------------------------------------------------
+# 6. 去識別化與報告
+# ---------------------------------------------------------------------------
+def deidentify(hosts):
+    for i, h in enumerate(hosts, 1):
+        h["tag"] = "H%02d" % i
+    return hosts
+
+
+def render_report(hosts, args, rules, datasets):
+    rt = rules["report_text"]
+    cats = rules["categories"]
+    sevname = rules.get("severity_names", {})
+    L = []
+    w = L.append
+    cnt = {c: 0 for c in cats}
+    for h in hosts:
+        for x in h["findings"]:
+            cnt[x["category"]] = cnt.get(x["category"], 0) + 1
+    total = sum(cnt.values()) or 1
+    w("# %s\n" % rt["title"])
+    w("| 項目 | 內容 |\n|---|---|")
+    w("| 受檢單位 | %s |" % (args.agency or "（未填）"))
+    w("| 執行單位 | %s |" % (args.dealer or "（未填）"))
+    w("| 判斷基準月份 | %s |" % args.date)
+    w("| 受檢主機數 | %d |" % len(hosts))
+    w("| 分析程式版本 | offline-ubuntu-healthcheck %s |" % TOOL_VERSION)
+    used = [ds for ds in datasets.values() if ds.get("used")]
+    if used:
+        w("| 弱點比對資料 | Canonical 官方 OVAL（security-metadata.canonical.com） |")
+        w("| 比對引擎 | %s |" % args.engine_label)
+    else:
+        w("| 弱點比對資料 | 未使用官方資料檔；僅參考主機上的 Ubuntu Pro 用戶端 |")
+    if args.rules:
+        w("| 判讀規則 | 預設規則＋自訂規則（%s） |" % os.path.basename(args.rules))
+    w("")
+    if used:
+        w("**官方資料檔明細**\n")
+        w("| 版本代號 | 檔案 | 官方產生時間 | 距分析日 | SHA-256（前 16 碼） | 與下載紀錄 |\n|---|---|---|---|---|---|")
+        for code, ds in sorted(datasets.items()):
+            if not ds.get("used"):
+                continue
+            i = ds["info"]
+            rec = {True: "一致", False: "**不一致，請重新下載**", None: "無紀錄"}[i["recorded"]]
+            age = "%d 天" % i["age_days"] if i["age_days"] is not None else "?"
+            w("| %s | %s | %s | %s | %s | %s |" % (code, i["file"], i["timestamp"] or "?", age, i["sha256"][:16], rec))
+        stale = [c for c, ds in datasets.items() if ds.get("used") and ds["info"]["age_days"] is not None
+                 and ds["info"]["age_days"] > rules["thresholds"]["data_max_age_days"]]
+        if stale:
+            w("\n> 警告：%s 的官方資料已超過 %d 天，之後公布的弱點不在比對範圍內。建議先更新資料再出報告。"
+              % ("、".join(sorted(stale)), rules["thresholds"]["data_max_age_days"]))
+        w("")
+    w("## 一、摘要\n")
+    risky = [h for h in hosts if h["support_status"] in ("esm", "legacy", "eol", "nonlts")]
+    w("- 共 %d 台主機，其中 **%d 台已過標準維護期**。" % (len(hosts), len(risky)))
+    w("- 發現事項共 %d 項，依「Ubuntu Pro 能否解決」分成四類：\n" % sum(cnt.values()))
+    w("| 類別 | 說明 | 項數 | 占比 | Ubuntu Pro 能否解決 |\n|---|---|---|---|---|")
+    for c in sorted(cats):
+        w("| %s | %s | %d | %d%% | %s |" % (c, cats[c]["name"], cnt.get(c, 0), round(cnt.get(c, 0) * 100 / total),
+                                         cats[c]["pro_helps"]))
+    w("\n> D 類與 Ubuntu Pro 無關，本報告同樣列出，讓受檢單位掌握完整風險。\n")
+    w("## 二、主機總覽\n")
+    w("| 主機 | 版本 | 維護狀態 | 執行中核心 | 未重開機天數 | 需 Pro 才能取得的修補 | 未套用的免費修補 | 資料來源 |\n"
+      "|---|---|---|---|---|---|---|---|")
+    label = {"standard": "標準維護期內", "esm": "需 Pro（ESM）", "legacy": "需 Pro＋Legacy",
+             "eol": "已無維護", "nonlts": "非 LTS，需升級", "unknown": "待確認"}
+    srcname = {"oval": "官方 OVAL", "pro-client": "Pro 用戶端", "none": "無"}
+    for h in hosts:
+        p = h["patches"]
+        unit = p.get("unit", "")
+        w("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
+            h["tag"], h["os"], label.get(h["support_status"], "?"), h["running_kernel"] or "?",
+            h["uptime_days"] if h["uptime_days"] is not None else "?",
+            ("%d %s" % (p["needs_pro"], unit)) if p["source"] != "none" else "?",
+            ("%d %s" % (p["free_not_applied"], unit)) if p["source"] != "none" else "?",
+            srcname.get(p["source"], "?")))
+    w("\n%s\n" % rt["year_note"])
+    w("## 三、發現事項（依主機）\n")
+    for h in hosts:
+        w("### %s（%s）\n" % (h["tag"], h["os"]))
+        if h.get("error"):
+            w("> %s\n" % h["error"])
+            continue
+        w("維護狀態：%s\n" % h["support_text"])
+        if not h["run_as_root"]:
+            w("> 以一般使用者收集（預設）：SSH 設定、防火牆、空密碼帳號需要 sudo 才能檢查，列在「未能檢查」。\n")
+        w("| 類別 | 嚴重度 | 發現 | 說明 | 建議 | Pro 能否解決 |\n|---|---|---|---|---|---|")
+        for x in h["findings"]:
+            w("| %s | %s | %s | %s | %s | %s |" % (x["category"], x["severity"], x["title"],
+                                               x["detail"], x["action"], x["pro_helps"]))
+        if h["unchecked"]:
+            w("\n未能檢查的項目（不計入上表）：" + "；".join(h["unchecked"]))
+        if h.get("engine_check"):
+            e = h["engine_check"]
+            w("\n比對引擎對照：OpenSCAP %d 則、內建 %d 則；只有 OpenSCAP 有 %d 則、只有內建有 %d 則。"
+              % (e["oscap"], e["builtin"], len(e["only_oscap"]), len(e["only_builtin"])))
+        w("")
+    w("## 四、建議處理順序\n")
+    for i, s in enumerate(rt["priority_steps"], 1):
+        w("%d. %s" % (i, s))
+    w("\n## 五、檢查範圍與限制\n")
+    for s in rt["limitations"]:
+        w("- %s" % s)
+    w("")
+    n = rules["thresholds"]["detail_rows_per_host"]
+    if any(h.get("oval_matches") for h in hosts):
+        w("## 附錄：官方弱點資料比對明細\n")
+        w("每台主機最多列 %d 則，需要 Ubuntu Pro 的排前面，再依嚴重度排序；完整清單在 oval-detail.json。\n" % n)
+        for h in hosts:
+            hm = h.get("oval_matches") or []
+            if not hm:
+                continue
+            w("### %s\n" % h["tag"])
+            w("| 安全公告 | 嚴重度 | CVE 數 | 修補來源 | 需要 Pro | 套件（已安裝 → 修補版本） |\n|---|---|---|---|---|---|")
+            for m in hm[:n]:
+                pk = "；".join("%s %s → %s" % (p["source"], "/".join(p["installed"]) or "?", p["fixed"])
+                              for p in m["packages"][:3])
+                w("| %s | %s | %d | %s | %s | %s |" % (
+                    m["title"].replace("|", "/"), sevname.get(m["severity"], m["severity"]), len(m["cves"]),
+                    "、".join(m["pockets"]) or "?", "是" if m["needs_pro"] else "否", pk.replace("|", "/")))
+            if len(hm) > n:
+                w("\n（另有 %d 則未列出）" % (len(hm) - n))
+            w("")
+    return "\n".join(L)
+
+
+# ---------------------------------------------------------------------------
+# 7. 主程式
+# ---------------------------------------------------------------------------
+def find_datasets(args, rules):
+    """依 --oval 或 --data 找出各版本代號的官方資料檔（還不載入）。"""
+    found = {}
+    paths = []
+    if args.oval:
+        paths.append(args.oval)
+    elif args.data and os.path.isdir(args.data):
+        paths = [os.path.join(args.data, n) for n in sorted(os.listdir(args.data))]
+    for p in paths:
+        m = re.match(r"oci\.com\.ubuntu\.([a-z]+)\.usn\.oval\.xml(\.bz2)?$", os.path.basename(p))
+        if m and os.path.isfile(p):
+            found.setdefault(m.group(1), {"path": p})
+        elif args.oval:
+            sys.exit("錯誤：--oval 必須是官方的套件清單版檔案（檔名 oci.com.ubuntu.<代號>.usn.oval.xml.bz2）")
+    return found
+
+
+def main():
+    ap = argparse.ArgumentParser(description="offline-ubuntu-healthcheck 分析程式")
+    ap.add_argument("bundles", nargs="+", help="collect.sh 產出的 tar.gz（或解壓後的資料夾）")
+    ap.add_argument("--data", default=os.path.join(HERE, "data"), help="官方資料檔所在資料夾（預設：程式旁的 data/）")
+    ap.add_argument("--oval", help="只用這一個官方資料檔（oci.com.ubuntu.<代號>.usn.oval.xml.bz2）")
+    ap.add_argument("--engine", choices=["auto", "oscap", "builtin", "both"], default="auto")
+    ap.add_argument("--rules", help="自訂規則檔（JSON），覆蓋在 rules/default-rules.json 上")
+    ap.add_argument("--deidentify", action="store_true", help="主機代號改為 H01、H02…")
+    ap.add_argument("--agency", default="")
+    ap.add_argument("--assessor", "--dealer", dest="dealer", default="", help="執行單位（報告表頭）")
+    ap.add_argument("--date", default=datetime.date.today().strftime("%Y-%m"), help="判斷基準月份 YYYY-MM")
+    ap.add_argument("--out", default="hc-report")
+    args = ap.parse_args()
+
+    if not re.match(r"^\d{4}-(0[1-9]|1[0-2])$", args.date):
+        ap.error("--date 格式必須是 YYYY-MM，例如 2026-11")
+    if args.oval and not os.path.isfile(args.oval):
+        ap.error("找不到資料檔：%s" % args.oval)
+    try:
+        rules = load_rules(args.rules)
+    except (OSError, ValueError) as e:
+        ap.error("規則檔讀取失敗：%s" % e)
+
+    ver = oscap_version() if args.engine in ("auto", "oscap", "both") else None
+    if args.engine in ("oscap", "both") and not ver:
+        ap.error("找不到 oscap 指令。Ubuntu 上可安裝 openscap-scanner（24.04 以後）或 libopenscap8（22.04 以前）")
+    args.engine_used = "oscap" if (args.engine == "auto" and ver) else ("builtin" if args.engine == "auto" else args.engine)
+    args.engine_label = {"oscap": "OpenSCAP %s" % ver, "builtin": "內建比對（依官方 OVAL 的同一套判斷條件實作）",
+                         "both": "OpenSCAP %s（並以內建比對對照）" % ver}[args.engine_used]
+
+    datasets = find_datasets(args, rules)
+    loaded = []
+    for b in args.bundles:
+        try:
+            loaded.append((b, load_bundle(b)))
+        except Exception as e:
+            loaded.append((b, e))
+    # 只載入用得到的版本
+    need = set()
+    for _, f in loaded:
+        if isinstance(f, dict):
+            vid = parse_kv(strip_exit(f.get("os-release.txt", ""))).get("VERSION_ID", "")
+            code = (rules["lifecycle"].get(vid) or {}).get("codename") or \
+                parse_kv(strip_exit(f.get("os-release.txt", ""))).get("VERSION_CODENAME", "")
+            need.add(code)
+    today = datetime.date.today()
+    for code, ds in datasets.items():
+        if code not in need:
+            continue
+        try:
+            ds["oval"] = load_oval(ds["path"])
+            if not ds["oval"]["manifest_based"]:
+                raise ValueError("不是套件清單版（oci.）的 OVAL")
+            ds["info"] = oval_info(ds["path"], rules)
+            ts = ds["oval"]["timestamp"]
+            ds["info"]["timestamp"] = ts
+            try:
+                ds["info"]["age_days"] = (today - datetime.date(*map(int, ts[:10].split("-")))).days
+            except ValueError:
+                pass
+            ds["used"] = True
+            print("已載入官方資料：%s（%d 則公告，產生時間 %s）" % (ds["info"]["file"], len(ds["oval"]["defs"]), ts),
+                  file=sys.stderr)
+        except Exception as e:
+            print("警告：資料檔 %s 無法使用（%s: %s）" % (ds["path"], type(e).__name__, e), file=sys.stderr)
+            ds.pop("oval", None)
+
+    hosts = []
+    for b, f in loaded:
+        try:
+            if isinstance(f, Exception):
+                raise f
+            hosts.append(analyze_host(f, args, rules, datasets))
+        except Exception as e:  # 單台資料壞掉不影響其他主機
+            print("警告：%s 無法分析（%s: %s）" % (b, type(e).__name__, e), file=sys.stderr)
+            hosts.append(error_host(b, e))
+    if args.deidentify:
+        if args.out == "hc-report":
+            args.out = "hc-report-deid"
+        hosts = deidentify(hosts)
+        args.agency = "（已去識別化）"
+    os.makedirs(args.out, exist_ok=True)
+    with open(os.path.join(args.out, "report.md"), "w", encoding="utf-8") as f:
+        f.write(render_report(hosts, args, rules, datasets))
+    # 完整比對明細另存一檔；findings.json 只留摘要，方便交給 AI 分析
+    detail = [{"tag": h["tag"], "oval_matches": h.get("oval_matches", [])} for h in hosts]  # 用清單，代號重複也不會互相覆蓋
+    with open(os.path.join(args.out, "oval-detail.json"), "w", encoding="utf-8") as f:
+        json.dump(detail, f, ensure_ascii=False, indent=1)
+    for h in hosts:
+        h["oval_matches"] = [{"title": m["title"], "severity": m["severity"], "needs_pro": m["needs_pro"],
+                              "pockets": m["pockets"], "cve_count": len(m["cves"]),
+                              "packages": sorted({p["source"] for p in m["packages"]})}
+                             for m in h.get("oval_matches", [])]
+    out = {"schema": "offline-ubuntu-healthcheck/0.3", "tool_version": TOOL_VERSION, "basis_month": args.date,
+           "deidentified": args.deidentify, "engine": args.engine_label if any(
+               ds.get("used") for ds in datasets.values()) else None,
+           "data": {c: ds["info"] for c, ds in datasets.items() if ds.get("used")},
+           "categories": rules["categories"], "hosts": hosts}
+    with open(os.path.join(args.out, "findings.json"), "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print("已產出：%s/report.md、findings.json、oval-detail.json" % args.out)
+
+
+if __name__ == "__main__":
+    sys.exit(main())
