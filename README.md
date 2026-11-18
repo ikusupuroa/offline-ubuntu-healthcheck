@@ -27,9 +27,80 @@ cd offline-ubuntu-healthcheck
 
 | 情況 | 指令 |
 |---|---|
-| 這台電腦可以 SSH 到要檢查的主機 | `cp hosts.example.txt hosts.txt`，編輯後執行 `./hc scan hosts.txt` |
-| 只能請主機管理者自己跑，再把結果交給你 | 主機上：`bash collect.sh --tag H01`<br>你的電腦：`./hc report hc-H01-*.tar.gz` |
-| 只想檢查這台電腦自己 | `./hc local` |
+| 只想檢查這台電腦自己（Ubuntu） | `./hc local --sudo` |
+| 這台電腦可以 SSH 到要檢查的主機 | `cp hosts.example.txt hosts.txt`，編輯後執行 `./hc scan hosts.txt --sudo` |
+| 只能請主機管理者自己跑，再把結果交給你 | 主機上：`sudo bash collect.sh --tag H01`<br>你的電腦：`./hc report hc-H01-*.tar.gz` |
+
+三種情況都可以不加 sudo。加了會多檢查 SSH 設定、防火牆（ufw）、空密碼帳號三項；沒加的話，報告會把這三項列在「未能檢查」。
+
+### 情況一：只想檢查這台電腦自己
+
+要檢查的 Ubuntu 主機就是你正在用的這台。收集和分析都在這台完成，不需要 SSH。
+
+```bash
+./hc local --sudo
+```
+
+`--sudo` 會詢問你這個帳號的 sudo 密碼。這個方式只能在 Ubuntu 上用：macOS 和 Windows 沒有 Ubuntu 的套件清單，沒有東西可以檢查。
+
+### 情況二：用 SSH 一次掃描多台主機
+
+```mermaid
+flowchart LR
+  A["分析電腦<br>./hc scan hosts.txt --sudo"] -- "① 經 SSH 送入收集腳本" --> B["受檢主機<br>H01、H02…"]
+  B -- "② 收集結果傳回<br>（主機上不留收集檔）" --> A
+  A -- "③ 與 data/ 的官方資料比對" --> C["reports/日期時間/<br>report.html"]
+```
+
+先複製主機清單範本，再編輯成你要檢查的主機，一行一台，格式是「代號　SSH 登入目標　［其他 ssh 參數，可省略］」：
+
+```bash
+cp hosts.example.txt hosts.txt
+```
+
+```text
+H01   admin@10.0.0.5
+H02   ops@10.0.0.6     -p 2222
+```
+
+然後執行：
+
+```bash
+./hc scan hosts.txt --sudo
+```
+
+收集腳本經 SSH 送進主機執行，結果直接傳回這台電腦，主機上不會留下腳本或收集檔。報告上只會出現代號，不會出現 IP。這裡的 `--sudo` 需要主機設定免密碼 sudo；沒有設定的主機會自動改用一般權限收集。
+
+### 情況三：請主機管理者自己執行，再把結果交給你
+
+適合從你的電腦連不到主機，或單位不開放 SSH 帳號給你的情況。
+
+```mermaid
+flowchart LR
+  A["分析電腦"] -- "① 把 collect.sh<br>交給主機管理者" --> B["受檢主機<br>sudo bash collect.sh --tag H01"]
+  B -- "② 交回<br>hc-H01-日期時間.tar.gz" --> A
+  A -- "③ ./hc report" --> C["reports/日期時間/<br>report.html"]
+```
+
+管理者在主機上執行，會在目前的資料夾產生 `hc-H01-<日期時間>.tar.gz`：
+
+```bash
+sudo bash collect.sh --tag H01
+```
+
+用 sudo 產生的檔案屬於 root，只有 root 能讀。複製出來之前，先把檔案的擁有者改成自己：
+
+```bash
+sudo chown $USER hc-H01-*.tar.gz
+```
+
+拿回收集檔後，在你的電腦上分析。多台主機的收集檔可以一次放進去：
+
+```bash
+./hc report hc-*.tar.gz
+```
+
+分析完，請管理者刪除主機上的 `collect.sh` 與 `hc-*.tar.gz`。
 
 跑完之後，用瀏覽器打開畫面最後一行的 `report.html`。
 

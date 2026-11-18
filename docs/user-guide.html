@@ -118,7 +118,7 @@ figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
 
 <h2>2. 準備分析用的電腦</h2>
 
-<p>「分析用的電腦」是你拿來執行工具、產生報告的那台。它要能用 SSH 連到受檢主機；連不到也沒關係，可以改請主機管理者自己收集（第 4 章情況二）。</p>
+<p>「分析用的電腦」是你拿來執行工具、產生報告的那台。它要能用 SSH 連到受檢主機；連不到也沒關係，可以改請主機管理者自己收集（第 4 章情況三）。只檢查分析電腦自己的話，也不需要 SSH（第 4 章情況一）。</p>
 
 <h3>2.1 需要什麼</h3>
 <ul>
@@ -223,7 +223,7 @@ cd offline-ubuntu-healthcheck</pre>
 sudo apt install -y libopenscap8        # 22.04 以前</pre>
 
 <h2>3. 準備主機清單與 SSH 登入</h2>
-<p>這一章只有「分析電腦可以用 SSH 連到受檢主機」時才需要。不能用 SSH 的話，直接跳到第 4 章情況二。</p>
+<p>這一章只有「分析電腦可以用 SSH 連到受檢主機」時才需要。只檢查分析電腦自己，或不能用 SSH 的話，直接跳到第 4 章的情況一或情況三。</p>
 
 <h3>3.1 建立主機清單 hosts.txt</h3>
 <div class="step"><b class="n">1</b><div><p>從範本複製一份：</p><pre>cp hosts.example.txt hosts.txt</pre></div></div>
@@ -252,10 +252,33 @@ H02   ops@10.0.0.6     -p 2222</pre>
 <h2>4. 收集資料並產生報告</h2>
 <p>依你的情況選一種。三種做法產生的報告完全一樣。</p>
 
-<h3>情況一：分析電腦能用 SSH 連到主機（建議）</h3>
-<p>一次掃描多台主機的過程如圖 2。</p>
+<h3>情況一：只想檢查分析電腦自己</h3>
+<p>要檢查的 Ubuntu 主機就是你正在用的這台。收集和分析都在這台完成，不需要 SSH，也不需要第 3 章的主機清單。</p>
+<pre>./hc local --sudo</pre>
+<p><code>--sudo</code> 會詢問你這個帳號的 sudo 密碼。不加也能跑，只是 SSH 設定、防火牆、空密碼帳號三項會列為「未能檢查」。</p>
+<p>只有分析電腦本身是 Ubuntu 時才能用。macOS 沒有 Ubuntu 的套件清單，可以用來掃別台主機，但不能掃自己。</p>
 
-<figure class="arch keep">
+<h3>情況二：分析電腦能用 SSH 連到主機（多台主機時建議）</h3>
+<div class="step"><b class="n">1</b><div><p>在 <code>offline-ubuntu-healthcheck</code> 資料夾裡執行：</p><pre>./hc scan hosts.txt --sudo</pre><p>不需要 sudo 就把 <code>--sudo</code> 拿掉。</p></div></div>
+<div class="step"><b class="n">2</b><div><p>等它跑完。每台主機通常 3 到 15 秒。畫面會像這樣（實測輸出）：</p>
+<pre class="out">開始收集 1 台主機（收集檔存放在 reports/2026-11-16-151406/collected，內含套件清單，請妥善保管）
+  [1/1] H01：完成，3 秒
+
+健檢完成：1 台主機，其中 1 台已過標準維護期
+------------------------------------------------------------
+  H01   20.04   需 Pro（ESM）   A 2｜B 0｜C 1｜D 2｜需 Pro 178、免費可修 3 則安全公告
+------------------------------------------------------------
+A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決）　C＝合規工具　D＝與 Pro 無關
+官方資料：focal（20.04），產生於 2026-11-15（1 天前），雜湊核對：一致
+
+報告：reports/2026-11-16-151406/report.html　← 用瀏覽器打開</pre>
+<p>這段畫面的意思：H01 是 20.04，標準維護期已經過了；有 178 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到，另外 3 則是免費的、只是還沒裝。A、B、C、D 是發現事項的類別，第 5 章會詳細說明。</p>
+</div></div>
+<div class="step"><b class="n">3</b><div><p>用瀏覽器打開最後一行的 <code>report.html</code>。</p></div></div>
+
+<figure class="arch">
+<div class="keep">
+<p>一次掃描多台主機時，資料怎麼流動如圖 2。</p>
 <svg viewBox="0 0 680 450" role="img" aria-label="圖 2：用 SSH 掃描多台主機">
 <defs>
 <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" fill="#1d1d1f"/></marker>
@@ -319,6 +342,7 @@ H02   ops@10.0.0.6     -p 2222</pre>
 <text class="s" x="300" y="334">主機上不留檔</text>
 </svg>
 <figcaption>圖 2　用 SSH 一次掃描多台主機</figcaption>
+</div>
 <ol class="legend">
   <li>① 把要檢查的主機寫進 <code>hosts.txt</code>（3.1 節），並設好免密碼登入（3.2 節）。</li>
   <li>② 在分析電腦上執行 <code>./hc scan hosts.txt --sudo</code>。</li>
@@ -329,33 +353,13 @@ H02   ops@10.0.0.6     -p 2222</pre>
   <li>⑦ 用瀏覽器打開 <code>report.html</code>，第 5 章說明怎麼看。</li>
 </ol>
 </figure>
-<div class="step"><b class="n">1</b><div><p>在 <code>offline-ubuntu-healthcheck</code> 資料夾裡執行：</p><pre>./hc scan hosts.txt --sudo</pre><p>不需要 sudo 就把 <code>--sudo</code> 拿掉。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>等它跑完。每台主機通常 3 到 15 秒。畫面會像這樣（實測輸出）：</p>
-<pre class="out">開始收集 1 台主機（收集檔存放在 reports/2026-11-16-151406/collected，內含套件清單，請妥善保管）
-  [1/1] H01：完成，3 秒
-
-健檢完成：1 台主機，其中 1 台已過標準維護期
-------------------------------------------------------------
-  H01   20.04   需 Pro（ESM）   A 2｜B 0｜C 1｜D 2｜需 Pro 178、免費可修 3 則安全公告
-------------------------------------------------------------
-A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決）　C＝合規工具　D＝與 Pro 無關
-官方資料：focal（20.04），產生於 2026-11-15（1 天前），雜湊核對：一致
-
-報告：reports/2026-11-16-151406/report.html　← 用瀏覽器打開</pre>
-<p>這段畫面的意思：H01 是 20.04，標準維護期已經過了；有 178 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到，另外 3 則是免費的、只是還沒裝。A、B、C、D 是發現事項的類別，第 5 章會詳細說明。</p>
-</div></div>
-<div class="step"><b class="n">3</b><div><p>用瀏覽器打開最後一行的 <code>report.html</code>。</p></div></div>
 
 <p>收集時，腳本經 SSH 送進主機執行，結果直接傳回分析電腦。主機上不會留下收集腳本或收集檔。</p>
 
-<h3>情況二：只能請主機管理者自己收集</h3>
+<h3>情況三：只能請主機管理者自己收集</h3>
 <div class="step"><b class="n">1</b><div><p>把 <code>collect.sh</code> 這個檔案交給主機管理者（隨身碟、內部檔案分享都可以）。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>請管理者在主機上執行，<code>H01</code> 換成這台的代號：</p><pre>bash collect.sh --tag H01</pre><p>要多檢查 SSH、防火牆、空密碼帳號時改用：</p><pre>sudo bash collect.sh --tag H01</pre><p>完成後，目前的資料夾會多一個 <code>hc-H01-日期時間.tar.gz</code>。</p></div></div>
+<div class="step"><b class="n">2</b><div><p>請管理者在主機上執行，<code>H01</code> 換成這台的代號：</p><pre>bash collect.sh --tag H01</pre><p>要多檢查 SSH、防火牆、空密碼帳號時改用：</p><pre>sudo bash collect.sh --tag H01</pre><p>完成後，目前的資料夾會多一個 <code>hc-H01-日期時間.tar.gz</code>。</p><p>用 sudo 產生的檔案屬於 root，只有 root 能讀。複製出來之前，先把檔案的擁有者改成自己：</p><pre>sudo chown $USER hc-H01-*.tar.gz</pre></div></div>
 <div class="step"><b class="n">3</b><div><p>管理者把這個檔案交回給你。你在分析電腦上執行：</p><pre>./hc report hc-H01-*.tar.gz</pre><p>多台一起分析，就把檔案都列上去，或用 <code>./hc report hc-*.tar.gz</code>。</p></div></div>
-
-<h3>情況三：只想檢查分析電腦自己</h3>
-<pre>./hc local --sudo</pre>
-<p>只有分析電腦本身是 Ubuntu 時才能用。macOS 沒有 Ubuntu 的套件清單，可以用來掃別台主機，但不能掃自己。</p>
 
 <h3>4.1 報告表頭與去識別化</h3>
 <p>這些參數三種情況都能加：</p>
@@ -378,7 +382,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 </table></div>
 
 <h3>4.3 主機上會留下什麼</h3>
-<p>用情況一（<code>./hc scan</code>）收集時，主機上不會留下收集腳本與收集檔。用情況二時，主機上會有 <code>collect.sh</code> 和產生的 <code>hc-*.tar.gz</code>，交回後請主機管理者刪除。</p>
+<p>用情況二（<code>./hc scan</code>）收集時，主機上不會留下收集腳本與收集檔。用情況三時，主機上會有 <code>collect.sh</code> 和產生的 <code>hc-*.tar.gz</code>，交回後請主機管理者刪除。用情況一時，收集檔只存在分析電腦的 <code>reports/日期時間/collected/</code>。</p>
 <p>不論哪種做法，2026 年 11 月的實機測試發現，收集時其他程式會寫自己的紀錄：</p>
 <ul>
   <li>Ubuntu Pro 用戶端（<code>pro</code> 指令）會更新自己的記錄檔與快取。</li>
@@ -575,7 +579,7 @@ ssh -p 2222 admin@10.0.0.5 'echo OK'</pre>
 <p>分析電腦查不到這個主機名稱，<code>hosts.txt</code> 改寫 IP。</p>
 
 <p><b>Q：用了 --sudo，SSH 設定、防火牆還是「未能檢查」</b></p>
-<p>那台主機的帳號不能免密碼 sudo，工具自動改用了一般權限，畫面上會有說明。可以請管理者用情況二的 <code>sudo bash collect.sh --tag 代號</code> 收集。</p>
+<p>那台主機的帳號不能免密碼 sudo，工具自動改用了一般權限，畫面上會有說明。可以請管理者用情況三的 <code>sudo bash collect.sh --tag 代號</code> 收集。</p>
 
 <p><b>Q：畫面說官方資料超過 7 天</b></p>
 <p>照 7.1 節更新。不能上網時照樣可以分析，只是之後公布的弱點不會列入，報告上也會註明。</p>
@@ -593,11 +597,11 @@ ssh -p 2222 admin@10.0.0.5 'echo OK'</pre>
 <tr><td>看官方資料日期</td><td><code>./hc update --list</code></td></tr>
 <tr><td>更新官方資料</td><td><code>./hc update</code> 或 <code>git pull</code></td></tr>
 <tr><td>核對資料沒被改過</td><td><code>./hc update --verify</code></td></tr>
+<tr><td>檢查這台電腦自己</td><td><code>./hc local --sudo</code></td></tr>
 <tr><td>建立主機清單</td><td><code>cp hosts.example.txt hosts.txt</code></td></tr>
 <tr><td>用 SSH 收集並分析</td><td><code>./hc scan hosts.txt --sudo</code></td></tr>
 <tr><td>主機管理者自己收集</td><td><code>sudo bash collect.sh --tag H01</code></td></tr>
 <tr><td>分析交回來的收集檔</td><td><code>./hc report hc-*.tar.gz</code></td></tr>
-<tr><td>檢查這台電腦自己</td><td><code>./hc local --sudo</code></td></tr>
 <tr><td>產生給 AI 用的去識別化版本</td><td>原本的指令後面加 <code>--deidentify</code></td></tr>
 <tr><td>看完整參數說明</td><td><code>./hc scan -h</code>、<code>./hc report -h</code></td></tr>
 </table></div>
