@@ -23,6 +23,7 @@
   "thresholds": {
     "uptime_days_warn": 90,
     "data_max_age_days": 7,
+    "apt_update_stale_days": 7,
     "detail_rows_per_host": 30
   },
 
@@ -64,7 +65,8 @@
       "enabled": true, "category": "D", "severity": "auto",
       "title": "{n_packages} 個套件有免費的安全修補，還沒安裝",
       "detail": "要更新的套件：{packages}。對應 {usns} 則官方安全公告，其中重大或高風險 {crit_high} 則。這些修補放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro{reboot_note}",
-      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新"
+      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新",
+      "action_if_auto_update_failing": "在主機上執行 sudo apt update 與 sudo apt upgrade；這台主機的自動更新目前沒有在運作，請先處理「已設定自動更新，但套件清單…沒有成功更新」那一項，再排定固定的修補時段"
     },
     "pro_client_pending": {
       "enabled": true, "category": "A", "severity": "高",
@@ -82,7 +84,8 @@
       "enabled": true, "category": "D", "severity": "高",
       "title": "有 {n} 個套件的免費安全更新還沒安裝",
       "detail": "這些更新放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro（來源：主機上的 Ubuntu Pro 用戶端）",
-      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新"
+      "action": "在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新",
+      "action_if_auto_update_failing": "在主機上執行 sudo apt update 與 sudo apt upgrade；這台主機的自動更新目前沒有在運作，請先處理「已設定自動更新，但套件清單…沒有成功更新」那一項，再排定固定的修補時段"
     },
     "kernel_not_running_newest": {
       "enabled": true, "category": "B", "severity": "高",
@@ -138,6 +141,12 @@
       "title": "有空密碼帳號", "detail": "共 {n} 個",
       "action": "在主機上執行 sudo awk -F: '$2==\"\"{print $1}' /etc/shadow 找出帳號，設定密碼，或用 sudo passwd -l 帳號 鎖定"
     },
+    "auto_updates_failing": {
+      "enabled": true, "category": "D", "severity": "高",
+      "title": "已設定自動更新，但套件清單 {days} 天沒有成功更新",
+      "detail": "最後一次成功更新套件清單是 {last}（收集當天往前 {days} 天）。自動更新沒有在運作，之後公布的修補也不會自動安裝",
+      "action": "先查主機能不能連到套件來源（網路、Proxy、DNS）以及來源設定是否正確：在主機上執行 sudo apt update，看最後幾行的錯誤訊息；修好後隔天再確認套件清單有更新"
+    },
     "no_auto_updates": {
       "enabled": true, "category": "D", "severity": "低",
       "title": "未啟用自動安全更新", "detail": "unattended-upgrades 沒有設定為每天執行",
@@ -145,7 +154,7 @@
     },
     "third_party_packages": {
       "enabled": true, "category": "D", "severity": "中",
-      "title": "有 {n} 個非 Ubuntu 官方來源的套件",
+      "title": "有 {n} 個非 Ubuntu 官方來源的套件", "short": "非 Ubuntu 官方來源的套件",
       "detail": "第三方或來源不明的套件，不在 Ubuntu 與 Ubuntu Pro 的修補範圍",
       "action": "在主機上執行 pro security-status --thirdparty 與 pro security-status --unavailable 列出這些套件，盤點來源並向原廠確認更新方式"
     }
@@ -154,12 +163,21 @@
   "report_text": {
     "title": "Ubuntu 主機資安健檢報告",
     "year_note": "維護年限說明：LTS 版本標準維護 5 年；訂閱 Ubuntu Pro（ESM）共 10 年；加購 Legacy 最長 15 年。",
-    "priority_steps": [
-      "先處理各類「高」嚴重度項目，其中 D 類的帳號與登入設定通常當天就能改。",
-      "已過標準維護期的主機（A 類）：短期以 Ubuntu Pro 恢復安全更新，同時排定升級計畫。",
-      "核心修補無法排停機的主機（B 類）：評估 Livepatch，並保留定期重開機的維護窗口。",
-      "需要稽核證據的單位（C 類）：評估 USG，並與適用的組態基準比對。"
-    ],
+    "_priority_說明": "「建議處理順序」依報告內容產生：只列這份報告實際出現的項目，順序照下面排列。{hosts} 換成主機代號，{items} 換成發現項目。",
+    "priority": {
+      "auto_update_failing": "先修好自動更新（{hosts}）：自動更新已設定，但套件清單很久沒有成功更新。先查網路與套件來源，否則之後的修補也不會自動安裝。",
+      "d_high": "當天就能改、不用採購的高風險設定（{hosts}）：{items}。",
+      "patches_available": "安裝已經可以取得的安全修補（{hosts}）：在主機上執行 sudo apt update 與 sudo apt upgrade；含核心更新的要排時段重開機。只想先修重大與高風險時，見各主機的「重大與高風險公告」。",
+      "no_support": "已無官方維護或非 LTS 的主機（{hosts}）：Ubuntu Pro 也無法提供修補，規劃升級到仍在維護期內的 LTS 版本。",
+      "a_class": "要訂閱 Ubuntu Pro 才拿得到修補的主機（{hosts}）：評估訂閱 Ubuntu Pro 取得這些修補；已過標準維護期的主機，同時排定升級計畫。",
+      "b_class": "修補要重開機才生效的主機（{hosts}）：排定重開機時段；停機困難的，評估 Livepatch（只處理高風險與重大核心漏洞，不能取代所有重開機）。",
+      "d_other": "其他設定與管理項目（{hosts}）：{items}，依各項的建議排入例行維護。",
+      "c_class": "需要設定基準的稽核證據時（{hosts}）：評估 Ubuntu Pro 內含的 USG，並與適用的組態基準比對。",
+      "broken": "收集檔損壞或格式不符、沒有分析的主機（{hosts}）：請重新收集。",
+      "unchecked": "有項目未能檢查（{hosts}）：收集時權限不足或缺資料，不代表沒有問題；可加 --sudo 重新收集，或依各主機的說明補資料。",
+      "none": "這次沒有需要處理的發現。維持定期更新，並定期重新健檢。"
+    },
+    "crit_high_note": "只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。",
     "limitations": [
       "本健檢只讀取系統資訊，不做弱點利用測試、不修改設定，不等同滲透測試。",
       "只涵蓋 Ubuntu 官方套件庫的套件；第三方軟體（例如自行安裝的應用程式）的弱點不在比對範圍。",

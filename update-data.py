@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜官方資料更新（update-data.py）
 
-版本：0.5
+版本：0.6
 在「能上網」的電腦執行（Python 3.6 以上，只用標準函式庫）。從 Canonical 官方網站下載
 套件清單版的 OVAL 弱點資料，並留下來源紀錄，方便帶進離線環境後核對。
 
@@ -37,7 +37,7 @@ import tempfile
 import urllib.error
 import urllib.request
 
-VERSION = "0.5"
+VERSION = "0.6"
 BASE = "https://security-metadata.canonical.com/oval/"
 # 本專案在 GitHub 上每天更新的副本（data 分支，內容是官方原始檔，未經修改）
 MIRROR_REPO = "ikusupuroa/offline-ubuntu-healthcheck"

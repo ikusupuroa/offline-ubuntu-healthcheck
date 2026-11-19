@@ -9,9 +9,10 @@ main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}h1{font-size:26px;mar
 .card b{font-size:28px;display:block}.card.A{border-color:var(--a)}.card.B{border-color:var(--b)}.card.C{border-color:var(--c)}.card.D{border-color:var(--d)}
 .tag{display:inline-block;border-radius:4px;padding:0 6px;font-size:12px;font-weight:700;color:#fff}.tA{background:var(--a)}.tB{background:var(--b)}.tC{background:var(--c)}.tD{background:var(--d)}
 details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}summary{cursor:pointer;font-weight:600}
+h4{font-size:15px;margin:18px 0 4px}code{font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--card);padding:1px 4px;border-radius:4px;word-break:break-all}
 </style></head><body><main>
 <h1>Ubuntu 主機資安健檢報告</h1>
-<p class="mut">受檢單位：示範單位（虛構）　執行單位：示範執行單位（虛構）　判斷基準月份：2026-11　分析程式：offline-ubuntu-healthcheck 0.5</p>
+<p class="mut">受檢單位：示範單位（虛構）　執行單位：示範執行單位（虛構）　判斷基準月份：2026-11　分析程式：offline-ubuntu-healthcheck 0.6</p>
 <h2>一、摘要</h2>
 <p>共 <b>3</b> 台主機，其中 <b>2</b> 台已過標準維護期；發現事項共 23 項，依「Ubuntu Pro 能否解決」分成四類。</p>
 <div class="cards">
@@ -20,11 +21,12 @@ details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}
 <div class="card C"><span class="tag tC">C</span><b>2</b>合規與設定基準（Ubuntu Pro 提供工具，仍需人力）<br><span class="mut">Ubuntu Pro 能否解決：部分</span></div>
 <div class="card D"><span class="tag tD">D</span><b>12</b>與 Ubuntu Pro 無關（自行處理、升級或其他服務）<br><span class="mut">Ubuntu Pro 能否解決：否</span></div>
 </div><p class="mut">D 類與 Ubuntu Pro 無關，同樣列出，讓受檢單位掌握完整風險。每一項發現的「建議」欄寫了處理方式；各類別的意思與處理步驟，見使用者手冊（docs/user-guide.pdf）第 5 章。</p>
-<h2>二、主機總覽</h2><div class="tw"><table><tr><th>主機</th><th>版本</th><th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th><th>需 Pro 才能取得的修補</th><th>未套用的免費修補</th><th>執行中核心</th><th>未重開機天數</th></tr>
-<tr><td><b>demo-ap01</b></td><td>Ubuntu 20.04.6 LTS</td><td>需 Pro（ESM）</td><td>2</td><td>2</td><td>1</td><td>6</td><td>49 則安全公告</td><td>74 則安全公告</td><td>5.4.0-150-generic</td><td>200</td></tr>
-<tr><td><b>demo-db01</b></td><td>Ubuntu 16.04.7 LTS</td><td>需 Pro＋Legacy</td><td>2</td><td>1</td><td>0</td><td>3</td><td>85 則安全公告</td><td>14 則安全公告</td><td>4.4.0-210-generic</td><td>480</td></tr>
-<tr><td><b>demo-web01</b></td><td>Ubuntu 22.04.5 LTS</td><td>標準維護期內</td><td>1</td><td>1</td><td>1</td><td>3</td><td>2 則安全公告</td><td>76 則安全公告</td><td>5.15.0-125-generic</td><td>30</td></tr>
+<h2>二、主機總覽</h2><div class="tw"><table><tr><th>主機</th><th>AI 代號</th><th>版本</th><th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th><th>需 Pro 才能取得的修補</th><th>未套用的免費修補</th><th>執行中核心</th><th>未重開機天數</th></tr>
+<tr><td><b>demo-ap01</b></td><td>H01</td><td>Ubuntu 20.04.6 LTS</td><td>需 Pro（ESM）</td><td>2</td><td>2</td><td>1</td><td>6</td><td>49 則安全公告</td><td>74 則安全公告</td><td>5.4.0-150-generic</td><td>200</td></tr>
+<tr><td><b>demo-db01</b></td><td>H02</td><td>Ubuntu 16.04.7 LTS</td><td>需 Pro＋Legacy</td><td>2</td><td>1</td><td>0</td><td>3</td><td>85 則安全公告</td><td>14 則安全公告</td><td>4.4.0-210-generic</td><td>480</td></tr>
+<tr><td><b>demo-web01</b></td><td>H03</td><td>Ubuntu 22.04.5 LTS</td><td>標準維護期內</td><td>1</td><td>1</td><td>1</td><td>3</td><td>2 則安全公告</td><td>76 則安全公告</td><td>5.15.0-125-generic</td><td>30</td></tr>
 </table></div><p class="mut">維護年限說明：LTS 版本標準維護 5 年；訂閱 Ubuntu Pro（ESM）共 10 年；加購 Legacy 最長 15 年。</p>
+<p class="mut">AI 代號是 findings-ai.json（去識別化，可交給 AI 分析）裡的主機代號；這張對照表只在本報告，不要一起交給雲端 AI。</p>
 <h2>三、發現事項（依主機）</h2>
 <h3>demo-ap01（Ubuntu 20.04.6 LTS）</h3>
 <p>維護狀態：標準維護已於 2025-05 結束；訂閱 Ubuntu Pro（ESM）才有安全更新，到 2030-05</p>
@@ -40,6 +42,20 @@ details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}
 <tr><td><span class="tag tD">D</span></td><td>中</td><td>主機防火牆（ufw）未啟用</td><td>ufw 狀態為 inactive</td><td>先確認是否已由網路層防火牆保護。要啟用時，先執行 sudo ufw allow OpenSSH 保留遠端登入，再執行 sudo ufw enable</td><td>否</td></tr>
 <tr><td><span class="tag tD">D</span></td><td>中</td><td>有 3 個非 Ubuntu 官方來源的套件</td><td>第三方或來源不明的套件，不在 Ubuntu 與 Ubuntu Pro 的修補範圍</td><td>在主機上執行 pro security-status --thirdparty 與 pro security-status --unavailable 列出這些套件，盤點來源並向原廠確認更新方式</td><td>否</td></tr>
 <tr><td><span class="tag tD">D</span></td><td>低</td><td>未啟用自動安全更新</td><td>unattended-upgrades 沒有設定為每天執行</td><td>依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades</td><td>否</td></tr>
+</table></div>
+<h4>重大與高風險公告（67 則）：只修這一則的指令</h4><p class="mut">只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。</p>
+<div class="tw"><table><tr><th>安全公告</th><th>嚴重度</th><th>套件</th><th>指令</th></tr>
+<tr><td>核心公告 57 則：USN-7795-1、USN-8615-1、USN-8666-1、USN-8851-1、USN-8919-1、USN-9030-1 等</td><td>重大</td><td>linux</td><td>其中 20 則要先訂閱 Ubuntu Pro（sudo pro attach）才能取得，其餘免費：<br><code>sudo apt update &amp;&amp; sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch</code></td></tr>
+<tr><td>USN-7604-2 -- Sudo vulnerability</td><td>高</td><td>sudo</td><td>要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：<br><code>sudo pro fix USN-7604-2</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade sudo</code></td></tr>
+<tr><td>USN-8375-1 -- nginx vulnerabilities</td><td>高</td><td>nginx</td><td>要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：<br><code>sudo pro fix USN-8375-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade nginx nginx-core</code></td></tr>
+<tr><td>USN-8414-2 -- OpenSSL vulnerabilities</td><td>高</td><td>openssl</td><td>要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：<br><code>sudo pro fix USN-8414-2</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
+<tr><td>USN-8847-2 -- OpenSSL vulnerabilities</td><td>高</td><td>openssl</td><td>要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：<br><code>sudo pro fix USN-8847-2</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
+<tr><td>USN-4662-1 -- OpenSSL vulnerability</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-4662-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
+<tr><td>USN-4705-1 -- Sudo vulnerabilities</td><td>高</td><td>sudo</td><td><code>sudo pro fix USN-4705-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade sudo</code></td></tr>
+<tr><td>USN-4891-1 -- OpenSSL vulnerability</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-4891-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
+<tr><td>USN-5051-1 -- OpenSSL vulnerabilities</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-5051-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
+<tr><td>USN-5328-1 -- OpenSSL vulnerability</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-5328-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
+<tr><td>USN-5844-1 -- OpenSSL vulnerabilities</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-5844-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libssl1.1 openssl</code></td></tr>
 </table></div>
 <details open><summary>免費就能修補：6 個套件、74 則公告</summary>
 <div class="tw"><table><tr><th>套件（原始碼套件名稱）</th><th>最高嚴重度</th><th>公告數</th><th>修補來源</th><th>已安裝 → 修補版本</th></tr>
@@ -195,6 +211,14 @@ details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}
 <tr><td><span class="tag tD">D</span></td><td>中</td><td>SSH 允許密碼登入</td><td>SSH 設定 PasswordAuthentication 為 yes，帳號可能被猜密碼</td><td>先確認每位管理者都能用金鑰登入，再把 PasswordAuthentication 改為 no，執行 sudo systemctl reload ssh</td><td>否</td></tr>
 <tr><td><span class="tag tD">D</span></td><td>低</td><td>未啟用自動安全更新</td><td>unattended-upgrades 沒有設定為每天執行</td><td>依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades</td><td>否</td></tr>
 </table></div>
+<h4>重大與高風險公告（63 則）：只修這一則的指令</h4><p class="mut">只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。</p>
+<div class="tw"><table><tr><th>安全公告</th><th>嚴重度</th><th>套件</th><th>指令</th></tr>
+<tr><td>核心公告 59 則：USN-7332-1、USN-7797-1、USN-8548-2、USN-8662-1、USN-8725-1、USN-8864-1 等</td><td>重大</td><td>linux</td><td>要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：<br><code>sudo apt update &amp;&amp; sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch</code></td></tr>
+<tr><td>USN-7604-2 -- Sudo vulnerability</td><td>高</td><td>sudo</td><td>要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：<br><code>sudo pro fix USN-7604-2</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade sudo</code></td></tr>
+<tr><td>USN-3304-1 -- Sudo vulnerability</td><td>高</td><td>sudo</td><td><code>sudo pro fix USN-3304-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade sudo</code></td></tr>
+<tr><td>USN-3534-1 -- GNU C Library vulnerabilities</td><td>高</td><td>glibc</td><td><code>sudo pro fix USN-3534-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade libc6</code></td></tr>
+<tr><td>USN-4705-1 -- Sudo vulnerabilities</td><td>高</td><td>sudo</td><td><code>sudo pro fix USN-4705-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade sudo</code></td></tr>
+</table></div>
 <details open><summary>免費就能修補：4 個套件、14 則公告</summary>
 <div class="tw"><table><tr><th>套件（原始碼套件名稱）</th><th>最高嚴重度</th><th>公告數</th><th>修補來源</th><th>已安裝 → 修補版本</th></tr>
 <tr><td>glibc</td><td>高</td><td>6</td><td>Ubuntu 一般更新</td><td>2.23-0ubuntu3 → 2.23-0ubuntu11.3</td></tr>
@@ -325,6 +349,14 @@ details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}
 <tr><td><span class="tag tD">D</span></td><td>低</td><td>未啟用自動安全更新</td><td>unattended-upgrades 沒有設定為每天執行</td><td>依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades</td><td>否</td></tr>
 </table></div>
 <p class="mut">未能檢查的項目（不計入上表）：SSH 設定（主機沒有安裝 SSH 服務）；主機防火牆（ufw）狀態（需要 sudo，或主機未安裝 ufw）；空密碼帳號（需要 sudo）</p>
+<h4>重大與高風險公告（43 則）：只修這一則的指令</h4><p class="mut">只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。</p>
+<div class="tw"><table><tr><th>安全公告</th><th>嚴重度</th><th>套件</th><th>指令</th></tr>
+<tr><td>核心公告 39 則：USN-7166-1、USN-7387-1、USN-7510-1、USN-7909-1、USN-8096-1、USN-8493-1 等</td><td>重大</td><td>linux</td><td><code>sudo apt update &amp;&amp; sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch</code></td></tr>
+<tr><td>USN-6429-1 -- curl vulnerabilities</td><td>高</td><td>curl</td><td><code>sudo pro fix USN-6429-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade curl libcurl4</code></td></tr>
+<tr><td>USN-7824-3 -- Redis vulnerability</td><td>高</td><td>redis</td><td><code>sudo pro fix USN-7824-3</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade redis-server</code></td></tr>
+<tr><td>USN-8414-1 -- OpenSSL vulnerabilities</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-8414-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade openssl</code></td></tr>
+<tr><td>USN-8847-1 -- OpenSSL vulnerabilities</td><td>高</td><td>openssl</td><td><code>sudo pro fix USN-8847-1</code><br><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade openssl</code></td></tr>
+</table></div>
 <details open><summary>免費就能修補：5 個套件、76 則公告</summary>
 <div class="tw"><table><tr><th>套件（原始碼套件名稱）</th><th>最高嚴重度</th><th>公告數</th><th>修補來源</th><th>已安裝 → 修補版本</th></tr>
 <tr><td>linux</td><td>重大</td><td>41</td><td>Ubuntu 一般更新</td><td>5.15.0-125.135/5.15.0-130.140 → 5.15.0-203.213</td></tr>
@@ -344,7 +376,7 @@ details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}
 <tr><td>USN-8631-1 -- Linux kernel vulnerabilities</td><td>重大</td><td>18</td><td>Ubuntu 一般更新</td></tr>
 <tr><td>USN-8818-4 -- Linux kernel vulnerabilities</td><td>重大</td><td>20</td><td>Ubuntu 一般更新</td></tr>
 <tr><td>USN-8875-1 -- Linux kernel vulnerabilities</td><td>重大</td><td>950</td><td>Ubuntu 一般更新</td></tr>
-<tr><td>USN-8961-1 -- Linux kernel vulnerabilities</td><td>重大</td><td>1068</td><td>Ubuntu 一般更新</td></tr>
+<tr><td>USN-8961-1 -- Linux kernel vulnerabilities</td><td>重大</td><td>1067</td><td>Ubuntu 一般更新</td></tr>
 <tr><td>USN-9027-1 -- Linux kernel vulnerabilities</td><td>重大</td><td>5</td><td>Ubuntu 一般更新</td></tr>
 <tr><td>USN-6429-1 -- curl vulnerabilities</td><td>高</td><td>2</td><td>Ubuntu 一般更新</td></tr>
 <tr><td>USN-7179-1 -- Linux kernel vulnerabilities</td><td>高</td><td>14</td><td>Ubuntu 一般更新</td></tr>
@@ -419,13 +451,13 @@ details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}
 <tr><td>USN-6531-1 -- Redis vulnerabilities</td><td>中</td><td>6</td><td>esm-apps</td></tr>
 <tr><td>USN-7321-1 -- Redis vulnerabilities</td><td>中</td><td>2</td><td>esm-apps</td></tr>
 </table></div></details></details>
-<h2>四、建議處理順序</h2><ol><li>先處理各類「高」嚴重度項目，其中 D 類的帳號與登入設定通常當天就能改。</li><li>已過標準維護期的主機（A 類）：短期以 Ubuntu Pro 恢復安全更新，同時排定升級計畫。</li><li>核心修補無法排停機的主機（B 類）：評估 Livepatch，並保留定期重開機的維護窗口。</li><li>需要稽核證據的單位（C 類）：評估 USG，並與適用的組態基準比對。</li></ol>
+<h2>四、建議處理順序</h2><ol><li>當天就能改、不用採購的高風險設定（demo-ap01）：SSH 允許 root 直接登入。</li><li>安裝已經可以取得的安全修補（demo-ap01、demo-db01、demo-web01）：在主機上執行 sudo apt update 與 sudo apt upgrade；含核心更新的要排時段重開機。只想先修重大與高風險時，見各主機的「重大與高風險公告」。</li><li>要訂閱 Ubuntu Pro 才拿得到修補的主機（demo-ap01、demo-db01、demo-web01）：評估訂閱 Ubuntu Pro 取得這些修補；已過標準維護期的主機，同時排定升級計畫。</li><li>修補要重開機才生效的主機（demo-ap01、demo-db01、demo-web01）：排定重開機時段；停機困難的，評估 Livepatch（只處理高風險與重大核心漏洞，不能取代所有重開機）。</li><li>其他設定與管理項目（demo-ap01、demo-db01、demo-web01）：SSH 允許密碼登入、主機防火牆（ufw）未啟用、非 Ubuntu 官方來源的套件、未啟用自動安全更新，依各項的建議排入例行維護。</li><li>需要設定基準的稽核證據時（demo-ap01、demo-web01）：評估 Ubuntu Pro 內含的 USG，並與適用的組態基準比對。</li><li>有項目未能檢查（demo-web01）：收集時權限不足或缺資料，不代表沒有問題；可加 --sudo 重新收集，或依各主機的說明補資料。</li></ol>
 <h2>五、檢查範圍與限制</h2><ul><li>本健檢只讀取系統資訊，不做弱點利用測試、不修改設定，不等同滲透測試。</li><li>只涵蓋 Ubuntu 官方套件庫的套件；第三方軟體（例如自行安裝的應用程式）的弱點不在比對範圍。</li><li>官方弱點資料以「已安裝的套件版本」比對：舊核心套件若仍留在系統上，也可能被列入；實際執行中的核心請看 B 類。</li><li>建議欄的指令是一般做法，執行前請依單位的變更管理規定評估，並先在測試環境確認。</li><li>標示「未能檢查」的項目，代表收集時權限不足或主機沒有對應工具，不代表沒有問題。</li><li>結果反映收集當下的狀態，以及報告上所列官方資料日期之前公布的弱點。</li></ul>
 <h2>附錄：資料來源</h2>
 <p>比對引擎：內建比對（依官方 OVAL 的同一套判斷條件實作）</p>
 <div class="tw"><table><tr><th>版本</th><th>檔案</th><th>官方產生時間</th><th>距分析日</th><th>SHA-256（前 16 碼）</th><th>與下載紀錄</th></tr>
-<tr><td>focal（20.04）</td><td>oci.com.ubuntu.focal.usn.oval.xml.bz2</td><td>2026-11-15T21:06:47</td><td>1 天</td><td>d1a222aa36a2ea79</td><td>一致</td></tr>
-<tr><td>jammy（22.04）</td><td>oci.com.ubuntu.jammy.usn.oval.xml.bz2</td><td>2026-11-15T21:06:14</td><td>1 天</td><td>e3bec427b1d302ca</td><td>一致</td></tr>
-<tr><td>xenial（16.04）</td><td>oci.com.ubuntu.xenial.usn.oval.xml.bz2</td><td>2026-11-15T21:07:39</td><td>1 天</td><td>856c45d708e71b2c</td><td>一致</td></tr>
+<tr><td>focal（20.04）</td><td>oci.com.ubuntu.focal.usn.oval.xml.bz2</td><td>2026-11-18T21:11:51</td><td>1 天</td><td>745951677f4d0c61</td><td>一致</td></tr>
+<tr><td>jammy（22.04）</td><td>oci.com.ubuntu.jammy.usn.oval.xml.bz2</td><td>2026-11-18T21:11:14</td><td>1 天</td><td>1b9f50d782f9890b</td><td>一致</td></tr>
+<tr><td>xenial（16.04）</td><td>oci.com.ubuntu.xenial.usn.oval.xml.bz2</td><td>2026-11-18T21:12:48</td><td>1 天</td><td>afc265647e4eb8b3</td><td>一致</td></tr>
 </table></div><p class="mut">弱點資料：Canonical 官方 OVAL（security-metadata.canonical.com），授權 CC BY-SA 4.0。</p>
 </main></body></html>

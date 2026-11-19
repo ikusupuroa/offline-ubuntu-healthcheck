@@ -127,6 +127,20 @@ lxc exec t-2204 -- su - ubuntu -c 'bash -s -- --tag T-2204 --stdout' < collect.s
 3. 查測試機 IP：`lxc list t-2004 -c n4`。`hosts.txt` 要寫 IP，測試主機查不到 LXD 測試機的名稱。
 4. 刪掉測試機再重建時，新測試機可能拿到同一個 IP，SSH 會出現「REMOTE HOST IDENTIFICATION HAS CHANGED」。確定是自己剛建的測試機後，執行 `ssh-keygen -R 測試機IP` 刪掉舊紀錄再連。
 
+## 附錄：驗證「只修這一則」的指令（tests/lxd-fixcheck.sh）
+
+報告的「重大與高風險公告」附了 `sudo pro fix USN-…` 與 `apt install --only-upgrade` 兩行指令。這支腳本用容器驗證這兩行是否照預期運作：
+
+```bash
+tests/lxd-fixcheck.sh              # 預設 20.04、22.04、24.04
+tests/lxd-fixcheck.sh 24.04        # 只測一個版本
+tests/lxd-fixcheck.sh --cleanup    # 刪除測試機（名稱開頭 hc-f-）
+```
+
+它會把測試機的 openssl 降回發行版本，製造確定存在的缺口，再跑 `./hc local` 取出報告列的指令，逐則記錄：apt 模擬執行實際會升級哪些套件（有沒有多帶相依套件）、`pro fix --dry-run` 連網與斷網的結果、真的升級後 `pro fix` 是否認定已修好，以及 pro 用戶端版本與 changelog 裡最早提到 USN 的版本。結果在 `test-results/fixcheck-<日期時間>/RESULTS.md`。
+
+Landscape 離線（air-gapped）環境不在這支腳本的範圍，斷網只是模擬「連不到 Canonical」。
+
 ## 注意
 
 - `lxc console --show-log` 只能用在容器，虛擬機不能用。

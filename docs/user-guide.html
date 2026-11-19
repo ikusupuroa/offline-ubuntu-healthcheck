@@ -74,7 +74,7 @@ figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
 
 <section class="cover">
   <h1>Ubuntu 主機資安健檢工具<br>使用者手冊</h1>
-  <p class="sub">offline-ubuntu-healthcheck 0.5</p>
+  <p class="sub">offline-ubuntu-healthcheck 0.6</p>
   <p class="mut">2026 年 11 月</p>
   <p class="mut">工具下載：https://github.com/ikusupuroa/offline-ubuntu-healthcheck</p>
   <p class="mut" style="margin-top:40px">本工具不是 Canonical 的官方工具，與 Canonical 沒有隸屬關係，也沒有經過 Canonical 背書。Ubuntu 是 Canonical Ltd. 的商標。</p>
@@ -308,7 +308,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <rect class="wb" x="40" y="290" width="220" height="54" rx="6"/>
 <circle class="bd" cx="56" cy="317" r="10"/><text class="bn" x="56" y="321" text-anchor="middle">6</text>
 <text class="c" x="72" y="306">reports/日期時間/</text>
-<text class="s" x="72" y="322">report.html、findings.json</text>
+<text class="s" x="72" y="322">report.html、findings-ai.json</text>
 <text class="s" x="72" y="337">collected/（收集到的資料）</text>
 <path class="ln" d="M150 344V375" marker-end="url(#ah2)"/>
 <rect class="hl" x="28" y="378" width="244" height="44" rx="8"/>
@@ -367,8 +367,13 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><th>參數</th><th>作用</th></tr>
 <tr><td><code>--agency "受檢單位名稱"</code></td><td>寫在報告表頭</td></tr>
 <tr><td><code>--assessor "執行單位名稱"</code></td><td>寫在報告表頭</td></tr>
-<tr><td><code>--deidentify</code></td><td>主機代號改成 H01、H02…，要交給雲端 AI 前使用（第 6 章）</td></tr>
+<tr><td><code>--deidentify</code></td><td>整份報告都去識別化：主機代號改成 H01、H02…，受檢單位遮掉。只要交 AI 分析的話不必加，每次都會產生 <code>findings-ai.json</code>（第 6 章）；加了之後 <code>findings.json</code> 的內容和 <code>findings-ai.json</code> 相同</td></tr>
+<tr><td><code>--refresh-data</code></td><td>開始收集前，先向 Canonical 檢查有沒有新的官方資料，有就下載（每次連線最多等 15 秒）。連不上就用已下載的資料，不會中斷</td></tr>
 </table></div>
+<p>開始收集前，畫面會先說明這次用的官方資料是哪一天產生的、從哪裡來，例如：</p>
+<pre>本次使用的官方弱點資料（data）：
+  noble（24.04）：官方產生於 2026-11-18（1 天前），剛從 Canonical 更新</pre>
+<p>沒加 <code>--refresh-data</code> 時寫「使用已下載的資料」；加了但連不上時寫「無法連線，改用已下載的資料」。</p>
 
 <h3>4.2 產出哪些檔案</h3>
 <p>每次分析都會在 <code>reports/日期時間/</code> 產生：</p>
@@ -376,7 +381,8 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><th>檔案</th><th>用途</th></tr>
 <tr><td><code>report.html</code></td><td>報告，用瀏覽器打開</td></tr>
 <tr><td><code>report.md</code></td><td>同一份報告的文字版，可以修改後交付</td></tr>
-<tr><td><code>findings.json</code></td><td>結構化結果，交給 AI 分析用</td></tr>
+<tr><td><code>findings-ai.json</code></td><td>去識別化的結構化結果，要交給 AI 分析時上傳這個（第 6 章）。主機代號改成 H01、H02…，收集時間只留日期，不含受檢單位名稱</td></tr>
+<tr><td><code>findings.json</code></td><td>同一份結構化結果，保留原本的主機代號，給機關內部的 AI 或程式使用</td></tr>
 <tr><td><code>oval-detail.json</code></td><td>每則安全公告的完整比對明細</td></tr>
 <tr><td><code>collected/</code></td><td>收集到的原始資料，含套件清單，請依單位的資料分級規定保管</td></tr>
 </table></div>
@@ -413,6 +419,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><td>需 Pro 才能取得的修補</td><td>要訂閱才拿得到的安全公告則數</td></tr>
 <tr><td>未套用的免費修補</td><td>免費、但還沒裝的安全公告則數。這個數字大，代表例行修補沒有在做</td></tr>
 <tr><td>未重開機天數</td><td>超過 90 天會在 B 類提醒</td></tr>
+<tr><td>AI 代號</td><td>這台主機在 <code>findings-ai.json</code> 裡的代號（H01、H02…）。AI 的分析結果寫 H01 時，用這一欄對回原本的主機。這張對照只在報告裡，不要一起交給雲端 AI</td></tr>
 </table></div>
 
 <h3>5.3 發現事項：每一列怎麼讀</h3>
@@ -446,6 +453,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><td>主機防火牆（ufw）未啟用</td><td>D</td><td>主機本身沒有開防火牆</td><td>先確認網路層有沒有防火牆。要啟用時先執行 <code>sudo ufw allow OpenSSH</code>，再執行 <code>sudo ufw enable</code>，避免把自己鎖在外面</td></tr>
 <tr><td>有 root 以外的最高權限帳號</td><td>D</td><td>有其他 UID 為 0 的帳號</td><td>依建議欄的指令找出帳號，確認用途，不需要就移除</td></tr>
 <tr><td>有空密碼帳號</td><td>D</td><td>有帳號沒設密碼</td><td>依建議欄的指令找出帳號，設定密碼或鎖定</td></tr>
+<tr><td>已設定自動更新，但套件清單 N 天沒有成功更新</td><td>D</td><td>自動更新有開，但已經很久沒成功，修補不會自動安裝。常見原因是連不到套件來源（網路、Proxy、DNS）</td><td>在主機上執行 <code>sudo apt update</code>，看錯誤訊息，修好網路或來源設定；隔天再確認有更新</td></tr>
 <tr><td>未啟用自動安全更新</td><td>D</td><td>沒有每天自動裝安全更新</td><td>依變更管理規定決定；要啟用時執行 <code>sudo dpkg-reconfigure -plow unattended-upgrades</code></td></tr>
 <tr><td>有 N 個非 Ubuntu 官方來源的套件</td><td>D</td><td>第三方或來源不明的套件不在 Ubuntu 的修補範圍</td><td>盤點來源，向原廠確認更新方式</td></tr>
 </table></div>
@@ -472,23 +480,33 @@ sudo apt upgrade</pre>
 <p>明細一列是一個套件，寫出最高嚴重度、對應幾則公告、修補來源（「Ubuntu 一般更新」是免費的來源，esm-infra、esm-apps 是 Ubuntu Pro 的延伸維護），以及「已安裝版本 → 修補版本」。再展開「逐則公告」可以看到每則安全公告（USN）的標題。</p>
 <p>報告上的套件名稱是「原始碼套件」名稱，一個原始碼套件可能對應主機上好幾個實際安裝的套件，名稱不一定相同。例如報告寫 <code>glibc</code>，主機上看到的是 <code>libc6</code>。照建議欄執行 <code>sudo apt upgrade</code> 會一起更新，不必逐一對照。</p>
 
-<h3>5.7 其他段落</h3>
+<h3>5.7 重大與高風險公告：只先修這幾則</h3>
+<p>有重大或高風險的安全公告時，每台主機的發現事項表下方會列出這些公告，並附上「只修這一則」的指令：</p>
+<ul>
+  <li><code>sudo pro fix USN-編號</code>：主機能連到 Canonical，或機關內部有 Landscape 離線（air-gapped）環境時使用。</li>
+  <li><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade 套件…</code>：只升級這則公告點名、而且主機上真的有裝的套件。上面那種不能用時改用這行。</li>
+  <li>核心公告合併成一列：新核心是不同的套件名稱，要用 <code>sudo apt update</code> 與 <code>sudo apt upgrade</code> 安裝，再重開機；停機困難時評估 Livepatch。</li>
+  <li>寫「要先訂閱 Ubuntu Pro」的，修補只放在延伸維護，要先訂閱並執行 <code>sudo pro attach</code>。</li>
+</ul>
+<div class="note">只修重大與高風險時，其餘公告會一直累積。這是排不出時段時的權宜做法，仍要排時段執行 <code>sudo apt update</code> 與 <code>sudo apt upgrade</code> 全面更新。執行前一樣依變更管理規定，先在測試環境確認。</div>
+
+<h3>5.8 其他段落</h3>
 <ul>
   <li><b>未能檢查的項目</b>：收集時權限不足或主機沒有對應工具，<b>不代表沒有問題</b>。通常是沒有用 sudo。</li>
   <li><b>比對引擎對照</b>：用了 <code>--engine both</code> 才會出現，兩個比對引擎的結果應該一樣。</li>
-  <li><b>四、建議處理順序</b>：先處理「高」的項目，D 類的帳號與登入設定多半當天就能改。</li>
+  <li><b>四、建議處理順序</b>：依這份報告實際出現的項目產生，沒出現的類別不會列出。每一步都寫了涉及哪幾台主機。</li>
   <li><b>五、檢查範圍與限制</b>：說明這份健檢沒涵蓋什麼，交付報告時請一併說明。</li>
   <li><b>附錄：資料來源</b>：這次用的官方資料是哪一天產生的、檔案有沒有被改過。「與下載紀錄」要是「一致」。</li>
 </ul>
 
 <h2>6. 交給 AI 分析</h2>
-<p>報告是固定格式。如果想依單位的資安政策產出更完整的建議，可以把 <code>findings.json</code> 交給 AI，搭配本工具附的分析指引（skill）一起使用。分析指引就是 <code>skill/offline-ubuntu-healthcheck/SKILL.md</code> 這個檔案，裡面規定 AI 要怎麼讀資料、什麼話不能亂說、要輸出哪些段落。</p>
+<p>報告是固定格式。如果想依單位的資安政策產出更完整的建議，可以把 <code>findings-ai.json</code> 交給 AI，搭配本工具附的分析指引（skill）一起使用。分析指引就是 <code>skill/offline-ubuntu-healthcheck/SKILL.md</code> 這個檔案，裡面規定 AI 要怎麼讀資料、什麼話不能亂說、要輸出哪些段落。</p>
 
 <h3>6.1 先做兩件事</h3>
 <div class="step"><b class="n">1</b><div><p><b>確認單位規定</b>：機關使用生成式 AI 有相關規定，先問資訊單位能不能把健檢結果交給雲端 AI，或是要用機關內部的 AI。</p></div></div>
-<div class="step"><b class="n">2</b><div><p><b>產生去識別化的版本</b>：主機代號會改成 H01、H02，報告表頭的受檢單位也會遮掉。</p>
-<pre>./hc report reports/日期時間/collected/*.tar.gz --deidentify</pre>
-<p>交給 AI 的是新產生的 <code>findings.json</code>（資料夾名稱結尾是 <code>-deid</code>）。</p></div></div>
+<div class="step"><b class="n">2</b><div><p><b>找到去識別化的檔案</b>：每次分析都會在報告資料夾產生 <code>findings-ai.json</code>，主機代號已經改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。交給 AI 的就是這個檔案，不必另外再跑一次。</p>
+<p>AI 的分析結果會寫 H01、H02，用 <code>report.html</code> 主機總覽的「AI 代號」欄對回原本的主機。同一個資料夾裡的 <code>findings.json</code> 保留原代號，不要交給雲端 AI。</p>
+<p>連報告本身都要去識別化（例如要把整份報告交給外部人員）時，才在原本的指令後面加 <code>--deidentify</code>。</p></div></div>
 
 <h3>6.2 取得分析指引檔</h3>
 <ul>
@@ -498,12 +516,12 @@ sudo apt upgrade</pre>
 
 <h3>6.3 做法一：一次性使用（任何 AI 平台）</h3>
 <p>不用安裝，每次開新對話時把兩個檔案一起上傳：</p>
-<div class="step"><b class="n">1</b><div><p>開一個新對話，上傳 <code>SKILL.md</code> 和 <code>findings.json</code>。</p><p>平台不接受 <code>.md</code> 檔時（例如 Claude 的官方支援清單沒有列 <code>.md</code>），把檔名改成 <code>SKILL.txt</code> 再上傳，或直接把內容貼進對話框。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>輸入：</p><pre>請依照 SKILL 檔的指引，分析 findings.json 的健檢結果。</pre></div></div>
+<div class="step"><b class="n">1</b><div><p>開一個新對話，上傳 <code>SKILL.md</code> 和 <code>findings-ai.json</code>。</p><p>平台不接受 <code>.md</code> 檔時（例如 Claude 的官方支援清單沒有列 <code>.md</code>），把檔名改成 <code>SKILL.txt</code> 再上傳，或直接把內容貼進對話框。</p></div></div>
+<div class="step"><b class="n">2</b><div><p>輸入：</p><pre>請依照 SKILL 檔的指引，分析 findings-ai.json 的健檢結果。</pre></div></div>
 <p>機關內部自建的 AI 也是同樣做法。</p>
 
 <h3>6.4 做法二：做成固定的 skill</h3>
-<p>裝好之後，之後只要上傳 <code>findings.json</code> 並說「請分析這份健檢結果」，AI 就會自動套用指引。各平台的選單名稱常改版，以下是 2026 年 11 月查證時的做法，操作前請以官方說明為準。</p>
+<p>裝好之後，之後只要上傳 <code>findings-ai.json</code> 並說「請分析這份健檢結果」，AI 就會自動套用指引。各平台的選單名稱常改版，以下是 2026 年 11 月查證時的做法，操作前請以官方說明為準。</p>
 
 <h3>Claude 網頁版與桌面版</h3>
 <div class="step"><b class="n">1</b><div><p>到設定的 Capabilities，開啟「Code execution and file creation」（新版介面叫「Create and edit files」）。這一步一定要做，skill 才能用。</p></div></div>
@@ -542,7 +560,7 @@ cp -r skill/offline-ubuntu-healthcheck ~/.claude/skills/</pre>
 <p class="mut">官方說明：https://support.google.com/gemini/answer/18560919 、https://geminicli.com/docs/cli/skills/</p>
 
 <h3>6.5 AI 會給你什麼</h3>
-<p>依分析指引，AI 會依序輸出：三句話總結、處理清單（含優先順序、要不要停機、要不要採購）、Ubuntu Pro 能解決的部分、Ubuntu Pro 解決不了的部分、維護責任建議、需要人工確認的事。</p>
+<p>依分析指引，AI 會依序輸出：整體風險、三句話總結、處理清單（含優先順序、要不要停機、要不要採購；未能檢查的項目列在表格下方）、Ubuntu Pro 能解決的部分、Ubuntu Pro 解決不了的部分、維護責任建議、需要人工確認的事、結論。你補充主機用途、能不能停機等情境時，AI 會再依情境調整處理順序，並寫出判斷的前提。</p>
 <div class="note">交付前請人工核對 AI 的分析，特別是數字與建議的指令。分析指引已要求 AI 只根據檔案內容、不自己編 CVE 或指令，但仍可能出錯。</div>
 
 <h2>7. 更新官方資料與常見問題</h2>
@@ -555,6 +573,7 @@ cp -r skill/offline-ubuntu-healthcheck ~/.claude/skills/</pre>
 <tr><td>完全不能上網</td><td>在能上網的電腦更新後，把整個資料夾帶進去，再執行 <code>./hc update --verify</code></td></tr>
 <tr><td>只更新部分版本</td><td><code>./hc update --releases 20.04,22.04</code></td></tr>
 <tr><td>使用自己保管的資料</td><td>在指令後面加 <code>--data 資料夾路徑</code></td></tr>
+<tr><td>每次掃描前自動檢查新資料</td><td>在 <code>scan</code>、<code>report</code>、<code>local</code> 後面加 <code>--refresh-data</code>，連不上會改用已下載的資料</td></tr>
 </table></div>
 <p>GitHub 上的資料是本專案每天從 Canonical 官方網站取得的副本，檔案沒有修改過，下載後一樣會核對內容與 SHA-256。</p>
 
@@ -582,7 +601,10 @@ ssh -p 2222 admin@10.0.0.5 'echo OK'</pre>
 <p>那台主機的帳號不能免密碼 sudo，工具自動改用了一般權限，畫面上會有說明。可以請管理者用情況三的 <code>sudo bash collect.sh --tag 代號</code> 收集。</p>
 
 <p><b>Q：畫面說官方資料超過 7 天</b></p>
-<p>照 7.1 節更新。不能上網時照樣可以分析，只是之後公布的弱點不會列入，報告上也會註明。</p>
+<p>照 7.1 節更新，或下次加 <code>--refresh-data</code>。不能上網時照樣可以分析，只是之後公布的弱點不會列入，報告上也會註明。</p>
+
+<p><b>Q：報告說「已設定自動更新，但套件清單 N 天沒有成功更新」</b></p>
+<p>自動更新有開，但主機很久沒有成功取得新的套件清單，所以修補一直沒裝。在主機上執行 <code>sudo apt update</code>，看最後幾行的錯誤訊息：常見的是連不到套件來源、Proxy 沒設好，或內部鏡像站停止同步。修好後隔天再檢查一次。</p>
 
 <p><b>Q：報告上數字跟主機上 <code>pro security-status</code> 不一樣</b></p>
 <p>報告算的是「安全公告則數」，<code>pro security-status</code> 算的是「套件數」，單位不同。兩邊應該同時為 0 或同時大於 0。</p>
@@ -602,7 +624,9 @@ ssh -p 2222 admin@10.0.0.5 'echo OK'</pre>
 <tr><td>用 SSH 收集並分析</td><td><code>./hc scan hosts.txt --sudo</code></td></tr>
 <tr><td>主機管理者自己收集</td><td><code>sudo bash collect.sh --tag H01</code></td></tr>
 <tr><td>分析交回來的收集檔</td><td><code>./hc report hc-*.tar.gz</code></td></tr>
-<tr><td>產生給 AI 用的去識別化版本</td><td>原本的指令後面加 <code>--deidentify</code></td></tr>
+<tr><td>交給 AI 分析</td><td>上傳報告資料夾裡的 <code>findings-ai.json</code>（每次都會產生）</td></tr>
+<tr><td>整份報告去識別化</td><td>原本的指令後面加 <code>--deidentify</code></td></tr>
+<tr><td>掃描前先檢查新的官方資料</td><td>原本的指令後面加 <code>--refresh-data</code></td></tr>
 <tr><td>看完整參數說明</td><td><code>./hc scan -h</code>、<code>./hc report -h</code></td></tr>
 </table></div>
 

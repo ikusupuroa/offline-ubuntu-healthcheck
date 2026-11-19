@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜分析程式（analyze.py）
 
-版本：0.5
+版本：0.6
 在分析用的電腦執行（Python 3.6 以上，只用標準函式庫，不需連網）。
 
 用法：
@@ -20,7 +20,8 @@
 產出：
   report.md         健檢報告
   report.html       同一份報告的網頁版，用瀏覽器打開
-  findings.json     結構化結果摘要，可交給 AI 分析（skill/offline-ubuntu-healthcheck/SKILL.md）
+  findings.json     結構化結果摘要（原代號），給地端 AI 或程式使用
+  findings-ai.json  同一份摘要的去識別化版本，可直接交給 AI 分析（skill/offline-ubuntu-healthcheck/SKILL.md）
   oval-detail.json  官方弱點比對的完整明細（含每則公告的 CVE 清單與套件版本）
 
 判讀規則（分類、嚴重度、建議文字、維護時程）在 rules/default-rules.json，可用 --rules 覆蓋。
@@ -43,7 +44,7 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from html import escape as html_escape
 
-TOOL_VERSION = "0.5"
+TOOL_VERSION = "0.6"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -418,7 +419,15 @@ PKG_RX = re.compile(r"^(\S+) source package")
 FIXED_RX = re.compile(r"note: '([^']+)'")
 
 
-def _hit(oval, d, leaves, hits_by_test):
+def _binaries(oval, tid, man, fixed):
+    """這個條件實際比對到、而且版本比修補版本舊的二進位套件名稱（apt install 要用二進位套件名稱）。"""
+    t = oval["tests"].get(tid, {})
+    names = (oval["compiled"].get(t.get("object")) or ([], []))[0]
+    return sorted(n for n in set(names)
+                  if any(not fixed or vercmp(v, fixed) < 0 for v in man.by_name.get(n, [])))
+
+
+def _hit(oval, d, leaves, hits_by_test, man):
     pockets, pkgs = set(), []
     for lf in leaves:
         cm = lf["comment"]
@@ -430,7 +439,8 @@ def _hit(oval, d, leaves, hits_by_test):
         pm, fm = PKG_RX.search(cm), FIXED_RX.search(cm)
         pkgs.append({"source": pm.group(1) if pm else "?", "pocket": pocket,
                      "fixed": fm.group(1) if fm else fixed,
-                     "installed": sorted(set(hits_by_test.get(lf["test"], [])))[:3]})
+                     "installed": sorted(set(hits_by_test.get(lf["test"], [])))[:3],
+                     "binaries": _binaries(oval, lf["test"], man, fm.group(1) if fm else fixed)})
     known = [p for p in pockets if p]
     # 只看「這台主機實際缺的」那幾個修補；來源都讀不到時，才退回公告說明裡的「Available with Ubuntu Pro」
     needs_pro = any(p.startswith("esm") for p in known) if known else d["pro"]
@@ -447,7 +457,7 @@ def match_builtin(oval, manifest_lines):
             continue
         ok, leaves = _eval(d["criteria"], lambda tid: _test_builtin(oval, tid, man, cache)[0])
         if ok:
-            hits.append(_hit(oval, d, leaves, {k: v[1] for k, v in cache.items()}))
+            hits.append(_hit(oval, d, leaves, {k: v[1] for k, v in cache.items()}, man))
     return hits
 
 
@@ -496,7 +506,7 @@ def match_oscap(oval, manifest_lines):
         hb = {}
         for lf in leaves:
             hb[lf["test"]] = _test_builtin(oval, lf["test"], man, {})[1]
-        hits.append(_hit(oval, d, leaves, hb))
+        hits.append(_hit(oval, d, leaves, hb, man))
     return hits
 
 
@@ -529,6 +539,8 @@ class Ctx:
             "id": fid, "category": cat, "severity": sev, "title": fmt(r.get("title")),
             "detail": fmt(r.get("detail")) or kw.get("detail", ""), "action": fmt(r.get("action")),
             "pro_helps": self.rules["categories"][cat]["pro_helps"]})
+        if r.get("short"):
+            self.findings[-1]["short"] = r["short"]
 
 
 def support_status(rules, version_id, is_lts, ym):
@@ -782,8 +794,36 @@ def analyze_host(files, args, rules, datasets):
         n = to_int(parse_kv(files["shadow-summary.txt"]).get("empty_password_accounts"))
         if n:
             ctx.add("empty_password_accounts", n=n)
-    if 'Unattended-Upgrade "1"' not in strip_exit(files.get("unattended-upgrades.txt", "")):
+    # 套件清單最後一次成功更新（apt update）的日期，以收集當天為準計算天數
+    apt_last, apt_age = "", None
+    m = re.match(r"(\d{4})-(\d{2})-(\d{2})", strip_exit(files.get("apt-update-stamp.txt", "")))
+    cm = re.match(r"(\d{4})-(\d{2})-(\d{2})", meta.get("collected_at", ""))
+    if m and ok("apt-update-stamp.txt"):
+        apt_last = m.group(0)
+        if cm:
+            apt_age = (datetime.date(*map(int, cm.groups())) - datetime.date(*map(int, m.groups()))).days
+    auto_on = 'Unattended-Upgrade "1"' in strip_exit(files.get("unattended-upgrades.txt", ""))
+    auto_failing = False
+    if not auto_on:
         ctx.add("no_auto_updates")
+        if apt_age is not None and apt_age > rules["thresholds"]["apt_update_stale_days"]:
+            ctx.findings[-1]["detail"] += "；套件清單上次成功更新是 %s（收集當天往前 %d 天）" % (apt_last, apt_age)
+    elif apt_age is not None and apt_age > rules["thresholds"]["apt_update_stale_days"]:
+        ctx.add("auto_updates_failing", days=apt_age, last=apt_last)
+        auto_failing = any(x["id"] == "auto_updates_failing" for x in ctx.findings)
+    elif apt_age is None and pkglist and "apt-update-stamp.txt" not in files:
+        unchecked.append("自動更新是否正常運作（主機上沒有套件清單更新成功的紀錄）")
+    elif apt_age is None and pkglist:
+        unchecked.append("自動更新是否正常運作（套件清單更新紀錄讀取失敗）")
+    if auto_failing and patch["source"] == "pro-client":
+        for x in ctx.findings:
+            if x["id"] == "auto_updates_failing":
+                x["detail"] += "。主機上 Ubuntu Pro 用戶端的修補數也是用這份舊清單算的，可能偏低"
+    if auto_failing:  # 這台的自動更新沒在運作：免費修補的建議不再寫「啟用自動安全更新」
+        for x in ctx.findings:
+            alt = rules["findings"].get(x["id"], {}).get("action_if_auto_update_failing")
+            if alt:
+                x["action"] = alt
     sattrs = api_attrs(files.get("pro-api-summary.json", ""))
     if sattrs:
         s = sattrs.get("summary") if isinstance(sattrs.get("summary"), dict) else {}
@@ -795,6 +835,7 @@ def analyze_host(files, args, rules, datasets):
     ctx.findings.sort(key=lambda x: (x["category"], order.get(x["severity"], 9)))
     sev_rank = {"Critical": 0, "High": 1, "Medium": 2, "Low": 3, "Negligible": 4, "None": 5}
     hits.sort(key=lambda h: (not h["needs_pro"], sev_rank.get(h["severity"], 9), h["title"]))
+    crit_fixes = crit_high_fixes(hits) if patch["source"] == "oval" else []
     return {
         "tag": meta.get("tag", "?"),
         "collected_at": meta.get("collected_at", "?"),
@@ -811,9 +852,42 @@ def analyze_host(files, args, rules, datasets):
         "patches": patch,
         "oval_matches": hits,
         "engine_check": engine_check,
+        "apt_last_update": apt_last or None,
+        "apt_update_age_days": apt_age,
+        "auto_updates_enabled": auto_on,
+        "crit_high_fixes": crit_fixes,
         "unchecked": unchecked,
         "findings": ctx.findings,
     }
+
+
+USN_RX = re.compile(r"\b(USN-\d+-\d+)\b")
+
+
+def crit_high_fixes(hits):
+    """重大與高風險公告：逐則附上「只修這一則」的指令。
+    pro fix 用公告編號；apt 用這台主機實際裝了、版本比修補版本舊的二進位套件名稱。
+    核心公告的新版本是不同的套件名稱，apt --only-upgrade 裝不到，改寫全面更新後重開機。"""
+    out = []
+    for h in hits:
+        if h["severity"] not in ("Critical", "High"):
+            continue
+        m = USN_RX.search(h["title"])
+        usn = m.group(1) if m else ""
+        kern = is_kernel(h)
+        bins = sorted({b for p in h["packages"] for b in p.get("binaries", [])})
+        cmds = []
+        if usn:
+            cmds.append("sudo pro fix %s" % usn)
+        if kern:
+            cmds.append("sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）")
+        elif bins:
+            cmds.append("sudo apt update && sudo apt install --only-upgrade %s" % " ".join(bins))
+        out.append({"usn": usn or h["title"].split(" ", 1)[0], "title": h["title"], "severity": h["severity"],
+                    "needs_pro": h["needs_pro"], "subscribed": bool(h.get("subscribed")), "kernel": kern,
+                    "packages": sorted({p["source"] for p in h["packages"]}), "binaries": bins,
+                    "commands": cmds})
+    return out
 
 
 def error_host(path, err):
@@ -821,7 +895,7 @@ def error_host(path, err):
             "os": "?", "version_id": "?", "codename": "", "support_status": "unknown", "support_text": "未分析",
             "running_kernel": "", "uptime_days": None, "run_as_root": True,
             "patches": {"source": "none", "unit": "", "needs_pro": 0, "pro_not_applied": 0, "free_not_applied": 0},
-            "oval_matches": [], "engine_check": None, "unchecked": [], "findings": []}
+            "oval_matches": [], "engine_check": None, "unchecked": [], "findings": [], "crit_high_fixes": []}
 
 
 # ---------------------------------------------------------------------------
@@ -908,6 +982,64 @@ def deidentify(hosts):
     return hosts
 
 
+PATCH_IDS = {"oval_free_not_applied", "oval_pro_not_applied", "pro_client_not_applied", "pro_client_free_not_applied"}
+
+
+def _host_list(tags, limit=10):
+    tags = list(dict.fromkeys(tags))
+    return "、".join(tags[:limit]) + (" 等 %d 台" % len(tags) if len(tags) > limit else "")
+
+
+def priority_steps(hosts, rules):
+    """「建議處理順序」：只列這份報告實際出現的項目。自訂規則仍用舊的 priority_steps（固定文字）時照舊。"""
+    rt = rules["report_text"]
+    if rt.get("priority_steps"):
+        return list(rt["priority_steps"])
+    tpl = rt.get("priority", {})
+    groups = {}  # 步驟 → ([主機], [項目])
+
+    def put(key, tag, item=None):
+        g = groups.setdefault(key, ([], []))
+        g[0].append(tag)
+        if item and item not in g[1]:
+            g[1].append(item)
+    for h in hosts:
+        if h.get("error"):
+            put("broken", h["tag"])
+            continue
+        for x in h["findings"]:
+            fid, cat = x.get("id"), x["category"]
+            item = x.get("short") or x["title"]
+            if fid == "auto_updates_failing":
+                put("auto_update_failing", h["tag"])
+            elif fid in PATCH_IDS:
+                put("patches_available", h["tag"])
+            elif fid == "os_no_support":
+                put("no_support", h["tag"])
+            elif cat == "A":
+                put("a_class", h["tag"])
+            elif cat == "B":
+                put("b_class", h["tag"])
+            elif cat == "C":
+                put("c_class", h["tag"])
+            elif x["severity"] == "高":
+                put("d_high", h["tag"], item)
+            else:
+                put("d_other", h["tag"], item)
+        if h.get("unchecked"):
+            put("unchecked", h["tag"])
+    order = ["auto_update_failing", "d_high", "patches_available", "no_support", "a_class", "b_class",
+             "d_other", "c_class", "broken", "unchecked"]
+    out = []
+    for key in order:
+        if key in groups and tpl.get(key):
+            tags, items = groups[key]
+            out.append(tpl[key].replace("{hosts}", _host_list(tags)).replace("{items}", "、".join(items)))
+    if not [k for k in groups if k not in ("unchecked", "broken")] and tpl.get("none"):
+        out.insert(0, tpl["none"])
+    return out
+
+
 def cat_counts(h):
     c = {"A": 0, "B": 0, "C": 0, "D": 0}
     for x in h["findings"]:
@@ -918,6 +1050,28 @@ def cat_counts(h):
 # ---------------------------------------------------------------------------
 # 7. 報告：Markdown
 # ---------------------------------------------------------------------------
+def fix_rows(fx, sevname):
+    """報告用的列：一般套件逐則列出；核心公告合併成一列（新核心是不同的套件名稱，處理方式都一樣）。
+    回傳 [(公告, 嚴重度, 套件, 前置說明, [指令])]。findings.json 仍逐則保留。"""
+    rows, kern = [], []
+    for f in fx:
+        if f["kernel"]:
+            kern.append(f)
+            continue
+        pre = "要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：" if f["needs_pro"] and not f["subscribed"] else ""
+        rows.append((f["title"], sevname.get(f["severity"], f["severity"]), "、".join(f["packages"]), pre, f["commands"]))
+    if kern:
+        sev = "重大" if any(f["severity"] == "Critical" for f in kern) else sevname.get("High", "High")
+        ids = [f["usn"] for f in kern]
+        title = "核心公告 %d 則：%s" % (len(kern), "、".join(ids[:6]) + (" 等" if len(ids) > 6 else ""))
+        np = sum(1 for f in kern if f["needs_pro"] and not f["subscribed"])
+        pre = ("要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：" if np == len(kern) else
+               "其中 %d 則要先訂閱 Ubuntu Pro（sudo pro attach）才能取得，其餘免費：" % np if np else "")
+        rows.insert(0, (title, sev, "、".join(sorted({p for f in kern for p in f["packages"]})), pre,
+                        ["sudo apt update && sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch"]))
+    return rows
+
+
 def _m(x):
     """Markdown 表格儲存格：避免「|」把欄位切開、尖括號被當成 HTML。"""
     return str(x).replace("|", "／").replace("<", "&lt;").replace(">", "&gt;").replace("\n", " ")
@@ -976,18 +1130,21 @@ def render_report(hosts, args, rules, datasets, warnings=()):
                                          cats[c]["pro_helps"]))
     w("\n> D 類與 Ubuntu Pro 無關，本報告同樣列出，讓受檢單位掌握完整風險。\n")
     w("## 二、主機總覽\n")
-    w("| 主機 | 版本 | 維護狀態 | 執行中核心 | 未重開機天數 | 需 Pro 才能取得的修補 | 未套用的免費修補 | 資料來源 |\n"
-      "|---|---|---|---|---|---|---|---|")
+    show_ai = not args.deidentify
+    w("| 主機 |%s 版本 | 維護狀態 | 執行中核心 | 未重開機天數 | 需 Pro 才能取得的修補 | 未套用的免費修補 | 資料來源 |\n"
+      "|---|%s---|---|---|---|---|---|---|" % (" AI 代號 |" if show_ai else "", "---|" if show_ai else ""))
     for h in hosts:
         p = h["patches"]
         unit = p.get("unit", "")
-        w("| %s | %s | %s | %s | %s | %s | %s | %s |" % (
-            _m(h["tag"]), _m(h["os"]), STATUS_LABEL.get(h["support_status"], "?"), _m(h["running_kernel"] or "?"),
+        w("| %s |%s %s | %s | %s | %s | %s | %s | %s |" % (
+            _m(h["tag"]), (" %s |" % h.get("ai_tag", "")) if show_ai else "", _m(h["os"]), STATUS_LABEL.get(h["support_status"], "?"), _m(h["running_kernel"] or "?"),
             h["uptime_days"] if h["uptime_days"] is not None else "?",
             ("%d %s" % (p["needs_pro"], unit)) if p["source"] != "none" else "?",
             ("%d %s" % (p["free_not_applied"], unit)) if p["source"] != "none" else "?",
             SRC_LABEL.get(p["source"], "?")))
     w("\n%s\n" % rt["year_note"])
+    if show_ai:
+        w("AI 代號是 findings-ai.json（去識別化，可交給 AI 分析）裡的主機代號；這張對照表只在本報告，不要一起交給雲端 AI。\n")
     w("## 三、發現事項（依主機）\n")
     for h in hosts:
         w("### %s（%s）\n" % (_m(h["tag"]), _m(h["os"])))
@@ -1007,9 +1164,16 @@ def render_report(hosts, args, rules, datasets, warnings=()):
             e = h["engine_check"]
             w("\n比對引擎對照：OpenSCAP %d 則、內建 %d 則；只有 OpenSCAP 有 %d 則、只有內建有 %d 則。"
               % (e["oscap"], e["builtin"], len(e["only_oscap"]), len(e["only_builtin"])))
+        fx = h.get("crit_high_fixes") or []
+        if fx:
+            w("\n**重大與高風險公告（%d 則）：只修這一則的指令**\n" % len(fx))
+            w("> %s\n" % rt.get("crit_high_note", ""))
+            w("| 安全公告 | 嚴重度 | 套件 | 指令 |\n|---|---|---|---|")
+            for title, sev, pk, pre, cmds in fix_rows(fx, sevname):
+                w("| %s | %s | %s | %s |" % (_m(title), sev, _m(pk), _m(pre + "　或　".join(cmds))))
         w("")
     w("## 四、建議處理順序\n")
-    for i, s in enumerate(rt["priority_steps"], 1):
+    for i, s in enumerate(priority_steps(hosts, rules), 1):
         w("%d. %s" % (i, s))
     w("\n## 五、檢查範圍與限制\n")
     for s in rt["limitations"]:
@@ -1057,6 +1221,7 @@ main{max-width:1100px;margin:0 auto;padding:24px 16px 64px}h1{font-size:26px;mar
 .card b{font-size:28px;display:block}.card.A{border-color:var(--a)}.card.B{border-color:var(--b)}.card.C{border-color:var(--c)}.card.D{border-color:var(--d)}
 .tag{display:inline-block;border-radius:4px;padding:0 6px;font-size:12px;font-weight:700;color:#fff}.tA{background:var(--a)}.tB{background:var(--b)}.tC{background:var(--c)}.tD{background:var(--d)}
 details{background:var(--card);border-radius:8px;padding:8px 12px;margin:10px 0}summary{cursor:pointer;font-weight:600}
+h4{font-size:15px;margin:18px 0 4px}code{font:13px/1.5 ui-monospace,Menlo,Consolas,monospace;background:var(--card);padding:1px 4px;border-radius:4px;word-break:break-all}
 """
 
 
@@ -1095,17 +1260,20 @@ def render_html(hosts, args, rules, datasets, warnings=()):
     w("</div><p class=\"mut\">D 類與 Ubuntu Pro 無關，同樣列出，讓受檢單位掌握完整風險。"
       "每一項發現的「建議」欄寫了處理方式；各類別的意思與處理步驟，見使用者手冊（docs/user-guide.pdf）第 5 章。</p>")
     # 主機總覽
-    w("<h2>二、主機總覽</h2><div class=\"tw\"><table><tr><th>主機</th><th>版本</th><th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th>"
+    show_ai = not args.deidentify
+    w("<h2>二、主機總覽</h2><div class=\"tw\"><table><tr><th>主機</th>%s<th>版本</th>" % ("<th>AI 代號</th>" if show_ai else "") + "<th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th>"
       "<th>需 Pro 才能取得的修補</th><th>未套用的免費修補</th><th>執行中核心</th><th>未重開機天數</th></tr>")
     for h in hosts:
         p, c = h["patches"], cat_counts(h)
         unit = p.get("unit", "")
-        w("<tr><td><b>%s</b></td><td>%s</td><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (
-            _e(h["tag"]), _e(h["os"]), _e(STATUS_LABEL.get(h["support_status"], "?")), c["A"], c["B"], c["C"], c["D"],
+        w("<tr><td><b>%s</b></td>%s<td>%s</td><td>%s</td><td>%d</td><td>%d</td><td>%d</td><td>%d</td><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>" % (
+            _e(h["tag"]), ("<td>%s</td>" % _e(h.get("ai_tag", ""))) if show_ai else "", _e(h["os"]), _e(STATUS_LABEL.get(h["support_status"], "?")), c["A"], c["B"], c["C"], c["D"],
             _e(("%d %s" % (p["needs_pro"], unit)) if p["source"] != "none" else "?"),
             _e(("%d %s" % (p["free_not_applied"], unit)) if p["source"] != "none" else "?"),
             _e(h["running_kernel"] or "?"), _e(h["uptime_days"] if h["uptime_days"] is not None else "?")))
     w("</table></div><p class=\"mut\">%s</p>" % _e(rt["year_note"]))
+    if show_ai:
+        w('<p class="mut">AI 代號是 findings-ai.json（去識別化，可交給 AI 分析）裡的主機代號；這張對照表只在本報告，不要一起交給雲端 AI。</p>')
     # 各主機
     w("<h2>三、發現事項（依主機）</h2>")
     n = rules["thresholds"]["detail_rows_per_host"]
@@ -1131,6 +1299,15 @@ def render_html(hosts, args, rules, datasets, warnings=()):
             w('<p class="mut">比對引擎對照：OpenSCAP %d 則、內建 %d 則，%s。</p>' % (
                 e["oscap"], e["builtin"], "結果一致" if same else "有差異（只有 OpenSCAP 有 %d 則、只有內建有 %d 則）"
                 % (len(e["only_oscap"]), len(e["only_builtin"]))))
+        fx = h.get("crit_high_fixes") or []
+        if fx:
+            w("<h4>重大與高風險公告（%d 則）：只修這一則的指令</h4><p class=\"mut\">%s</p>" % (len(fx), _e(rt.get("crit_high_note", ""))))
+            w("<div class=\"tw\"><table><tr><th>安全公告</th><th>嚴重度</th><th>套件</th><th>指令</th></tr>")
+            for title, sev, pk, pre, cmds in fix_rows(fx, sevname):
+                c = "<br>".join("<code>%s</code>" % _e(x) for x in cmds) or "（無法組出指令，請用 sudo apt update 與 sudo apt upgrade）"
+                w("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s%s</td></tr>" % (
+                    _e(title), _e(sev), _e(pk), _e(pre) + ("<br>" if pre else ""), c))
+            w("</table></div>")
         matches = h.get("oval_matches") or []
         for label, group, opened in detail_groups(matches):
             rows = group_by_package(group)
@@ -1150,7 +1327,7 @@ def render_html(hosts, args, rules, datasets, warnings=()):
                     _e(m["title"]), _e(sevname.get(m["severity"], m["severity"])), len(m["cves"]),
                     _e(pocket_label(m["pockets"]))))
             w("</table></div></details></details>")
-    w("<h2>四、建議處理順序</h2><ol>%s</ol>" % "".join("<li>%s</li>" % _e(s) for s in rt["priority_steps"]))
+    w("<h2>四、建議處理順序</h2><ol>%s</ol>" % "".join("<li>%s</li>" % _e(s) for s in priority_steps(hosts, rules)))
     w("<h2>五、檢查範圍與限制</h2><ul>%s</ul>" % "".join("<li>%s</li>" % _e(s) for s in rt["limitations"]))
     w("<h2>附錄：資料來源</h2>")
     if used:
@@ -1282,6 +1459,12 @@ def run_analysis(loaded, args, rules, log=None):
         warnings.append("有主機代號重複，已自動加上序號：%s。請確認收集時的代號。" % "、".join(renamed))
     elif renamed:  # 去識別化版本不寫出原代號
         warnings.append("有 %d 台主機的代號重複，已自動編號。請確認收集時的代號。" % len(renamed))
+    dup_ai = "有 %d 台主機的代號重複，已自動編號。請確認收集時的代號。" % len(renamed)
+    warnings_ai = [x for x in warnings if not x.startswith("有主機代號重複") and x != dup_ai]
+    if renamed:
+        warnings_ai.append(dup_ai)
+    for i, h in enumerate(hosts, 1):
+        h["ai_tag"] = "H%02d" % i  # findings-ai.json 用的代號；對照只寫在地端的報告
     if args.deidentify:
         hosts = deidentify(hosts)
         args.agency = "（已去識別化）"
@@ -1296,18 +1479,48 @@ def run_analysis(loaded, args, rules, log=None):
         json.dump(detail, f, ensure_ascii=False, indent=1)
     slim = copy.deepcopy(hosts)
     for h in slim:
+        matches = h.get("oval_matches", [])
         h["oval_matches"] = [{"title": m["title"], "severity": m["severity"], "needs_pro": m["needs_pro"],
                               "pockets": m["pockets"], "cve_count": len(m["cves"]),
                               "packages": sorted({p["source"] for p in m["packages"]})}
-                             for m in h.get("oval_matches", [])]
-    out = {"schema": "offline-ubuntu-healthcheck/0.5", "tool_version": TOOL_VERSION, "basis_month": args.date,
-           "deidentified": args.deidentify, "warnings": warnings,
+                             for m in matches]
+        # 每個套件「已安裝版本 → 修補版本」，AI 才能說明要更新到哪一版
+        h["package_updates"] = [{"source": e["source"], "severity": e["severity"], "needs_pro": e["needs_pro"],
+                                 "pockets": sorted(e["pockets"]), "usn_count": len(e["usns"]),
+                                 "installed": sorted(e["installed"])[:2], "fixed": e["fixed"]}
+                                for e in group_by_package(matches)]
+        for x in h.get("findings", []):
+            x.pop("short", None)
+    out = {"schema": "offline-ubuntu-healthcheck/0.6", "tool_version": TOOL_VERSION, "basis_month": args.date,
+           "deidentified": args.deidentify, "warnings": warnings_ai if args.deidentify else warnings,
            "engine": args.engine_label if any(ds.get("used") for ds in datasets.values()) else None,
            "data": {c: ds["info"] for c, ds in datasets.items() if ds.get("used")},
-           "categories": rules["categories"], "hosts": slim}
+           "categories": rules["categories"], "priority_steps": priority_steps(hosts, rules), "hosts": slim}
+    steps_ai = priority_steps([dict(h, tag=h["ai_tag"]) for h in hosts], rules)
+    if rules["report_text"].get("priority_steps"):  # 自訂的固定文字裡可能寫了主機代號，逐一換成 AI 代號
+        m = {h["tag"]: h["ai_tag"] for h in hosts}
+        rx = re.compile(r"(?<![A-Za-z0-9._-])(%s)(?![A-Za-z0-9._-])" % "|".join(
+            re.escape(t) for t in sorted(m, key=len, reverse=True)))
+        steps_ai = [rx.sub(lambda g: m[g.group(1)], x) for x in steps_ai]
+    ai = ai_view(out, warnings_ai, steps_ai)
     with open(os.path.join(args.out, "findings.json"), "w", encoding="utf-8") as f:
-        json.dump(out, f, ensure_ascii=False, indent=2)
+        json.dump(ai if args.deidentify else out, f, ensure_ascii=False, indent=2)
+    with open(os.path.join(args.out, "findings-ai.json"), "w", encoding="utf-8") as f:
+        json.dump(ai, f, ensure_ascii=False, indent=2)
     return hosts, datasets, warnings
+
+
+def ai_view(out, warnings_ai, steps_ai):
+    """去識別化版本：主機代號改用 AI 代號（H01、H02…），收集時間只留日期，警告不出現原代號，
+    不放代號對照。加 --deidentify 時 findings.json 也寫這一份，兩個檔案內容相同。"""
+    ai = copy.deepcopy(out)
+    ai["deidentified"] = True
+    ai["warnings"] = list(warnings_ai)
+    for h in ai["hosts"]:
+        h["tag"] = h.pop("ai_tag", h["tag"])
+        h["collected_at"] = str(h.get("collected_at", ""))[:10]
+    ai["priority_steps"] = list(steps_ai)  # 用 AI 代號重新產生，不在文字裡替換代號
+    return ai
 
 
 def pad(text, width):
@@ -1352,8 +1565,9 @@ def print_summary(hosts, datasets, warnings, args, rules, stream=None):
             {True: "一致", False: "不一致！", None: "無紀錄"}[i["recorded"]]))
     p()
     p("報告：%s　← 用瀏覽器打開" % os.path.join(args.out, "report.html"))
-    p("其他：report.md（可編輯）、findings.json（給 AI 分析）、oval-detail.json（完整明細）")
+    p("其他：report.md（可編輯）、findings.json（含原代號，給地端 AI 或程式用）、oval-detail.json（完整明細）")
     p("怎麼看報告：使用者手冊 docs/user-guide.pdf 第 5 章")
+    p("給 AI 分析：請上傳 findings-ai.json（已去識別化，主機代號改成 H01、H02…，對照在 report.html 的「AI 代號」欄）")
 
 
 def default_out():
@@ -1366,7 +1580,8 @@ def add_common_args(ap):
     ap.add_argument("--engine", choices=["auto", "oscap", "builtin", "both"], default="auto",
                     help="比對引擎（預設 auto：有 oscap 就用，否則內建）")
     ap.add_argument("--rules", help="自訂規則檔（JSON），覆蓋在 rules/default-rules.json 上")
-    ap.add_argument("--deidentify", action="store_true", help="主機代號改為 H01、H02…（交給 AI 前使用）")
+    ap.add_argument("--deidentify", action="store_true",
+                    help="整份報告都去識別化：主機代號改為 H01、H02…（findings-ai.json 每次都會產生，不必加這個參數）")
     ap.add_argument("--agency", default="", help="受檢單位（報告表頭）")
     ap.add_argument("--assessor", dest="dealer", default="", help="執行單位（報告表頭）")
     ap.add_argument("--date", default=datetime.date.today().strftime("%Y-%m"), help="判斷基準月份 YYYY-MM（預設本月）")

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜統一入口（hc）
 
-版本：0.5
+版本：0.6
 一個指令完成收集與分析。只用 Python 3.6 以上的標準函式庫。
 
   ./hc scan hosts.txt          用 SSH 逐台收集並分析（主機上不留下收集腳本與收集檔）
@@ -97,15 +97,92 @@ def sync_bundled(args):
         print("已從 git 下載的內建資料放入 %d 個版本的官方弱點資料（不需要網路）" % n)
 
 
-def preflight_data(args, rules):
-    """收集之前先看一次官方資料：都沒有或有過舊的，先問要不要更新，免得收完才發現。"""
+CHECK_TIMEOUT = 15  # --refresh-data 連線檢查的逾時秒數
+
+
+def refresh(args, codes):
+    """向 Canonical 檢查這些版本有沒有新資料，有就下載。連不上就停，不再試其他版本、也不中斷掃描。
+    回傳 {代號: "updated"／"same"／"failed"／"skipped"}。"""
+    up = load_updater()
+    os.makedirs(args.data, exist_ok=True)
+    src = up.load_sources(args.data)
+    result, offline = {}, False
+    print("向 Canonical 檢查官方資料（最多等 %d 秒）…" % CHECK_TIMEOUT)
+    for code in codes:
+        if offline:
+            result[code] = "skipped"
+            continue
+        before = src["files"].get(up.fname(code), {}).get("sha256")
+        if up.download(code, args.data, src, CHECK_TIMEOUT, True):
+            up.save_sources(args.data, src)
+            result[code] = "same" if src["files"].get(up.fname(code), {}).get("sha256") == before else "updated"
+        else:
+            result[code] = "failed"
+            offline = True
+    args.offline = offline
+    return result
+
+
+def local_codename(rules):
+    """hc local：這台機器自己的版本代號（讀 /etc/os-release）。"""
+    try:
+        with open("/etc/os-release", encoding="utf-8") as f:
+            osr = A.parse_kv(f.read())
+    except OSError:
+        return None
+    return (rules["lifecycle"].get(osr.get("VERSION_ID", "")) or {}).get("codename") or osr.get("VERSION_CODENAME") or None
+
+
+SOURCE_TEXT = {"updated": "剛從 Canonical 更新", "same": "已向 Canonical 確認是最新的一份",
+               "failed": "無法連線，改用已下載的資料", "skipped": "無法連線，改用已下載的資料"}
+
+
+def data_statement(args, rules, codes, found, status):
+    """開始收集前，在畫面說明這次用的官方資料來源與時間點。"""
+    print("本次使用的官方弱點資料（%s）：" % args.data)
+    if not codes:
+        print("  還沒有任何版本的資料")
+        return
+    for code in codes:
+        ds = found.get(code)
+        st = status.get(code)
+        if not ds:
+            print("  %s：沒有資料檔%s" % (A.code_label(rules, code), "（無法連線，沒辦法下載）" if st in ("failed", "skipped") else ""))
+            continue
+        ts, age = A.quick_data_info(ds["path"])
+        print("  %s：官方產生於 %s（%s 天前），%s" % (A.code_label(rules, code), ts[:10] or "?",
+                                              age if age is not None else "?", SOURCE_TEXT.get(st, "使用已下載的資料")))
+
+
+def preflight_data(args, rules, codes=None):
+    """收集之前先看一次官方資料，並在畫面說明這次用哪一份。
+    加 --refresh-data 時先向 Canonical 檢查新資料；連不上就用已下載的，不中斷。
+    沒加時，資料都沒有或有過舊的，先問要不要更新，免得收完才發現。
+    codes：已知要用到的版本（local、report）；scan 收集前還不知道主機版本，就看已下載的那些。"""
+    args.offline = False
     if args.oval:
+        ts, age = A.quick_data_info(args.oval)
+        print("本次使用的官方弱點資料：指定的資料檔 %s（官方產生於 %s，%s 天前）"
+              % (os.path.basename(args.oval), ts[:10] or "?", age if age is not None else "?"))
         return
     sync_bundled(args)
     try:
         found = A.find_datasets(args)
     except ValueError as e:
         sys.exit("錯誤：%s" % e)
+    ver = {lc.get("codename"): v for v, lc in rules["lifecycle"].items()}
+    targets = sorted(codes or found, key=lambda c: (ver.get(c, "99"), c))  # 依版本號排列
+    if args.refresh_data:
+        status = refresh(args, targets) if targets else {}
+        found = A.find_datasets(args)
+        args.asked_stale = True  # 已經向官方確認過，收集完不再問過舊的資料
+        if not args.offline and args.update == "ask":
+            args.update = "yes"  # 收集後才知道缺的版本，也直接下載
+        data_statement(args, rules, targets, found, status)
+        if found or args.offline:  # 連不上時，缺資料的版本在收集後統一提醒一次
+            return
+    else:
+        data_statement(args, rules, targets, found, {})
     lim = rules["thresholds"]["data_max_age_days"]
     stale = []
     for code, ds in sorted(found.items()):
@@ -149,6 +226,10 @@ def check_data(loaded, args, rules):
             stale.append(code)
     if not (missing or stale):
         return  # 資料日期在最後的摘要會列出，這裡不重複
+    if getattr(args, "offline", False) and missing:  # --refresh-data 剛確認連不上，不再試一次
+        print("注意：%s 沒有官方資料，這些主機只能參考 Ubuntu Pro 用戶端；能上網時執行 ./hc update 再重跑。"
+              % "、".join(A.code_label(rules, c) for c in missing))
+        return
     print("官方弱點資料（%s）：" % (args.oval or args.data))
     for code in missing:
         print("  %s：沒有資料檔" % A.code_label(rules, code))
@@ -294,13 +375,15 @@ def cmd_report(args, rules):
     missing = [b for b in args.bundles if not os.path.exists(b)]
     if missing:
         sys.exit("錯誤：找不到檔案：%s" % "、".join(missing))
-    preflight_data(args, rules)
-    finish(A.load_inputs(args.bundles), args, rules)
+    loaded = A.load_inputs(args.bundles)
+    preflight_data(args, rules, A.needed_codenames(loaded, rules))
+    finish(loaded, args, rules)
 
 
 def cmd_local(args, rules):
     check_tag(args.tag, "--tag")
-    preflight_data(args, rules)
+    code = local_codename(rules)
+    preflight_data(args, rules, [code] if code else None)
     cdir = collected_dir(args)
     os.makedirs(cdir, exist_ok=True)
     path = os.path.join(cdir, "hc-%s.tar.gz" % args.tag)
@@ -339,6 +422,9 @@ def main():
         A.add_common_args(p)
         p.add_argument("--update", choices=["ask", "yes", "no"], default="ask",
                        help="官方資料缺少或過舊時：ask 詢問（預設）、yes 自動更新、no 不更新")
+        p.add_argument("--refresh-data", action="store_true",
+                       help="開始前先向 Canonical 檢查有沒有新的官方資料，有就下載（最多等 %d 秒）；"
+                            "連不上就用已下載的資料，不中斷" % CHECK_TIMEOUT)
     args = ap.parse_args()
     if not args.cmd:
         ap.print_help()

@@ -118,12 +118,15 @@ sudo chown $USER hc-H01-*.tar.gz
 | 從 Canonical 官方網站更新（建議） | `./hc update` |
 | 連不到官方網站、但能連 GitHub | `git pull`，或 `./hc update --from github` |
 | 帶進離線環境後核對檔案 | `./hc update --verify` |
+| 每次掃描前先檢查新資料 | `scan`、`report`、`local` 後面加 `--refresh-data`（連不上就用已下載的，不中斷） |
 
 GitHub 上的資料由 GitHub Actions 每天從 Canonical 官方網站取得，放在 `data` 分支（只保留最新一份）與 Releases 的 `data-latest`，檔案未經修改。細節見 [docs/offline-data.md](docs/offline-data.md)。
 
 ## 交給 AI 分析
 
-`skill/offline-ubuntu-healthcheck/` 是給 AI 用的分析指引（Agent Skill 格式）。可以和 `findings.json` 一起上傳到對話中使用，也可以安裝到 Claude、ChatGPT、Gemini 等平台。做法見使用者手冊第 6 章。交給雲端 AI 前，請先加上 `--deidentify` 產生去識別化的版本。
+`skill/offline-ubuntu-healthcheck/` 是給 AI 用的分析指引（Agent Skill 格式）。可以和報告資料夾裡的 `findings-ai.json` 一起上傳到對話中使用，也可以安裝到 Claude、ChatGPT、Gemini 等平台。做法見使用者手冊第 6 章。
+
+`findings-ai.json` 每次分析都會產生，已經去識別化：主機代號改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。代號對照在 `report.html` 主機總覽的「AI 代號」欄，只留在地端。同一個資料夾的 `findings.json` 保留原代號，給機關內部的 AI 或程式使用，不要交給雲端 AI。
 
 ## 其他文件
 
@@ -152,4 +155,4 @@ Ubuntu 14.04、16.04、18.04、20.04、22.04、24.04、26.04 LTS。非 LTS 版�
 
 程式碼採用 [Apache License 2.0](LICENSE)。
 
-官方 OVAL 資料的著作權屬於 Canonical Ltd.，授權為 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)。本專案的 `data` 分支與 Releases 壓縮檔附帶的是官方原始檔，原樣轉存、未經修改，來源與下載時間記在 `SOURCES.json`。`samples/demo-report/` 裡的公告標題、CVE 編號與版本號，摘錄自 2026-11-15 產生的官方 OVAL。
+官方 OVAL 資料的著作權屬於 Canonical Ltd.，授權為 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)。本專案的 `data` 分支與 Releases 壓縮檔附帶的是官方原始檔，原樣轉存、未經修改，來源與下載時間記在 `SOURCES.json`。`samples/demo-report/` 裡的公告標題、CVE 編號與版本號，摘錄自 2026-11-18 產生的官方 OVAL。

@@ -6,7 +6,7 @@
 | 執行單位 | 示範執行單位（虛構） |
 | 判斷基準月份 | 2026-11 |
 | 受檢主機數 | 3 |
-| 分析程式版本 | offline-ubuntu-healthcheck 0.5 |
+| 分析程式版本 | offline-ubuntu-healthcheck 0.6 |
 | 弱點比對資料 | Canonical 官方 OVAL（security-metadata.canonical.com，CC BY-SA 4.0） |
 | 比對引擎 | 內建比對（依官方 OVAL 的同一套判斷條件實作） |
 
@@ -14,9 +14,9 @@
 
 | 版本 | 檔案 | 官方產生時間 | 距分析日 | SHA-256（前 16 碼） | 與下載紀錄 |
 |---|---|---|---|---|---|
-| focal（20.04） | oci.com.ubuntu.focal.usn.oval.xml.bz2 | 2026-11-15T21:06:47 | 1 天 | d1a222aa36a2ea79 | 一致 |
-| jammy（22.04） | oci.com.ubuntu.jammy.usn.oval.xml.bz2 | 2026-11-15T21:06:14 | 1 天 | e3bec427b1d302ca | 一致 |
-| xenial（16.04） | oci.com.ubuntu.xenial.usn.oval.xml.bz2 | 2026-11-15T21:07:39 | 1 天 | 856c45d708e71b2c | 一致 |
+| focal（20.04） | oci.com.ubuntu.focal.usn.oval.xml.bz2 | 2026-11-18T21:11:51 | 1 天 | 745951677f4d0c61 | 一致 |
+| jammy（22.04） | oci.com.ubuntu.jammy.usn.oval.xml.bz2 | 2026-11-18T21:11:14 | 1 天 | 1b9f50d782f9890b | 一致 |
+| xenial（16.04） | oci.com.ubuntu.xenial.usn.oval.xml.bz2 | 2026-11-18T21:12:48 | 1 天 | afc265647e4eb8b3 | 一致 |
 
 ## 一、摘要
 
@@ -34,13 +34,15 @@
 
 ## 二、主機總覽
 
-| 主機 | 版本 | 維護狀態 | 執行中核心 | 未重開機天數 | 需 Pro 才能取得的修補 | 未套用的免費修補 | 資料來源 |
-|---|---|---|---|---|---|---|---|
-| demo-ap01 | Ubuntu 20.04.6 LTS | 需 Pro（ESM） | 5.4.0-150-generic | 200 | 49 則安全公告 | 74 則安全公告 | 官方 OVAL |
-| demo-db01 | Ubuntu 16.04.7 LTS | 需 Pro＋Legacy | 4.4.0-210-generic | 480 | 85 則安全公告 | 14 則安全公告 | 官方 OVAL |
-| demo-web01 | Ubuntu 22.04.5 LTS | 標準維護期內 | 5.15.0-125-generic | 30 | 2 則安全公告 | 76 則安全公告 | 官方 OVAL |
+| 主機 | AI 代號 | 版本 | 維護狀態 | 執行中核心 | 未重開機天數 | 需 Pro 才能取得的修補 | 未套用的免費修補 | 資料來源 |
+|---|---|---|---|---|---|---|---|---|
+| demo-ap01 | H01 | Ubuntu 20.04.6 LTS | 需 Pro（ESM） | 5.4.0-150-generic | 200 | 49 則安全公告 | 74 則安全公告 | 官方 OVAL |
+| demo-db01 | H02 | Ubuntu 16.04.7 LTS | 需 Pro＋Legacy | 4.4.0-210-generic | 480 | 85 則安全公告 | 14 則安全公告 | 官方 OVAL |
+| demo-web01 | H03 | Ubuntu 22.04.5 LTS | 標準維護期內 | 5.15.0-125-generic | 30 | 2 則安全公告 | 76 則安全公告 | 官方 OVAL |
 
 維護年限說明：LTS 版本標準維護 5 年；訂閱 Ubuntu Pro（ESM）共 10 年；加購 Legacy 最長 15 年。
+
+AI 代號是 findings-ai.json（去識別化，可交給 AI 分析）裡的主機代號；這張對照表只在本報告，不要一起交給雲端 AI。
 
 ## 三、發現事項（依主機）
 
@@ -62,6 +64,24 @@
 | D | 中 | 有 3 個非 Ubuntu 官方來源的套件 | 第三方或來源不明的套件，不在 Ubuntu 與 Ubuntu Pro 的修補範圍 | 在主機上執行 pro security-status --thirdparty 與 pro security-status --unavailable 列出這些套件，盤點來源並向原廠確認更新方式 | 否 |
 | D | 低 | 未啟用自動安全更新 | unattended-upgrades 沒有設定為每天執行 | 依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades | 否 |
 
+**重大與高風險公告（67 則）：只修這一則的指令**
+
+> 只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。
+
+| 安全公告 | 嚴重度 | 套件 | 指令 |
+|---|---|---|---|
+| 核心公告 57 則：USN-7795-1、USN-8615-1、USN-8666-1、USN-8851-1、USN-8919-1、USN-9030-1 等 | 重大 | linux | 其中 20 則要先訂閱 Ubuntu Pro（sudo pro attach）才能取得，其餘免費：sudo apt update && sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch |
+| USN-7604-2 -- Sudo vulnerability | 高 | sudo | 要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：sudo pro fix USN-7604-2　或　sudo apt update && sudo apt install --only-upgrade sudo |
+| USN-8375-1 -- nginx vulnerabilities | 高 | nginx | 要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：sudo pro fix USN-8375-1　或　sudo apt update && sudo apt install --only-upgrade nginx nginx-core |
+| USN-8414-2 -- OpenSSL vulnerabilities | 高 | openssl | 要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：sudo pro fix USN-8414-2　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+| USN-8847-2 -- OpenSSL vulnerabilities | 高 | openssl | 要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：sudo pro fix USN-8847-2　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+| USN-4662-1 -- OpenSSL vulnerability | 高 | openssl | sudo pro fix USN-4662-1　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+| USN-4705-1 -- Sudo vulnerabilities | 高 | sudo | sudo pro fix USN-4705-1　或　sudo apt update && sudo apt install --only-upgrade sudo |
+| USN-4891-1 -- OpenSSL vulnerability | 高 | openssl | sudo pro fix USN-4891-1　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+| USN-5051-1 -- OpenSSL vulnerabilities | 高 | openssl | sudo pro fix USN-5051-1　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+| USN-5328-1 -- OpenSSL vulnerability | 高 | openssl | sudo pro fix USN-5328-1　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+| USN-5844-1 -- OpenSSL vulnerabilities | 高 | openssl | sudo pro fix USN-5844-1　或　sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl |
+
 ### demo-db01（Ubuntu 16.04.7 LTS）
 
 維護狀態：ESM 已於 2026-05 結束；需 Ubuntu Pro 加購 Legacy，最長到 2031-05
@@ -74,6 +94,18 @@
 | D | 高 | 4 個套件有免費的安全修補，還沒安裝 | 要更新的套件：glibc、sudo、bash、linux。對應 14 則官方安全公告，其中重大或高風險 3 則。這些修補放在 Ubuntu 一般的更新來源，不需要 Ubuntu Pro。其中包含核心更新，安裝後要重開機才生效 | 在主機上執行 sudo apt update 與 sudo apt upgrade；建議排定固定的修補時段，或啟用自動安全更新 | 否 |
 | D | 中 | SSH 允許密碼登入 | SSH 設定 PasswordAuthentication 為 yes，帳號可能被猜密碼 | 先確認每位管理者都能用金鑰登入，再把 PasswordAuthentication 改為 no，執行 sudo systemctl reload ssh | 否 |
 | D | 低 | 未啟用自動安全更新 | unattended-upgrades 沒有設定為每天執行 | 依單位的變更管理規定決定是否啟用；要啟用時執行 sudo dpkg-reconfigure -plow unattended-upgrades | 否 |
+
+**重大與高風險公告（63 則）：只修這一則的指令**
+
+> 只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。
+
+| 安全公告 | 嚴重度 | 套件 | 指令 |
+|---|---|---|---|
+| 核心公告 59 則：USN-7332-1、USN-7797-1、USN-8548-2、USN-8662-1、USN-8725-1、USN-8864-1 等 | 重大 | linux | 要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：sudo apt update && sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch |
+| USN-7604-2 -- Sudo vulnerability | 高 | sudo | 要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：sudo pro fix USN-7604-2　或　sudo apt update && sudo apt install --only-upgrade sudo |
+| USN-3304-1 -- Sudo vulnerability | 高 | sudo | sudo pro fix USN-3304-1　或　sudo apt update && sudo apt install --only-upgrade sudo |
+| USN-3534-1 -- GNU C Library vulnerabilities | 高 | glibc | sudo pro fix USN-3534-1　或　sudo apt update && sudo apt install --only-upgrade libc6 |
+| USN-4705-1 -- Sudo vulnerabilities | 高 | sudo | sudo pro fix USN-4705-1　或　sudo apt update && sudo apt install --only-upgrade sudo |
 
 ### demo-web01（Ubuntu 22.04.5 LTS）
 
@@ -92,12 +124,27 @@
 
 未能檢查的項目（不計入上表）：SSH 設定（主機沒有安裝 SSH 服務）；主機防火牆（ufw）狀態（需要 sudo，或主機未安裝 ufw）；空密碼帳號（需要 sudo）
 
+**重大與高風險公告（43 則）：只修這一則的指令**
+
+> 只修重大與高風險公告時，其餘公告會累積，仍建議排時段執行 sudo apt update 與 sudo apt upgrade 全面更新。核心公告修完要重開機才生效（停機困難時可評估 Livepatch）。sudo pro fix 需要主機能連到 Canonical，或內部有 Landscape 離線（air-gapped）環境；兩種都沒有時，用 apt 那一行。
+
+| 安全公告 | 嚴重度 | 套件 | 指令 |
+|---|---|---|---|
+| 核心公告 39 則：USN-7166-1、USN-7387-1、USN-7510-1、USN-7909-1、USN-8096-1、USN-8493-1 等 | 重大 | linux | sudo apt update && sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch |
+| USN-6429-1 -- curl vulnerabilities | 高 | curl | sudo pro fix USN-6429-1　或　sudo apt update && sudo apt install --only-upgrade curl libcurl4 |
+| USN-7824-3 -- Redis vulnerability | 高 | redis | sudo pro fix USN-7824-3　或　sudo apt update && sudo apt install --only-upgrade redis-server |
+| USN-8414-1 -- OpenSSL vulnerabilities | 高 | openssl | sudo pro fix USN-8414-1　或　sudo apt update && sudo apt install --only-upgrade openssl |
+| USN-8847-1 -- OpenSSL vulnerabilities | 高 | openssl | sudo pro fix USN-8847-1　或　sudo apt update && sudo apt install --only-upgrade openssl |
+
 ## 四、建議處理順序
 
-1. 先處理各類「高」嚴重度項目，其中 D 類的帳號與登入設定通常當天就能改。
-2. 已過標準維護期的主機（A 類）：短期以 Ubuntu Pro 恢復安全更新，同時排定升級計畫。
-3. 核心修補無法排停機的主機（B 類）：評估 Livepatch，並保留定期重開機的維護窗口。
-4. 需要稽核證據的單位（C 類）：評估 USG，並與適用的組態基準比對。
+1. 當天就能改、不用採購的高風險設定（demo-ap01）：SSH 允許 root 直接登入。
+2. 安裝已經可以取得的安全修補（demo-ap01、demo-db01、demo-web01）：在主機上執行 sudo apt update 與 sudo apt upgrade；含核心更新的要排時段重開機。只想先修重大與高風險時，見各主機的「重大與高風險公告」。
+3. 要訂閱 Ubuntu Pro 才拿得到修補的主機（demo-ap01、demo-db01、demo-web01）：評估訂閱 Ubuntu Pro 取得這些修補；已過標準維護期的主機，同時排定升級計畫。
+4. 修補要重開機才生效的主機（demo-ap01、demo-db01、demo-web01）：排定重開機時段；停機困難的，評估 Livepatch（只處理高風險與重大核心漏洞，不能取代所有重開機）。
+5. 其他設定與管理項目（demo-ap01、demo-db01、demo-web01）：SSH 允許密碼登入、主機防火牆（ufw）未啟用、非 Ubuntu 官方來源的套件、未啟用自動安全更新，依各項的建議排入例行維護。
+6. 需要設定基準的稽核證據時（demo-ap01、demo-web01）：評估 Ubuntu Pro 內含的 USG，並與適用的組態基準比對。
+7. 有項目未能檢查（demo-web01）：收集時權限不足或缺資料，不代表沒有問題；可加 --sudo 重新收集，或依各主機的說明補資料。
 
 ## 五、檢查範圍與限制
 
