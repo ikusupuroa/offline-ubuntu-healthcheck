@@ -132,12 +132,26 @@ lxc exec t-2204 -- su - ubuntu -c 'bash -s -- --tag T-2204 --stdout' < collect.s
 報告的「重大與高風險公告」附了 `sudo pro fix USN-…` 與 `apt install --only-upgrade` 兩行指令。這支腳本用容器驗證這兩行是否照預期運作：
 
 ```bash
-tests/lxd-fixcheck.sh              # 預設 20.04、22.04、24.04
-tests/lxd-fixcheck.sh 24.04        # 只測一個版本
-tests/lxd-fixcheck.sh --cleanup    # 刪除測試機（名稱開頭 hc-f-）
+tests/lxd-fixcheck.sh                    # 預設 20.04、22.04、24.04
+tests/lxd-fixcheck.sh 24.04              # 只測一個版本
+HC_MAX_FIXES=3 tests/lxd-fixcheck.sh     # 每個版本最多測幾則公告（預設 6）
+HC_POOL=default tests/lxd-fixcheck.sh    # 指定儲存池
+tests/lxd-fixcheck.sh --cleanup          # 刪除測試機（名稱開頭 hc-f-）
 ```
 
-它會把測試機的 openssl 降回發行版本，製造確定存在的缺口，再跑 `./hc local` 取出報告列的指令，逐則記錄：apt 模擬執行實際會升級哪些套件（有沒有多帶相依套件）、`pro fix --dry-run` 連網與斷網的結果、真的升級後 `pro fix` 是否認定已修好，以及 pro 用戶端版本與 changelog 裡最早提到 USN 的版本。結果在 `test-results/fixcheck-<日期時間>/RESULTS.md`。
+每個版本會建一台全新的測試機（名稱開頭 `hc-f-` 的舊測試機會先刪掉），關掉自動更新，再把幾包不同類型的套件降回發行版本，製造確定存在的缺口：
+
+| 套件 | 為什麼選它 |
+|---|---|
+| openssl | 最單純的情況，當基準 |
+| curl、vim | 一包原始碼拆成好幾個套件，主機通常只裝其中幾個 |
+| sudo | 單一套件，很常見 |
+| Python 3 | 套件之間的相依最複雜 |
+| libxml2、expat | 很多程式共用的函式庫 |
+
+`libc6`、`systemd`、`apt`、`dpkg` 不降版，降這些容易把測試機弄壞。
+
+接著跑 `./hc local`，每包原始碼挑一則報告列出的重大或高風險公告（不含核心），拍快照後逐則從快照重新開始測：apt 模擬執行實際會升級哪些套件、`pro fix --dry-run` 連網與拔掉網路卡的結果、真的用 `--only-upgrade` 升級後前後實際變動的套件（有沒有多帶相依套件、新裝或移除套件），以及升級後 `pro fix` 是否認定已修好。另外記錄 pro 用戶端版本、`pro fix` 有沒有 `--dry-run`、changelog 裡提到 USN 的版本。結果在 `test-results/fixcheck-<日期時間>/RESULTS.md`，原始輸出在同一層的 `logs/`。每個版本大約要 15 到 30 分鐘（估計值）。沒指定儲存池時，腳本會自動挑 btrfs 或 zfs 的儲存池：這兩種的快照與還原幾乎是瞬間完成，`dir` 則是整份複製，慢很多。都沒有才用 LXD 預設，畫面開頭會印出用了哪個。
 
 Landscape 離線（air-gapped）環境不在這支腳本的範圍，斷網只是模擬「連不到 Canonical」。
 
