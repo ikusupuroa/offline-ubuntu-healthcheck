@@ -1,6 +1,6 @@
 #!/bin/bash
 # offline-ubuntu-healthcheck｜「只修這一則」指令的 LXD 驗證（tests/lxd-fixcheck.sh）
-# 版本：0.6.1
+# 版本：0.6.2
 #
 # 驗證 v0.6 報告「重大與高風險公告」附的兩行指令：
 #   sudo pro fix USN-…                                   （主機要能連到 Canonical）
@@ -23,7 +23,7 @@
 # 用法：
 #   tests/lxd-fixcheck.sh                    # 預設測 20.04 22.04 24.04（用容器，不需要虛擬機）
 #   tests/lxd-fixcheck.sh 24.04              # 指定版本
-#   HC_MAX_FIXES=3 tests/lxd-fixcheck.sh     # 每個版本最多測幾則公告
+#   HC_MAX_FIXES=3 tests/lxd-fixcheck.sh     # 每個版本最多測幾則公告（0＝只產生報告，不測修補指令）
 #   HC_POOL=default tests/lxd-fixcheck.sh    # 指定儲存池；沒指定時自動挑 btrfs 或 zfs 的儲存池（快照與還原快很多），都沒有才用預設
 #   tests/lxd-fixcheck.sh --cleanup          # 刪除本腳本建立的測試機（名稱開頭 hc-f-）
 #
@@ -173,8 +173,11 @@ for V in "${VERSIONS[@]}"; do
   lxc exec "$VM" -- mkdir -p /root/hc/data </dev/null
   tar -czf - -C "$ROOT" hc analyze.py collect.sh update-data.py rules | lxc exec "$VM" -- tar -xzf - -C /root/hc
   tar -czf - -C "$OUT/data" . | lxc exec "$VM" -- tar -xzf - -C /root/hc/data
-  lxc exec "$VM" -- sh -c 'cd /root/hc && python3 hc local --update no --out /root/out' </dev/null > "$L/hc-local.log" 2>&1
+  lxc exec "$VM" -- sh -c 'cd /root/hc && python3 hc local --update no --tag U'"${V/./}"' --out /root/out' </dev/null > "$L/hc-local.log" 2>&1
   lxc exec "$VM" -- cat /root/out/findings.json </dev/null > "$L/findings.json" 2>/dev/null
+  # 整份報告（report.html、findings-ai.json 等）也帶出來，方便看報告與測 AI skill
+  mkdir -p "$L/report"
+  lxc exec "$VM" -- tar -czf - -C /root/out . </dev/null 2>/dev/null | tar -xzf - -C "$L/report" 2>/dev/null
 
   log "[$V] pro 用戶端資訊"
   {
@@ -220,6 +223,7 @@ for _, _, usn, f, pay in cand:
     print("%s\t%s\t%s\t%s" % (usn, key, " ".join(f["binaries"]), "需訂閱" if pay else "免費"))
     n += 1
 PY
+  if [ "$MAX_FIXES" = 0 ]; then log "[$V] HC_MAX_FIXES=0，只產生報告，略過公告測試"; continue; fi
   if [ ! -s "$L/fixes.tsv" ]; then log "[$V] 報告沒有可測的非核心重大／高風險公告，見 $L/hc-local.log"; continue; fi
 
   log "[$V] 拍快照 $SNAP"
