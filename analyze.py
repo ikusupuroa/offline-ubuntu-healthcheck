@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜分析程式（analyze.py）
 
-版本：0.6
+版本：0.6.1
 在分析用的電腦執行（Python 3.6 以上，只用標準函式庫，不需連網）。
 
 用法：
@@ -44,7 +44,7 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from html import escape as html_escape
 
-TOOL_VERSION = "0.6"
+TOOL_VERSION = "0.6.1"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -274,7 +274,8 @@ def load_oval(path):
             o["tests"][el.get("id")] = {"object": ob, "state": st, "check": el.get("check", "all"),
                                         "existence": el.get("check_existence", "at_least_one_exists")}
         elif t == "definition" and el.get("class") in ("patch", "vulnerability"):
-            d = {"id": el.get("id"), "title": "", "severity": "", "cves": [], "pro": False, "criteria": None}
+            d = {"id": el.get("id"), "title": "", "severity": "", "cves": [], "pro": False, "criteria": None,
+                 "cvss": {}, "issued": ""}
             for c in el.iter():
                 lt = _local(c.tag)
                 if lt == "title" and not d["title"]:
@@ -283,6 +284,15 @@ def load_oval(path):
                     d["severity"] = (c.text or "").strip()
                 elif lt == "cve" and c.text:
                     d["cves"].append(c.text.strip())
+                    av = AV_RX.search(c.get("cvss_vector") or "")
+                    if av:
+                        try:
+                            sc = float(c.get("cvss_score") or 0)
+                        except ValueError:
+                            sc = 0.0
+                        d["cvss"][c.text.strip()] = (sc, av.group(1))
+                elif lt == "issued" and not d["issued"]:
+                    d["issued"] = (c.get("date") or "")[:10]
                 elif lt == "description" and "Available with Ubuntu Pro" in (c.text or ""):
                     d["pro"] = True
             for c in el:
@@ -427,6 +437,30 @@ def _binaries(oval, tid, man, fixed):
                   if any(not fixed or vercmp(v, fixed) < 0 for v in man.by_name.get(n, [])))
 
 
+AV_RX = re.compile(r"AV:([NALP])")
+AV_ORDER = "NALP"  # 可及範圍由大到小：網路、相鄰網路、本機、實體接觸
+AV_LABEL = {"N": "網路", "A": "相鄰網路", "L": "本機", "P": "實體接觸"}
+LABEL_ORDER = [AV_LABEL[c] for c in AV_ORDER]
+
+
+def cvss_summary(cvss):
+    """一則公告所有 CVE 的 CVSS 摘要：最高分數、可及範圍最大的攻擊途徑、可從網路利用的 CVE 數。
+    資料來自官方 OVAL 的 cvss_score／cvss_vector（CVSS 3.x 與 4.0 混用，分數照官方原值，尺度不完全相同）。"""
+    vals = list(cvss.values())
+    if not vals:
+        return {"cvss_max": None, "attack_vector": "官方未提供", "cves_network": 0}
+    av = min((v[1] for v in vals), key=AV_ORDER.index)
+    return {"cvss_max": max(v[0] for v in vals), "attack_vector": AV_LABEL[av],
+            "cves_network": sum(1 for v in vals if v[1] == "N")}
+
+
+def vector_text(f):
+    """報告用：「網路（最高 9.2）」。"""
+    if f.get("cvss_max") is None:
+        return f.get("attack_vector") or "官方未提供"
+    return "%s（最高 %.1f）" % (f["attack_vector"], f["cvss_max"])
+
+
 def _hit(oval, d, leaves, hits_by_test, man):
     pockets, pkgs = set(), []
     for lf in leaves:
@@ -444,8 +478,11 @@ def _hit(oval, d, leaves, hits_by_test, man):
     known = [p for p in pockets if p]
     # 只看「這台主機實際缺的」那幾個修補；來源都讀不到時，才退回公告說明裡的「Available with Ubuntu Pro」
     needs_pro = any(p.startswith("esm") for p in known) if known else d["pro"]
-    return {"id": d["id"], "title": d["title"], "severity": d["severity"] or "None", "cves": d["cves"],
-            "pockets": sorted(p for p in pockets if p), "needs_pro": needs_pro, "packages": pkgs}
+    out = {"id": d["id"], "title": d["title"], "severity": d["severity"] or "None", "cves": d["cves"],
+           "pockets": sorted(p for p in pockets if p), "needs_pro": needs_pro, "packages": pkgs,
+           "issued": d.get("issued", "")}
+    out.update(cvss_summary(d.get("cvss", {})))
+    return out
 
 
 def match_builtin(oval, manifest_lines):
@@ -654,7 +691,7 @@ def analyze_host(files, args, rules, datasets):
     # --- 官方 OVAL 比對 ---
     patch = {"source": "none", "unit": "", "needs_pro": 0, "pro_not_applied": 0, "free_not_applied": 0,
              "engine": "", "data_file": "", "pro_client_pending_packages": len(pc_pending) if attrs else None}
-    hits, engine_check = [], None
+    hits, engine_check, free = [], None, []
     ds = datasets.get(codename) if codename else None
     if pkglist and ds and ds.get("oval"):
         manifest = ["%s\t%s" % (n, v) for n, v, _ in pkglist]
@@ -815,6 +852,20 @@ def analyze_host(files, args, rules, datasets):
         unchecked.append("自動更新是否正常運作（主機上沒有套件清單更新成功的紀錄）")
     elif apt_age is None and pkglist:
         unchecked.append("自動更新是否正常運作（套件清單更新紀錄讀取失敗）")
+    # 自動更新有開、套件清單也有更新，卻還有發布超過門檻天數的免費修補沒裝：自動更新沒有實際安裝
+    lag = rules["thresholds"].get("auto_update_lag_days", 7)
+    fresh = apt_age is not None and apt_age <= rules["thresholds"]["apt_update_stale_days"]
+    not_applying = False
+    if auto_on and fresh and cm and free:
+        today = datetime.date(*map(int, cm.groups()))
+        old = []
+        for h in free:
+            im = re.match(r"(\d{4})-(\d{2})-(\d{2})", h.get("issued") or "")
+            if im and (today - datetime.date(*map(int, im.groups()))).days > lag:
+                old.append(h["issued"])
+        if old:
+            ctx.add("auto_updates_not_applying", n=len(old), days=lag, oldest=min(old))
+            not_applying = any(x["id"] == "auto_updates_not_applying" for x in ctx.findings)
     if auto_failing and patch["source"] == "pro-client":
         for x in ctx.findings:
             if x["id"] == "auto_updates_failing":
@@ -822,6 +873,11 @@ def analyze_host(files, args, rules, datasets):
     if auto_failing:  # 這台的自動更新沒在運作：免費修補的建議不再寫「啟用自動安全更新」
         for x in ctx.findings:
             alt = rules["findings"].get(x["id"], {}).get("action_if_auto_update_failing")
+            if alt:
+                x["action"] = alt
+    elif not_applying:  # 自動更新有開但沒有實際安裝：同樣不再建議「啟用自動安全更新」
+        for x in ctx.findings:
+            alt = rules["findings"].get(x["id"], {}).get("action_if_auto_update_not_applying")
             if alt:
                 x["action"] = alt
     sattrs = api_attrs(files.get("pro-api-summary.json", ""))
@@ -886,6 +942,8 @@ def crit_high_fixes(hits):
         out.append({"usn": usn or h["title"].split(" ", 1)[0], "title": h["title"], "severity": h["severity"],
                     "needs_pro": h["needs_pro"], "subscribed": bool(h.get("subscribed")), "kernel": kern,
                     "packages": sorted({p["source"] for p in h["packages"]}), "binaries": bins,
+                    "attack_vector": h.get("attack_vector", "官方未提供"), "cvss_max": h.get("cvss_max"),
+                    "cves_network": h.get("cves_network", 0), "issued": h.get("issued", ""),
                     "commands": cmds})
     return out
 
@@ -1012,6 +1070,8 @@ def priority_steps(hosts, rules):
             item = x.get("short") or x["title"]
             if fid == "auto_updates_failing":
                 put("auto_update_failing", h["tag"])
+            elif fid == "auto_updates_not_applying":
+                put("auto_update_not_applying", h["tag"])
             elif fid in PATCH_IDS:
                 put("patches_available", h["tag"])
             elif fid == "os_no_support":
@@ -1028,7 +1088,7 @@ def priority_steps(hosts, rules):
                 put("d_other", h["tag"], item)
         if h.get("unchecked"):
             put("unchecked", h["tag"])
-    order = ["auto_update_failing", "d_high", "patches_available", "no_support", "a_class", "b_class",
+    order = ["auto_update_failing", "auto_update_not_applying", "d_high", "patches_available", "no_support", "a_class", "b_class",
              "d_other", "c_class", "broken", "unchecked"]
     out = []
     for key in order:
@@ -1052,14 +1112,15 @@ def cat_counts(h):
 # ---------------------------------------------------------------------------
 def fix_rows(fx, sevname):
     """報告用的列：一般套件逐則列出；核心公告合併成一列（新核心是不同的套件名稱，處理方式都一樣）。
-    回傳 [(公告, 嚴重度, 套件, 前置說明, [指令])]。findings.json 仍逐則保留。"""
+    回傳 [(公告, 嚴重度, 攻擊途徑, 套件, 前置說明, [指令])]。findings.json 仍逐則保留。"""
     rows, kern = [], []
     for f in fx:
         if f["kernel"]:
             kern.append(f)
             continue
         pre = "要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：" if f["needs_pro"] and not f["subscribed"] else ""
-        rows.append((f["title"], sevname.get(f["severity"], f["severity"]), "、".join(f["packages"]), pre, f["commands"]))
+        rows.append((f["title"], sevname.get(f["severity"], f["severity"]), vector_text(f), "、".join(f["packages"]),
+                     pre, f["commands"]))
     if kern:
         sev = "重大" if any(f["severity"] == "Critical" for f in kern) else sevname.get("High", "High")
         ids = [f["usn"] for f in kern]
@@ -1067,7 +1128,10 @@ def fix_rows(fx, sevname):
         np = sum(1 for f in kern if f["needs_pro"] and not f["subscribed"])
         pre = ("要先訂閱 Ubuntu Pro 並執行 sudo pro attach；之後：" if np == len(kern) else
                "其中 %d 則要先訂閱 Ubuntu Pro（sudo pro attach）才能取得，其餘免費：" % np if np else "")
-        rows.insert(0, (title, sev, "、".join(sorted({p for f in kern for p in f["packages"]})), pre,
+        scored = [f for f in kern if f.get("cvss_max") is not None]
+        kv = (vector_text({"attack_vector": min((f["attack_vector"] for f in scored), key=LABEL_ORDER.index),
+                           "cvss_max": max(f["cvss_max"] for f in scored)}) if scored else "官方未提供")
+        rows.insert(0, (title, sev, kv, "、".join(sorted({p for f in kern for p in f["packages"]})), pre,
                         ["sudo apt update && sudo apt upgrade，完成後重開機（sudo reboot）；停機困難時評估 Livepatch"]))
     return rows
 
@@ -1168,9 +1232,9 @@ def render_report(hosts, args, rules, datasets, warnings=()):
         if fx:
             w("\n**重大與高風險公告（%d 則）：只修這一則的指令**\n" % len(fx))
             w("> %s\n" % rt.get("crit_high_note", ""))
-            w("| 安全公告 | 嚴重度 | 套件 | 指令 |\n|---|---|---|---|")
-            for title, sev, pk, pre, cmds in fix_rows(fx, sevname):
-                w("| %s | %s | %s | %s |" % (_m(title), sev, _m(pk), _m(pre + "　或　".join(cmds))))
+            w("| 安全公告 | 嚴重度 | 攻擊途徑（CVSS） | 套件 | 指令 |\n|---|---|---|---|---|")
+            for title, sev, av, pk, pre, cmds in fix_rows(fx, sevname):
+                w("| %s | %s | %s | %s | %s |" % (_m(title), sev, _m(av), _m(pk), _m(pre + "　或　".join(cmds))))
         w("")
     w("## 四、建議處理順序\n")
     for i, s in enumerate(priority_steps(hosts, rules), 1):
@@ -1301,13 +1365,17 @@ def render_html(hosts, args, rules, datasets, warnings=()):
                 % (len(e["only_oscap"]), len(e["only_builtin"]))))
         fx = h.get("crit_high_fixes") or []
         if fx:
-            w("<h4>重大與高風險公告（%d 則）：只修這一則的指令</h4><p class=\"mut\">%s</p>" % (len(fx), _e(rt.get("crit_high_note", ""))))
-            w("<div class=\"tw\"><table><tr><th>安全公告</th><th>嚴重度</th><th>套件</th><th>指令</th></tr>")
-            for title, sev, pk, pre, cmds in fix_rows(fx, sevname):
+            frows = fix_rows(fx, sevname)
+            # 列數多時預設收合，和下方的比對明細一致；點標題可展開
+            w("<details%s><summary>重大與高風險公告（%d 則）：只修這一則的指令</summary><p class=\"mut\">%s</p>"
+              % (" open" if len(frows) <= 10 else "", len(fx), _e(rt.get("crit_high_note", ""))))
+            w("<div class=\"tw\"><table><tr><th>安全公告</th><th>嚴重度</th><th>攻擊途徑（CVSS）</th><th>套件</th><th>指令</th></tr>")
+            for title, sev, av, pk, pre, cmds in frows:
                 c = "<br>".join("<code>%s</code>" % _e(x) for x in cmds) or "（無法組出指令，請用 sudo apt update 與 sudo apt upgrade）"
-                w("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s%s</td></tr>" % (
-                    _e(title), _e(sev), _e(pk), _e(pre) + ("<br>" if pre else ""), c))
+                w("<tr><td>%s</td><td>%s</td><td>%s</td><td>%s</td><td>%s%s</td></tr>" % (
+                    _e(title), _e(sev), _e(av), _e(pk), _e(pre) + ("<br>" if pre else ""), c))
             w("</table></div>")
+            w("</details>")
         matches = h.get("oval_matches") or []
         for label, group, opened in detail_groups(matches):
             rows = group_by_package(group)
@@ -1342,6 +1410,9 @@ def render_html(hosts, args, rules, datasets, warnings=()):
         w("</table></div><p class=\"mut\">弱點資料：Canonical 官方 OVAL（security-metadata.canonical.com），授權 CC BY-SA 4.0。</p>")
     else:
         w("<p>未使用官方資料檔；僅參考主機上的 Ubuntu Pro 用戶端。</p>")
+    # 列印或另存 PDF 前把收合的段落全部展開，紙本才不會漏掉表格
+    w("<script>window.addEventListener('beforeprint',function(){"
+      "document.querySelectorAll('details').forEach(function(d){d.open=true;});});</script>")
     w("</main></body></html>")
     return "\n".join(out)
 
@@ -1482,6 +1553,8 @@ def run_analysis(loaded, args, rules, log=None):
         matches = h.get("oval_matches", [])
         h["oval_matches"] = [{"title": m["title"], "severity": m["severity"], "needs_pro": m["needs_pro"],
                               "pockets": m["pockets"], "cve_count": len(m["cves"]),
+                              "attack_vector": m.get("attack_vector", "官方未提供"), "cvss_max": m.get("cvss_max"),
+                              "issued": m.get("issued", ""),
                               "packages": sorted({p["source"] for p in m["packages"]})}
                              for m in matches]
         # 每個套件「已安裝版本 → 修補版本」，AI 才能說明要更新到哪一版

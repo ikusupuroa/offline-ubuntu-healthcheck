@@ -5,7 +5,7 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 # Ubuntu 健檢結果分析指引
 
-版本：0.6（2026-11-19，對應工具 0.6）
+版本：0.6.1（2026-11-20，對應工具 0.6.1）
 
 **怎麼放到自己的 AI 平台**：見使用者手冊（docs/user-guide.pdf）第 6 章。沒辦法安裝 skill 的平台，把本檔和 `findings-ai.json` 一起上傳到同一則對話即可。
 
@@ -30,16 +30,20 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
     - `free_not_applied`：免費、但還沒套用的修補數
     - `pro_not_applied`：已訂閱 Ubuntu Pro、但還沒套用的修補數
     - `packages_needs_pro`、`packages_free`、`packages_pro_not_applied`：上面三種各自要更新的套件名稱（原始碼套件名稱，依嚴重度排列；只有 `source` 為 `oval` 時才有）
-  - `oval_matches[]`：每則尚未修補的安全公告摘要：`title`、`severity`（Critical／High／Medium／Low／Negligible／None）、`needs_pro`、`pockets`（修補來源，例如 esm-infra、esm-apps、esm-infra-legacy 或版本代號）、`cve_count`、`packages`
+  - `oval_matches[]`：每則尚未修補的安全公告摘要：`title`、`severity`（Critical／High／Medium／Low／Negligible／None）、`needs_pro`、`pockets`（修補來源，例如 esm-infra、esm-apps、esm-infra-legacy 或版本代號）、`cve_count`、`packages`、`attack_vector`、`cvss_max`、`issued`（公告發布日）
   - `unchecked[]`：收集時沒有權限或資料不足、沒有檢查到的項目
   - `package_updates[]`：依套件彙整的修補清單，每個套件有 `source`（原始碼套件名稱）、`severity`、`needs_pro`、`pockets`、`usn_count`、`installed`（已安裝版本）、`fixed`（修補版本）。說明「要更新到哪一版」時用這裡的值
-  - `crit_high_fixes[]`：重大與高風險公告逐則的「只修這一則」指令：`usn`、`title`、`severity`、`needs_pro`、`subscribed`、`kernel`（是否為核心公告）、`packages`、`binaries`（要升級的二進位套件）、`commands`
+  - `crit_high_fixes[]`：重大與高風險公告逐則的「只修這一則」指令：`usn`、`title`、`severity`、`needs_pro`、`subscribed`、`kernel`（是否為核心公告）、`packages`、`binaries`（要升級的二進位套件）、`commands`、`issued`（公告發布日），以及：
+    - `attack_vector`：這則公告各 CVE 的 CVSS 向量裡，可及範圍最大的攻擊途徑：「網路」（不必先登入主機就可能被利用）、「相鄰網路」、「本機」（要先能登入或在主機上執行程式）、「實體接觸」，或「官方未提供」
+    - `cvss_max`：各 CVE 的最高 CVSS 分數（官方原值，CVSS 3.x 與 4.0 混用，分數尺度不完全相同）；`cves_network`：可從網路利用的 CVE 數
+    - 這三個欄位取自 Canonical 官方 OVAL，可以直接引用；不要自行補 CVE 編號、分數或攻擊手法
   - `apt_last_update`、`apt_update_age_days`、`auto_updates_enabled`：套件清單最後一次成功更新的日期、距收集當天幾天、自動更新是否設定為開啟
   - `running_kernel`、`newest_installed_kernel`、`uptime_days`、`livepatch_enabled`
   - `findings[]`：每項有 `id`（發現代號，例如 `auto_updates_failing`）、`category`（A/B/C/D）、`severity`（高/中/低）、`title`、`detail`、`action`、`pro_helps`（是/部分/否）
 - 最上層的 `data` 列出使用的官方資料檔與產生時間，`engine` 是比對引擎；`data` 為空代表沒有用官方資料比對。`warnings` 是分析時的提醒（例如主機代號重複），要轉告使用者。
 - 最上層的 `priority_steps` 是工具依這份結果產生的建議處理順序（只列實際出現的項目），排處理清單時以它為基礎。
 - 發現 `auto_updates_failing`（已設定自動更新，但套件清單很久沒有成功更新）時，自動更新其實沒有在運作，這常是免費修補沒裝的原因。這時不要建議「啟用自動安全更新」，先建議查網路與套件來源。
+- 發現 `auto_updates_not_applying`（自動更新已設定、套件清單也有更新，卻有發布超過門檻天數（預設 7 天）的免費修補沒裝）時，要明說「自動更新沒有實際安裝修補」，這是修補流程的問題：只手動安裝一次，之後還會再累積。建議照該項的 `action` 查紀錄與設定，並和安裝修補一起處理。
 - 核心公告（套件名稱以 linux 開頭）常一則就涵蓋上千個 CVE。說明風險時以「公告則數」與「重大／高風險則數」為主，不要用 CVE 總數渲染嚴重程度。
 - 分類定義：
   - A 修補取不到：訂閱 Ubuntu Pro 可解決
@@ -49,13 +53,14 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 ### 二、必須遵守
 
-1. **先分清楚資料與判讀**。沒有使用情境時，只根據檔案內容解讀；不要自行補 CVE 編號、弱點名稱、套件版本或攻擊情境，檔案裡沒有的，寫「健檢資料未包含」。使用者提供情境後，才可以把他的回答作為判讀依據，並清楚標示哪些是檔案資料、哪些是使用者確認的情境。
+1. **先分清楚資料與判讀**。沒有使用情境時，只根據檔案內容解讀；不要自行補 CVE 編號、弱點名稱、套件版本或攻擊情境，檔案裡沒有的，寫「健檢資料未包含」。`attack_vector`、`cvss_max` 是檔案資料，可以引用，但只能說「可能被利用的途徑」，不能說成已確認可被利用。使用者提供情境後，才可以把他的回答作為判讀依據，並清楚標示哪些是檔案資料、哪些是使用者確認的情境。
 2. **分類以檔案為準**。不可以把 D 類說成買 Ubuntu Pro 就能解決，也不可以省略 D 類。
-3. **年限寫完整**：標準維護 5 年；訂閱 Ubuntu Pro（ESM）共 10 年；加購 Legacy 最長 15 年。不要寫「Ubuntu Pro 提供 15 年」。
+3. **年限寫完整**：標準維護 5 年（只涵蓋 Main 套件庫）；訂閱 Ubuntu Pro（ESM）共 10 年（含 Universe）；加購 Legacy 最長 15 年。不要寫「Ubuntu Pro 提供 15 年」。
 4. **Livepatch 的限制要講**：只處理高風險與重大的核心漏洞，不含一般程式庫，也不能取代所有重開機。
 5. **非 LTS 版本與 eol**：Ubuntu Pro 不適用，只能升級。
 6. 不提供價格；需要費用時，請使用者向執行健檢的單位詢價。
 7. 法規只能概括提及（例如機關依資通安全管理法相關規定負有資安維護責任），不要引用你無法確認的條號或頻率。
+8. **數字照抄、不自創總數**：主機別的則數、套件名稱直接取自檔案對應欄位（重大與高風險的套件看 `crit_high_fixes[].packages`，不要從 `package_updates` 拼湊）。要加總時只加同單位的數字，並寫出怎麼加的；不要提出檔案和報告裡都沒有的總數。
 
 ### 三、情境式風險判讀
 
@@ -77,6 +82,10 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 - 使用者說服務不對外、未啟用，或有補償控制時，應寫成條件式結論：例如「依目前確認的內網限制，優先度可降低；若服務改為公開、隔離失效或用途改變，應重新評估」。
 - 不可因為有 WAF、VPN、MFA、網段隔離或備份，就把未修補項目說成已解決。這些是降低暴露或影響的補償控制，不是修補的替代品。
 - 不可自行執行掃描、連線、修補、重啟或要求上傳額外主機資料。指令仍以 `findings[].action` 與 `crit_high_fixes[].commands` 提供的內容為限，不可自行另編指令。
+- **依攻擊途徑排序**：對外服務的主機（公開網站、API、VPN 入口），先處理 `attack_vector` 為「網路」的重大與高風險公告，並說明 WAF、防火牆不一定擋得住作業系統函式庫（例如 TLS、壓縮函式庫）的漏洞。「本機」的公告（例如 sudo 提權）在公開主機上仍要修，但急迫程度取決於誰能登入主機。內網或隔離主機也照此區分，不要只看公告數量。
+- **判為「需立即處理」時要給到可以動手的程度**：列出相關的 `crit_high_fixes` 項目（公告編號、套件、攻擊途徑與分數）並附上它的 `commands`，同時給出建議期限。
+- **建議期限**：每個「需立即處理」「需排程處理」的項目都寫一個建議期限，例如網路可及的重大與高風險公告 7 天內、其他修補在下一個維護窗口（最長 30 天）、需採購或升級的決定 30 天內。要註明這是顧問建議，機關有自己的修補時限規定時以規定為準。
+- **隔離或不能連外的主機**：要說明免費修補與 Ubuntu Pro 修補都需要內部套件鏡像站或 Landscape 才能取得；Livepatch 在這種環境要另外架內部的 Livepatch 伺服器。不要只寫「確認離線更新方式」。
 
 #### 結論狀態
 
@@ -121,11 +130,21 @@ description: 分析 offline-ubuntu-healthcheck（Ubuntu 主機資安健檢）產
 
 **7. 結論**：用兩三句話給主管看的決定：這次最先做哪一件、要不要為這次的缺口採購 Ubuntu Pro（沒有 A 類時明說不需要）、建議多久後重新健檢。
 
+結尾若要提供後續選項，只列還沒做過的事；使用者已提供情境，就不要再列「提交情境資訊」「詢問主機角色」這類已完成的選項。
+
 **8. 情境判讀紀錄**（僅在啟用本節時輸出）：用「使用者確認的事實／由此得出的建議／仍待確認」三小段，逐項保留判讀依據。若使用者需要把結果交接給其他人，可將這一節另存為去識別化的 `assessment-context.json` 或 Markdown 紀錄；未取得使用者同意前，不自行建立或保存檔案。
 
 ---
 
 ## 設計紀錄（給後續維護此 skill 的 agent）
+
+### 2026-11-20｜v0.6.1 依 ChatGPT 實測評估補強
+
+用 LXD 三台測試機（20.04／22.04／24.04）的 `findings-ai.json` 測 ChatGPT。數字與事實／推論分離大致正確，但未達資安顧問水準，補強如下：
+- 工具在公告加上 `attack_vector`、`cvss_max`、`cves_network`、`issued`（取自官方 OVAL 的 CVSS 向量）。實測 AI 把公開主機判為需立即處理，卻說不出哪幾則從網路打得到；原本規則又禁止 AI 自補攻擊情境，所以由工具提供資料。
+- 新增 `auto_updates_not_applying` 說明：實測 AI 看到「自動更新已開、仍有上百則免費修補」只說「已啟用不代表已套用」，沒有指出流程失效。
+- 新增：依攻擊途徑排序、需立即處理時附單則指令與建議期限、隔離主機的鏡像站／Landscape／Livepatch 說明、不自創總數（實測冒出檔案沒有的總數）、重大與高風險的套件要照 `crit_high_fixes` 抄（實測列錯）、已回答的補問不再列為後續選項（實測重複出現）、年限補上 Main／Universe。
+- 建議期限（7 天／30 天）是設計線提出的預設值，待使用者確認。
 
 ### 2026-11-19｜v0.6 配合工具調整
 

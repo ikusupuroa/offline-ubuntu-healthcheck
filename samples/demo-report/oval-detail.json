@@ -29,6 +29,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-10-02",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -76,6 +80,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-07-28",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 14,
     "subscribed": false
    },
    {
@@ -132,6 +140,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-08-20",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 15,
     "subscribed": false
    },
    {
@@ -159,6 +171,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-09-30",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -192,6 +208,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-10-13",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -222,6 +242,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-11-10",
+    "cvss_max": 9.3,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -277,6 +301,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-06-19",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -303,6 +331,10 @@
       ]
      }
     ],
+    "issued": "2025-06-30",
+    "cvss_max": 2.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -338,6 +370,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-07-25",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -369,6 +405,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-08-19",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -395,6 +435,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-09-17",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -427,6 +471,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-11-19",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -466,6 +514,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-12-10",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -493,6 +545,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-01-30",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -525,6 +581,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-03-16",
+    "cvss_max": 7.8,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -554,6 +614,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-04-22",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -581,6 +645,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-05-19",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -611,6 +679,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-05-19",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -649,6 +721,10 @@
       ]
      }
     ],
+    "issued": "2026-06-03",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 10,
     "subscribed": false
    },
    {
@@ -676,6 +752,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-06-04",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -707,6 +787,10 @@
       ]
      }
     ],
+    "issued": "2026-06-09",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 5,
     "subscribed": false
    },
    {
@@ -736,6 +820,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-09-02",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 4,
     "subscribed": false
    },
    {
@@ -766,6 +854,10 @@
       ]
      }
     ],
+    "issued": "2026-09-29",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 4,
     "subscribed": false
    },
    {
@@ -792,6 +884,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-11-03",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -818,6 +914,10 @@
       ]
      }
     ],
+    "issued": "2022-11-24",
+    "cvss_max": 5.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -844,6 +944,10 @@
       ]
      }
     ],
+    "issued": "2024-02-01",
+    "cvss_max": 6.2,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -872,6 +976,10 @@
       ]
      }
     ],
+    "issued": "2025-09-01",
+    "cvss_max": 7.4,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -900,6 +1008,10 @@
       ]
      }
     ],
+    "issued": "2025-09-18",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -927,6 +1039,10 @@
       ]
      }
     ],
+    "issued": "2025-09-30",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -954,6 +1070,10 @@
       ]
      }
     ],
+    "issued": "2025-10-08",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -980,6 +1100,10 @@
       ]
      }
     ],
+    "issued": "2025-11-20",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -1013,6 +1137,10 @@
       ]
      }
     ],
+    "issued": "2026-01-27",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 4,
     "subscribed": false
    },
    {
@@ -1041,6 +1169,10 @@
       ]
      }
     ],
+    "issued": "2026-02-03",
+    "cvss_max": 5.3,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -1067,6 +1199,10 @@
       ]
      }
     ],
+    "issued": "2026-02-10",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -1099,6 +1235,10 @@
       ]
      }
     ],
+    "issued": "2026-03-04",
+    "cvss_max": 7.4,
+    "attack_vector": "網路",
+    "cves_network": 7,
     "subscribed": false
    },
    {
@@ -1134,6 +1274,10 @@
       ]
      }
     ],
+    "issued": "2026-03-30",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 8,
     "subscribed": false
    },
    {
@@ -1166,6 +1310,10 @@
       ]
      }
     ],
+    "issued": "2026-05-11",
+    "cvss_max": 8.6,
+    "attack_vector": "網路",
+    "cves_network": 5,
     "subscribed": false
    },
    {
@@ -1193,6 +1341,10 @@
       ]
      }
     ],
+    "issued": "2026-07-02",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -1224,6 +1376,10 @@
       ]
      }
     ],
+    "issued": "2026-06-24",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -1253,6 +1409,10 @@
       ]
      }
     ],
+    "issued": "2026-07-20",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -1282,6 +1442,10 @@
       ]
      }
     ],
+    "issued": "2026-08-10",
+    "cvss_max": 6.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -1310,6 +1474,10 @@
       ]
      }
     ],
+    "issued": "2026-08-25",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -1348,6 +1516,10 @@
       ]
      }
     ],
+    "issued": "2026-09-08",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 5,
     "subscribed": false
    },
    {
@@ -1379,6 +1551,10 @@
       ]
      }
     ],
+    "issued": "2026-09-24",
+    "cvss_max": 5.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -1409,6 +1585,10 @@
       ]
      }
     ],
+    "issued": "2026-09-30",
+    "cvss_max": 3.7,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -1435,6 +1615,10 @@
       ]
      }
     ],
+    "issued": "2026-11-12",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -1465,6 +1649,10 @@
       ]
      }
     ],
+    "issued": "2026-11-05",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 4,
     "subscribed": false
    },
    {
@@ -1491,6 +1679,10 @@
       ]
      }
     ],
+    "issued": "2023-09-21",
+    "cvss_max": 7.1,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -1521,6 +1713,10 @@
       ]
      }
     ],
+    "issued": "2026-04-09",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 4,
     "subscribed": false
    },
    {
@@ -1553,7 +1749,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-12-11",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:695110000000",
@@ -1659,7 +1859,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-08-08",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 8
    },
    {
     "id": "oval:com.ubuntu.focal:def:729310000000",
@@ -1825,7 +2029,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-02-26",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 20
    },
    {
     "id": "oval:com.ubuntu.focal:def:466210000000",
@@ -1851,7 +2059,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2020-12-08",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:470510000000",
@@ -1877,7 +2089,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2021-01-26",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:489110000000",
@@ -1903,7 +2119,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2021-03-25",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:505110000000",
@@ -1930,7 +2150,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2021-08-24",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:532810000000",
@@ -1956,7 +2180,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2022-03-15",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:584410000000",
@@ -1985,7 +2213,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2023-02-07",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 4
    },
    {
     "id": "oval:com.ubuntu.focal:def:613110000000",
@@ -2012,7 +2244,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-06-01",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:619310000000",
@@ -2035,7 +2271,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-06-29",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:625110000000",
@@ -2061,7 +2301,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-07-26",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:628410000000",
@@ -2099,7 +2343,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-08-11",
+    "cvss_max": 8.4,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:631710000000",
@@ -2126,7 +2374,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-08-29",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:634010000000",
@@ -2157,7 +2409,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-09-05",
+    "cvss_max": 10.0,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:638710000000",
@@ -2182,7 +2438,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-09-19",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:641710000000",
@@ -2210,7 +2470,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-10-04",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:644110000000",
@@ -2241,7 +2505,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-10-19",
+    "cvss_max": 8.9,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:660510000000",
@@ -2268,7 +2536,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-01-25",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:662510000000",
@@ -2295,7 +2567,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-02-07",
+    "cvss_max": 7.3,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:664810000000",
@@ -2322,7 +2598,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-02-22",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:668110000000",
@@ -2353,7 +2633,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-03-06",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:670210000000",
@@ -2380,7 +2664,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-03-19",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:672610000000",
@@ -2426,7 +2714,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-04-09",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 4
    },
    {
     "id": "oval:com.ubuntu.focal:def:674110000000",
@@ -2454,7 +2746,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-04-19",
+    "cvss_max": 8.4,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:676710000000",
@@ -2524,7 +2820,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-05-07",
+    "cvss_max": 8.9,
+    "attack_vector": "網路",
+    "cves_network": 5
    },
    {
     "id": "oval:com.ubuntu.focal:def:683110000000",
@@ -2588,7 +2888,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-06-12",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.focal:def:686810000000",
@@ -2614,7 +2918,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-07-03",
+    "cvss_max": 5.7,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:689610000000",
@@ -2784,7 +3092,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-07-12",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 14
    },
    {
     "id": "oval:com.ubuntu.focal:def:692410000000",
@@ -2814,7 +3126,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-07-29",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:697310000000",
@@ -2846,7 +3162,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-08-21",
+    "cvss_max": 8.4,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:700310000000",
@@ -2954,7 +3274,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-09-12",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 4
    },
    {
     "id": "oval:com.ubuntu.focal:def:702210000000",
@@ -2987,7 +3311,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-09-18",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:707310000000",
@@ -3014,7 +3342,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-10-16",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:708810000000",
@@ -3199,7 +3531,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-10-31",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 16
    },
    {
     "id": "oval:com.ubuntu.focal:def:715910000000",
@@ -3245,7 +3581,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-12-12",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.focal:def:717310000000",
@@ -3284,7 +3624,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-12-17",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:723410000000",
@@ -3312,7 +3656,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-01-28",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:739110000000",
@@ -3487,7 +3835,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-03-28",
+    "cvss_max": 8.9,
+    "attack_vector": "網路",
+    "cves_network": 7
    },
    {
     "id": "oval:com.ubuntu.focal:def:740810000000",
@@ -3513,7 +3865,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-04-02",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:746110000000",
@@ -3547,7 +3903,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-04-24",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:749510000000",
@@ -3572,7 +3932,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-05-06",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:751610000000",
@@ -3684,7 +4048,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-05-16",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 5
    },
    {
     "id": "oval:com.ubuntu.focal:def:473810000000",
@@ -3711,7 +4079,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2021-02-18",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:496710000000",
@@ -3737,7 +4109,11 @@
        "nginx-core"
       ]
      }
-    ]
+    ],
+    "issued": "2021-05-26",
+    "cvss_max": 7.7,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:498810000000",
@@ -3794,7 +4170,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2021-06-15",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:537110000000",
@@ -3822,7 +4202,11 @@
        "nginx-core"
       ]
      }
-    ]
+    ],
+    "issued": "2022-04-12",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.focal:def:540210000000",
@@ -3848,7 +4232,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2022-05-04",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:548810000000",
@@ -3874,7 +4262,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2022-06-21",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:550210000000",
@@ -3900,7 +4292,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2022-07-05",
+    "cvss_max": 5.3,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:572210000000",
@@ -3927,7 +4323,11 @@
        "nginx-core"
       ]
      }
-    ]
+    ],
+    "issued": "2022-11-15",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:581110000000",
@@ -3952,7 +4352,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2023-01-18",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:585520000000",
@@ -3978,7 +4382,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2023-03-15",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:600510000000",
@@ -4004,7 +4412,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2023-04-11",
+    "cvss_max": 5.3,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:611910000000",
@@ -4030,7 +4442,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2023-05-30",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:617210000000",
@@ -4060,7 +4476,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-06-16",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:620010000000",
@@ -4098,7 +4518,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2023-07-04",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.focal:def:620020000000",
@@ -4124,7 +4548,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2024-07-25",
+    "cvss_max": 5.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:646210000000",
@@ -4150,7 +4578,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-10-31",
+    "cvss_max": 6.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:649510000000",
@@ -4174,7 +4606,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2023-11-21",
+    "cvss_max": 7.5,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:677610000000",
@@ -4201,7 +4637,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-05-16",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:701410000000",
@@ -4227,7 +4667,11 @@
        "nginx-core"
       ]
      }
-    ]
+    ],
+    "issued": "2024-09-16",
+    "cvss_max": 4.7,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:728510000000",
@@ -4253,7 +4697,11 @@
        "nginx-core"
       ]
      }
-    ]
+    ],
+    "issued": "2025-02-24",
+    "cvss_max": 4.3,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:744010000000",
@@ -4278,7 +4726,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2025-04-16",
+    "cvss_max": 5.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:454910000000",
@@ -4304,7 +4756,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2020-09-28",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:467010000000",
@@ -4329,7 +4785,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2020-12-15",
+    "cvss_max": 3.3,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:538010000000",
@@ -4354,7 +4814,11 @@
        "bash"
       ]
      }
-    ]
+    ],
+    "issued": "2022-04-20",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:603910000000",
@@ -4381,7 +4845,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2023-04-25",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:643520000000",
@@ -4408,7 +4876,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2023-10-25",
+    "cvss_max": 5.3,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.focal:def:662210000000",
@@ -4435,7 +4907,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-02-05",
+    "cvss_max": 5.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:693710000000",
@@ -4463,7 +4939,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-07-31",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.focal:def:727810000000",
@@ -4490,7 +4970,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2025-02-20",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.focal:def:585530000000",
@@ -4513,7 +4997,11 @@
        "imagemagick"
       ]
      }
-    ]
+    ],
+    "issued": "2023-03-31",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.focal:def:666310000000",
@@ -4537,7 +5025,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-02-27",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    }
   ]
  },
@@ -4600,6 +5092,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-03-05",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 5,
     "subscribed": false
    },
    {
@@ -4633,6 +5129,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-10-02",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -4676,6 +5176,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-08-13",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 12,
     "subscribed": false
    },
    {
@@ -4715,6 +5219,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-08-20",
+    "cvss_max": 9.4,
+    "attack_vector": "網路",
+    "cves_network": 8,
     "subscribed": false
    },
    {
@@ -4746,6 +5254,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-09-04",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 6,
     "subscribed": false
    },
    {
@@ -4772,6 +5284,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-10-02",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -4796,6 +5312,10 @@
       "binaries": []
      }
     ],
+    "issued": "2021-07-20",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -4820,6 +5340,10 @@
       "binaries": []
      }
     ],
+    "issued": "2021-08-12",
+    "cvss_max": 8.3,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -4844,6 +5368,10 @@
       "binaries": []
      }
     ],
+    "issued": "2021-09-08",
+    "cvss_max": 8.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -4868,6 +5396,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-01-06",
+    "cvss_max": 4.4,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -4893,6 +5425,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-03-09",
+    "cvss_max": 6.5,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -4946,6 +5482,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-03-22",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -4982,6 +5522,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-04-01",
+    "cvss_max": 7.3,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5011,6 +5555,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-05-12",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -5036,6 +5584,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-06-08",
+    "cvss_max": 4.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5067,6 +5619,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-07-01",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5094,6 +5650,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-07-29",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5119,6 +5679,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-08-09",
+    "cvss_max": 5.3,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5156,6 +5720,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-09-30",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5192,6 +5760,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-12-01",
+    "cvss_max": 7.2,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -5219,6 +5791,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-01-12",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5248,6 +5824,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-03-06",
+    "cvss_max": 7.7,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5321,6 +5901,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-04-12",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 5,
     "subscribed": false
    },
    {
@@ -5349,6 +5933,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-04-26",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5378,6 +5966,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-06-08",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5408,6 +6000,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-07-12",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5443,6 +6039,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-07-26",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5472,6 +6072,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-08-28",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5504,6 +6108,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-09-19",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5538,6 +6146,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-10-19",
+    "cvss_max": 8.9,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5570,6 +6182,10 @@
       "binaries": []
      }
     ],
+    "issued": "2023-12-05",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5598,6 +6214,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-01-25",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5624,6 +6244,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-02-20",
+    "cvss_max": 5.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5654,6 +6278,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-03-18",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5694,6 +6322,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-04-19",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -5731,6 +6363,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-05-16",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -5762,6 +6398,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-07-03",
+    "cvss_max": 7.1,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -5816,6 +6456,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-07-31",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -5866,6 +6510,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-08-21",
+    "cvss_max": 8.4,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -5911,6 +6559,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-09-26",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 4,
     "subscribed": false
    },
    {
@@ -5954,6 +6606,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-11-14",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -6017,6 +6673,10 @@
       "binaries": []
      }
     ],
+    "issued": "2024-12-10",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -6073,6 +6733,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-01-06",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6106,6 +6770,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-02-10",
+    "cvss_max": 7.3,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6150,6 +6818,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-04-09",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6205,6 +6877,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-05-12",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -6239,6 +6915,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-06-04",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6265,6 +6945,10 @@
       ]
      }
     ],
+    "issued": "2025-06-30",
+    "cvss_max": 2.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6297,6 +6981,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-07-01",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6325,6 +7013,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-07-31",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6357,6 +7049,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-08-28",
+    "cvss_max": 9.1,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -6390,6 +7086,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-11-06",
+    "cvss_max": 7.4,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6430,6 +7130,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-12-15",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6459,6 +7163,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-01-29",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6491,6 +7199,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-03-04",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6521,6 +7233,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-04-01",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -6545,6 +7261,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-06-17",
+    "cvss_max": 7.3,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6570,6 +7290,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-10-13",
+    "cvss_max": 7.7,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6595,6 +7319,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-11-03",
+    "cvss_max": 8.2,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6637,6 +7365,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-11-10",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 5,
     "subscribed": false
    },
    {
@@ -6673,6 +7405,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-02-22",
+    "cvss_max": 7.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6701,6 +7437,10 @@
       ]
      }
     ],
+    "issued": "2022-03-07",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -6727,6 +7467,10 @@
       "binaries": []
      }
     ],
+    "issued": "2022-08-24",
+    "cvss_max": 7.1,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6753,6 +7497,10 @@
       ]
      }
     ],
+    "issued": "2023-01-18",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6780,6 +7528,10 @@
       ]
      }
     ],
+    "issued": "2023-05-29",
+    "cvss_max": 5.3,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -6806,6 +7558,10 @@
       ]
      }
     ],
+    "issued": "2023-07-31",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6833,6 +7589,10 @@
       ]
      }
     ],
+    "issued": "2023-12-07",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -6859,6 +7619,10 @@
       ]
      }
     ],
+    "issued": "2024-01-11",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6885,6 +7649,10 @@
       ]
      }
     ],
+    "issued": "2024-09-16",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -6911,6 +7679,10 @@
       ]
      }
     ],
+    "issued": "2024-05-02",
+    "cvss_max": 7.3,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6940,6 +7712,10 @@
       ]
      }
     ],
+    "issued": "2024-05-31",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -6966,6 +7742,10 @@
       ]
      }
     ],
+    "issued": "2025-02-10",
+    "cvss_max": 6.2,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -6992,6 +7772,10 @@
       ]
      }
     ],
+    "issued": "2025-02-18",
+    "cvss_max": 6.8,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -7016,6 +7800,10 @@
       "binaries": []
      }
     ],
+    "issued": "2025-02-25",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7044,6 +7832,10 @@
       ]
      }
     ],
+    "issued": "2026-02-03",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -7072,6 +7864,10 @@
       "binaries": []
      }
     ],
+    "issued": "2026-05-19",
+    "cvss_max": 6.3,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -7098,6 +7894,10 @@
       ]
      }
     ],
+    "issued": "2026-07-06",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -7124,6 +7924,10 @@
       ]
      }
     ],
+    "issued": "2026-07-21",
+    "cvss_max": 4.2,
+    "attack_vector": "網路",
+    "cves_network": 1,
     "subscribed": false
    },
    {
@@ -7155,6 +7959,10 @@
       ]
      }
     ],
+    "issued": "2026-09-22",
+    "cvss_max": 4.8,
+    "attack_vector": "網路",
+    "cves_network": 6,
     "subscribed": false
    },
    {
@@ -7181,6 +7989,10 @@
       ]
      }
     ],
+    "issued": "2022-04-20",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7207,6 +8019,10 @@
       ]
      }
     ],
+    "issued": "2022-10-10",
+    "cvss_max": 7.0,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7234,6 +8050,10 @@
       ]
      }
     ],
+    "issued": "2022-10-25",
+    "cvss_max": 9.1,
+    "attack_vector": "網路",
+    "cves_network": 2,
     "subscribed": false
    },
    {
@@ -7263,6 +8083,10 @@
       ]
      }
     ],
+    "issued": "2022-12-08",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 3,
     "subscribed": false
    },
    {
@@ -7285,6 +8109,10 @@
       "binaries": []
      }
     ],
+    "issued": "2021-09-22",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7309,6 +8137,10 @@
       ]
      }
     ],
+    "issued": "2023-08-09",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7334,7 +8166,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2017-05-30",
+    "cvss_max": 6.4,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:353410000000",
@@ -7364,7 +8200,11 @@
        "libc6"
       ]
      }
-    ]
+    ],
+    "issued": "2018-01-17",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.xenial:def:470510000000",
@@ -7390,7 +8230,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2021-01-26",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:323910000000",
@@ -7419,7 +8263,11 @@
        "libc6"
       ]
      }
-    ]
+    ],
+    "issued": "2017-03-21",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 5
    },
    {
     "id": "oval:com.ubuntu.xenial:def:329410000000",
@@ -7446,7 +8294,11 @@
        "bash"
       ]
      }
-    ]
+    ],
+    "issued": "2017-05-17",
+    "cvss_max": 8.4,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.xenial:def:332310000000",
@@ -7471,7 +8323,11 @@
        "libc6"
       ]
      }
-    ]
+    ],
+    "issued": "2017-06-19",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:396810000000",
@@ -7497,7 +8353,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2019-05-06",
+    "cvss_max": 8.2,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:415410000000",
@@ -7522,7 +8382,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2019-10-14",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.xenial:def:441610000000",
@@ -7556,7 +8420,11 @@
        "libc6"
       ]
      }
-    ]
+    ],
+    "issued": "2020-07-06",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 5
    },
    {
     "id": "oval:com.ubuntu.xenial:def:405810000000",
@@ -7581,7 +8449,11 @@
        "bash"
       ]
      }
-    ]
+    ],
+    "issued": "2019-07-15",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:426310000000",
@@ -7606,7 +8478,11 @@
        "sudo"
       ]
      }
-    ]
+    ],
+    "issued": "2020-02-03",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:495410000000",
@@ -7632,7 +8508,11 @@
        "libc6"
       ]
      }
-    ]
+    ],
+    "issued": "2021-05-14",
+    "cvss_max": 8.1,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.xenial:def:323920000000",
@@ -7655,7 +8535,11 @@
        "libc6"
       ]
      }
-    ]
+    ],
+    "issued": "2017-03-21",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.xenial:def:491620000000",
@@ -7676,7 +8560,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2021-04-22",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    }
   ]
  },
@@ -7712,6 +8600,10 @@
       ]
      }
     ],
+    "issued": "2023-12-05",
+    "cvss_max": 7.0,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7739,6 +8631,10 @@
       ]
      }
     ],
+    "issued": "2025-03-05",
+    "cvss_max": 7.0,
+    "attack_vector": "本機",
+    "cves_network": 0,
     "subscribed": false
    },
    {
@@ -7928,7 +8824,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-12-17",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 23
    },
    {
     "id": "oval:com.ubuntu.jammy:def:738710000000",
@@ -8200,7 +9100,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-03-27",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 23
    },
    {
     "id": "oval:com.ubuntu.jammy:def:751010000000",
@@ -8347,7 +9251,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-05-16",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 10
    },
    {
     "id": "oval:com.ubuntu.jammy:def:790910000000",
@@ -8548,7 +9456,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-12-04",
+    "cvss_max": 9.2,
+    "attack_vector": "網路",
+    "cves_network": 19
    },
    {
     "id": "oval:com.ubuntu.jammy:def:809610000000",
@@ -8785,7 +9697,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-03-16",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 31
    },
    {
     "id": "oval:com.ubuntu.jammy:def:849310000000",
@@ -8872,7 +9788,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-07-01",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 31
    },
    {
     "id": "oval:com.ubuntu.jammy:def:857510000000",
@@ -9651,7 +10571,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-07-21",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 94
    },
    {
     "id": "oval:com.ubuntu.jammy:def:863110000000",
@@ -9692,7 +10616,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-08-12",
+    "cvss_max": 9.4,
+    "attack_vector": "網路",
+    "cves_network": 9
    },
    {
     "id": "oval:com.ubuntu.jammy:def:881840000000",
@@ -9735,7 +10663,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-09-30",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 14
    },
    {
     "id": "oval:com.ubuntu.jammy:def:887510000000",
@@ -10708,7 +11640,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-10-06",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 135
    },
    {
     "id": "oval:com.ubuntu.jammy:def:896110000000",
@@ -11798,7 +12734,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-11-03",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 149
    },
    {
     "id": "oval:com.ubuntu.jammy:def:902710000000",
@@ -11826,7 +12766,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-11-10",
+    "cvss_max": 9.4,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.jammy:def:642910000000",
@@ -11853,7 +12797,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2023-10-11",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.jammy:def:717910000000",
@@ -11889,7 +12837,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2024-12-20",
+    "cvss_max": 8.8,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:723510000000",
@@ -11915,7 +12867,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-01-28",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:728810000000",
@@ -12042,7 +12998,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-02-24",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 9
    },
    {
     "id": "oval:com.ubuntu.jammy:def:732710000000",
@@ -12066,7 +13026,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-03-05",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:740610000000",
@@ -12093,7 +13057,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-04-02",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:745510000000",
@@ -12128,7 +13096,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-04-24",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.jammy:def:749410000000",
@@ -12152,7 +13124,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-05-06",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:755010000000",
@@ -12178,7 +13154,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-06-03",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:759110000000",
@@ -12266,7 +13246,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-06-23",
+    "cvss_max": 8.6,
+    "attack_vector": "網路",
+    "cves_network": 7
    },
    {
     "id": "oval:com.ubuntu.jammy:def:760810000000",
@@ -12298,7 +13282,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-07-01",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:765410000000",
@@ -12460,7 +13448,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-07-18",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 12
    },
    {
     "id": "oval:com.ubuntu.jammy:def:768310000000",
@@ -12485,7 +13477,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-07-31",
+    "cvss_max": 7.3,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:770410000000",
@@ -12529,7 +13525,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-08-20",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.jammy:def:772610000000",
@@ -12555,7 +13555,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-08-28",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:777410000000",
@@ -12720,7 +13724,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-12-03",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 10
    },
    {
     "id": "oval:com.ubuntu.jammy:def:779310000000",
@@ -12746,7 +13754,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-10-02",
+    "cvss_max": 7.3,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:782430000000",
@@ -12769,7 +13781,11 @@
        "redis-server"
       ]
      }
-    ]
+    ],
+    "issued": "2025-10-16",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:786210000000",
@@ -12793,7 +13809,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-11-06",
+    "cvss_max": 5.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:792810000000",
@@ -12825,7 +13845,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-12-11",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:801310000000",
@@ -12850,7 +13874,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-02-04",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:803310000000",
@@ -12986,7 +14014,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-02-12",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 17
    },
    {
     "id": "oval:com.ubuntu.jammy:def:806010000000",
@@ -13011,7 +14043,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-02-24",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:815910000000",
@@ -13037,7 +14073,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-04-08",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:818010000000",
@@ -13139,7 +14179,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-04-16",
+    "cvss_max": 8.7,
+    "attack_vector": "網路",
+    "cves_network": 6
    },
    {
     "id": "oval:com.ubuntu.jammy:def:825510000000",
@@ -13166,7 +14210,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-05-07",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:827910000000",
@@ -13200,7 +14248,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-05-19",
+    "cvss_max": 8.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:838810000000",
@@ -13229,7 +14281,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-06-04",
+    "cvss_max": 8.5,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:841410000000",
@@ -13263,7 +14319,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2026-06-09",
+    "cvss_max": 9.1,
+    "attack_vector": "網路",
+    "cves_network": 10
    },
    {
     "id": "oval:com.ubuntu.jammy:def:865810000000",
@@ -13289,7 +14349,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-08-20",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:884710000000",
@@ -13319,7 +14383,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2026-09-29",
+    "cvss_max": 8.2,
+    "attack_vector": "網路",
+    "cves_network": 6
    },
    {
     "id": "oval:com.ubuntu.jammy:def:623710000000",
@@ -13346,7 +14414,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2023-07-19",
+    "cvss_max": 5.9,
+    "attack_vector": "網路",
+    "cves_network": 2
    },
    {
     "id": "oval:com.ubuntu.jammy:def:645010000000",
@@ -13374,7 +14446,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2023-10-24",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 4
    },
    {
     "id": "oval:com.ubuntu.jammy:def:653510000000",
@@ -13400,7 +14476,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2023-12-06",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:669710000000",
@@ -13425,7 +14505,11 @@
        "bash"
       ]
      }
-    ]
+    ],
+    "issued": "2024-03-18",
+    "cvss_max": 7.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:671810000000",
@@ -13451,7 +14535,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2024-03-27",
+    "cvss_max": 8.6,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:685410000000",
@@ -13476,7 +14564,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-06-27",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:694410000000",
@@ -13502,7 +14594,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2024-08-05",
+    "cvss_max": 6.3,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:698610000000",
@@ -13527,7 +14623,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-09-03",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:701210000000",
@@ -13553,7 +14653,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2024-09-16",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:778610000000",
@@ -13578,7 +14682,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2025-09-30",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:782910000000",
@@ -13605,7 +14713,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2025-10-20",
+    "cvss_max": 6.8,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:798010000000",
@@ -13637,7 +14749,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2026-01-27",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 5
    },
    {
     "id": "oval:com.ubuntu.jammy:def:806210000000",
@@ -13666,7 +14782,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-02-25",
+    "cvss_max": 6.3,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.jammy:def:808410000000",
@@ -13695,7 +14815,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-03-11",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 4
    },
    {
     "id": "oval:com.ubuntu.jammy:def:815510000000",
@@ -13725,7 +14849,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2026-04-08",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 6
    },
    {
     "id": "oval:com.ubuntu.jammy:def:822710000000",
@@ -13757,7 +14885,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-05-04",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 7
    },
    {
     "id": "oval:com.ubuntu.jammy:def:848710000000",
@@ -13788,7 +14920,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-06-30",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 6
    },
    {
     "id": "oval:com.ubuntu.jammy:def:865110000000",
@@ -13814,7 +14950,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-08-19",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:867810000000",
@@ -13843,7 +14983,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2026-08-25",
+    "cvss_max": 9.1,
+    "attack_vector": "網路",
+    "cves_network": 5
    },
    {
     "id": "oval:com.ubuntu.jammy:def:873010000000",
@@ -13867,7 +15011,11 @@
       ],
       "binaries": []
      }
-    ]
+    ],
+    "issued": "2026-09-07",
+    "cvss_max": 6.9,
+    "attack_vector": "本機",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:882010000000",
@@ -13895,7 +15043,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-09-24",
+    "cvss_max": 9.1,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.jammy:def:886610000000",
@@ -13920,7 +15072,11 @@
        "redis-server"
       ]
      }
-    ]
+    ],
+    "issued": "2026-10-06",
+    "cvss_max": 7.1,
+    "attack_vector": "相鄰網路",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:893210000000",
@@ -13953,7 +15109,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-10-14",
+    "cvss_max": 9.1,
+    "attack_vector": "網路",
+    "cves_network": 8
    },
    {
     "id": "oval:com.ubuntu.jammy:def:662210000000",
@@ -13981,7 +15141,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-02-05",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 3
    },
    {
     "id": "oval:com.ubuntu.jammy:def:693710000000",
@@ -14009,7 +15173,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-07-31",
+    "cvss_max": 9.8,
+    "attack_vector": "網路",
+    "cves_network": 4
    },
    {
     "id": "oval:com.ubuntu.jammy:def:710410000000",
@@ -14035,7 +15203,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2024-11-18",
+    "cvss_max": 6.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:716210000000",
@@ -14061,7 +15233,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2024-12-16",
+    "cvss_max": 3.4,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:727810000000",
@@ -14087,7 +15263,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2025-02-20",
+    "cvss_max": 8.8,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:867020000000",
@@ -14113,7 +15293,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2026-08-25",
+    "cvss_max": 7.5,
+    "attack_vector": "網路",
+    "cves_network": 1
    },
    {
     "id": "oval:com.ubuntu.jammy:def:549520000000",
@@ -14137,7 +15321,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2025-09-29",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:623720000000",
@@ -14161,7 +15349,11 @@
        "libcurl4"
       ]
      }
-    ]
+    ],
+    "issued": "2023-07-19",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:666310000000",
@@ -14184,7 +15376,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2024-02-27",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    },
    {
     "id": "oval:com.ubuntu.jammy:def:862510000000",
@@ -14207,7 +15403,11 @@
        "openssl"
       ]
      }
-    ]
+    ],
+    "issued": "2026-07-30",
+    "cvss_max": null,
+    "attack_vector": "官方未提供",
+    "cves_network": 0
    }
   ]
  }

@@ -1,6 +1,6 @@
 {
   "schema": "offline-ubuntu-healthcheck/0.6",
-  "tool_version": "0.6",
+  "tool_version": "0.6.1",
   "basis_month": "2026-11",
   "deidentified": false,
   "warnings": [],
@@ -10,21 +10,21 @@
       "file": "oci.com.ubuntu.focal.usn.oval.xml.bz2",
       "sha256": "745951677f4d0c614d55d5e7797c62a47a2b6b76c8f61d4f4980cc43b424b7a6",
       "timestamp": "2026-11-18T21:11:51",
-      "age_days": 1,
+      "age_days": 2,
       "recorded": true
     },
     "jammy": {
       "file": "oci.com.ubuntu.jammy.usn.oval.xml.bz2",
       "sha256": "1b9f50d782f9890b71d0109557ab1f87387f2a6ef2e1ab76a0cc510c5c150836",
       "timestamp": "2026-11-18T21:11:14",
-      "age_days": 1,
+      "age_days": 2,
       "recorded": true
     },
     "xenial": {
       "file": "oci.com.ubuntu.xenial.usn.oval.xml.bz2",
       "sha256": "afc265647e4eb8b3ddd6346eda202f13aa4887cfc9ba92fe8eeeb783f31edf04",
       "timestamp": "2026-11-18T21:12:48",
-      "age_days": 1,
+      "age_days": 2,
       "recorded": true
     }
   },
@@ -116,6 +116,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-10-02",
           "packages": [
             "linux"
           ]
@@ -128,6 +131,9 @@
             "esm-infra"
           ],
           "cve_count": 23,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-07-28",
           "packages": [
             "linux"
           ]
@@ -140,6 +146,9 @@
             "esm-infra"
           ],
           "cve_count": 32,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-08-20",
           "packages": [
             "linux"
           ]
@@ -152,6 +161,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2026-09-30",
           "packages": [
             "linux"
           ]
@@ -164,6 +176,9 @@
             "esm-infra"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2026-10-13",
           "packages": [
             "linux"
           ]
@@ -176,6 +191,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 9.3,
+          "issued": "2026-11-10",
           "packages": [
             "linux"
           ]
@@ -188,6 +206,9 @@
             "esm-infra"
           ],
           "cve_count": 31,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2025-06-19",
           "packages": [
             "linux"
           ]
@@ -200,6 +221,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 2.8,
+          "issued": "2025-06-30",
           "packages": [
             "sudo"
           ]
@@ -212,6 +236,9 @@
             "esm-infra"
           ],
           "cve_count": 11,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2025-07-25",
           "packages": [
             "linux"
           ]
@@ -224,6 +251,9 @@
             "esm-infra"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2025-08-19",
           "packages": [
             "linux"
           ]
@@ -236,6 +266,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2025-09-17",
           "packages": [
             "linux"
           ]
@@ -248,6 +281,9 @@
             "esm-infra"
           ],
           "cve_count": 8,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-11-19",
           "packages": [
             "linux"
           ]
@@ -260,6 +296,9 @@
             "esm-infra"
           ],
           "cve_count": 15,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-12-10",
           "packages": [
             "linux"
           ]
@@ -272,6 +311,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2026-01-30",
           "packages": [
             "linux"
           ]
@@ -284,6 +326,9 @@
             "esm-infra"
           ],
           "cve_count": 8,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.8,
+          "issued": "2026-03-16",
           "packages": [
             "linux"
           ]
@@ -296,6 +341,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2026-04-22",
           "packages": [
             "linux"
           ]
@@ -308,6 +356,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-05-19",
           "packages": [
             "linux"
           ]
@@ -320,6 +371,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2026-05-19",
           "packages": [
             "linux"
           ]
@@ -332,6 +386,9 @@
             "esm-infra"
           ],
           "cve_count": 12,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2026-06-03",
           "packages": [
             "nginx"
           ]
@@ -344,6 +401,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2026-06-04",
           "packages": [
             "linux"
           ]
@@ -356,6 +416,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2026-06-09",
           "packages": [
             "openssl"
           ]
@@ -368,6 +431,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2026-09-02",
           "packages": [
             "linux"
           ]
@@ -380,6 +446,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2026-09-29",
           "packages": [
             "openssl"
           ]
@@ -392,6 +461,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2026-11-03",
           "packages": [
             "linux"
           ]
@@ -404,6 +476,9 @@
             "esm-apps"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 5.5,
+          "issued": "2022-11-24",
           "packages": [
             "imagemagick"
           ]
@@ -416,6 +491,9 @@
             "esm-apps"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 6.2,
+          "issued": "2024-02-01",
           "packages": [
             "imagemagick"
           ]
@@ -428,6 +506,9 @@
             "esm-apps"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 7.4,
+          "issued": "2025-09-01",
           "packages": [
             "imagemagick"
           ]
@@ -440,6 +521,9 @@
             "esm-apps"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2025-09-18",
           "packages": [
             "imagemagick"
           ]
@@ -452,6 +536,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2025-09-30",
           "packages": [
             "openssl"
           ]
@@ -464,6 +551,9 @@
             "esm-apps"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2025-10-08",
           "packages": [
             "imagemagick"
           ]
@@ -476,6 +566,9 @@
             "esm-apps"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2025-11-20",
           "packages": [
             "imagemagick"
           ]
@@ -488,6 +581,9 @@
             "esm-infra"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-01-27",
           "packages": [
             "openssl"
           ]
@@ -500,6 +596,9 @@
             "esm-apps"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 5.3,
+          "issued": "2026-02-03",
           "packages": [
             "imagemagick"
           ]
@@ -512,6 +611,9 @@
             "esm-apps"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2026-02-10",
           "packages": [
             "imagemagick"
           ]
@@ -524,6 +626,9 @@
             "esm-apps"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 7.4,
+          "issued": "2026-03-04",
           "packages": [
             "imagemagick"
           ]
@@ -536,6 +641,9 @@
             "esm-apps"
           ],
           "cve_count": 10,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2026-03-30",
           "packages": [
             "imagemagick"
           ]
@@ -548,6 +656,9 @@
             "esm-apps"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 8.6,
+          "issued": "2026-05-11",
           "packages": [
             "imagemagick"
           ]
@@ -560,6 +671,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-07-02",
           "packages": [
             "nginx"
           ]
@@ -572,6 +686,9 @@
             "esm-apps"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2026-06-24",
           "packages": [
             "imagemagick"
           ]
@@ -584,6 +701,9 @@
             "esm-apps"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2026-07-20",
           "packages": [
             "imagemagick"
           ]
@@ -596,6 +716,9 @@
             "esm-apps"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 6.8,
+          "issued": "2026-08-10",
           "packages": [
             "imagemagick"
           ]
@@ -608,6 +731,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-08-25",
           "packages": [
             "openssl"
           ]
@@ -620,6 +746,9 @@
             "esm-apps"
           ],
           "cve_count": 13,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2026-09-08",
           "packages": [
             "imagemagick"
           ]
@@ -632,6 +761,9 @@
             "esm-apps"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 5.5,
+          "issued": "2026-09-24",
           "packages": [
             "imagemagick"
           ]
@@ -644,6 +776,9 @@
             "esm-apps"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 3.7,
+          "issued": "2026-09-30",
           "packages": [
             "imagemagick"
           ]
@@ -656,6 +791,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2026-11-12",
           "packages": [
             "sudo"
           ]
@@ -668,6 +806,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2026-11-05",
           "packages": [
             "nginx"
           ]
@@ -680,6 +821,9 @@
             "esm-apps"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.1,
+          "issued": "2023-09-21",
           "packages": [
             "imagemagick"
           ]
@@ -692,6 +836,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2026-04-09",
           "packages": [
             "openssl"
           ]
@@ -704,6 +851,9 @@
             "focal"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2023-12-11",
           "packages": [
             "linux"
           ]
@@ -716,6 +866,9 @@
             "focal"
           ],
           "cve_count": 83,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2024-08-08",
           "packages": [
             "linux"
           ]
@@ -728,6 +881,9 @@
             "focal"
           ],
           "cve_count": 143,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-02-26",
           "packages": [
             "linux"
           ]
@@ -740,6 +896,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2020-12-08",
           "packages": [
             "openssl"
           ]
@@ -752,6 +911,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2021-01-26",
           "packages": [
             "sudo"
           ]
@@ -764,6 +926,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2021-03-25",
           "packages": [
             "openssl"
           ]
@@ -776,6 +941,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2021-08-24",
           "packages": [
             "openssl"
           ]
@@ -788,6 +956,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2022-03-15",
           "packages": [
             "openssl"
           ]
@@ -800,6 +971,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2023-02-07",
           "packages": [
             "openssl"
           ]
@@ -812,6 +986,9 @@
             "focal"
           ],
           "cve_count": 5,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-06-01",
           "packages": [
             "linux"
           ]
@@ -824,6 +1001,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-06-29",
           "packages": [
             "linux"
           ]
@@ -836,6 +1016,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-07-26",
           "packages": [
             "linux"
           ]
@@ -848,6 +1031,9 @@
             "focal"
           ],
           "cve_count": 16,
+          "attack_vector": "網路",
+          "cvss_max": 8.4,
+          "issued": "2023-08-11",
           "packages": [
             "linux"
           ]
@@ -860,6 +1046,9 @@
             "focal"
           ],
           "cve_count": 5,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-08-29",
           "packages": [
             "linux"
           ]
@@ -872,6 +1061,9 @@
             "focal"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 10.0,
+          "issued": "2023-09-05",
           "packages": [
             "linux"
           ]
@@ -884,6 +1076,9 @@
             "focal"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-09-19",
           "packages": [
             "linux"
           ]
@@ -896,6 +1091,9 @@
             "focal"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2023-10-04",
           "packages": [
             "linux"
           ]
@@ -908,6 +1106,9 @@
             "focal"
           ],
           "cve_count": 9,
+          "attack_vector": "本機",
+          "cvss_max": 8.9,
+          "issued": "2023-10-19",
           "packages": [
             "linux"
           ]
@@ -920,6 +1121,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2024-01-25",
           "packages": [
             "linux"
           ]
@@ -932,6 +1136,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 7.3,
+          "issued": "2024-02-07",
           "packages": [
             "linux"
           ]
@@ -944,6 +1151,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2024-02-22",
           "packages": [
             "linux"
           ]
@@ -956,6 +1166,9 @@
             "focal"
           ],
           "cve_count": 8,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2024-03-06",
           "packages": [
             "linux"
           ]
@@ -968,6 +1181,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2024-03-19",
           "packages": [
             "linux"
           ]
@@ -980,6 +1196,9 @@
             "focal"
           ],
           "cve_count": 23,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2024-04-09",
           "packages": [
             "linux"
           ]
@@ -992,6 +1211,9 @@
             "focal"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 8.4,
+          "issued": "2024-04-19",
           "packages": [
             "linux"
           ]
@@ -1004,6 +1226,9 @@
             "focal"
           ],
           "cve_count": 47,
+          "attack_vector": "網路",
+          "cvss_max": 8.9,
+          "issued": "2024-05-07",
           "packages": [
             "linux"
           ]
@@ -1016,6 +1241,9 @@
             "focal"
           ],
           "cve_count": 41,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2024-06-12",
           "packages": [
             "linux"
           ]
@@ -1028,6 +1256,9 @@
             "focal"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 5.7,
+          "issued": "2024-07-03",
           "packages": [
             "linux"
           ]
@@ -1040,6 +1271,9 @@
             "focal"
           ],
           "cve_count": 147,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2024-07-12",
           "packages": [
             "linux"
           ]
@@ -1052,6 +1286,9 @@
             "focal"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2024-07-29",
           "packages": [
             "linux"
           ]
@@ -1064,6 +1301,9 @@
             "focal"
           ],
           "cve_count": 9,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.4,
+          "issued": "2024-08-21",
           "packages": [
             "linux"
           ]
@@ -1076,6 +1316,9 @@
             "focal"
           ],
           "cve_count": 85,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2024-09-12",
           "packages": [
             "linux"
           ]
@@ -1088,6 +1331,9 @@
             "focal"
           ],
           "cve_count": 10,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2024-09-18",
           "packages": [
             "linux"
           ]
@@ -1100,6 +1346,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2024-10-16",
           "packages": [
             "linux"
           ]
@@ -1112,6 +1361,9 @@
             "focal"
           ],
           "cve_count": 162,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2024-10-31",
           "packages": [
             "linux"
           ]
@@ -1124,6 +1376,9 @@
             "focal"
           ],
           "cve_count": 23,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2024-12-12",
           "packages": [
             "linux"
           ]
@@ -1136,6 +1391,9 @@
             "focal"
           ],
           "cve_count": 16,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2024-12-17",
           "packages": [
             "linux"
           ]
@@ -1148,6 +1406,9 @@
             "focal"
           ],
           "cve_count": 5,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-01-28",
           "packages": [
             "linux"
           ]
@@ -1160,6 +1421,9 @@
             "focal"
           ],
           "cve_count": 152,
+          "attack_vector": "網路",
+          "cvss_max": 8.9,
+          "issued": "2025-03-28",
           "packages": [
             "linux"
           ]
@@ -1172,6 +1436,9 @@
             "focal"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-04-02",
           "packages": [
             "linux"
           ]
@@ -1184,6 +1451,9 @@
             "focal"
           ],
           "cve_count": 11,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2025-04-24",
           "packages": [
             "linux"
           ]
@@ -1196,6 +1466,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-05-06",
           "packages": [
             "linux"
           ]
@@ -1208,6 +1481,9 @@
             "focal"
           ],
           "cve_count": 89,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2025-05-16",
           "packages": [
             "linux"
           ]
@@ -1220,6 +1496,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2021-02-18",
           "packages": [
             "openssl"
           ]
@@ -1232,6 +1511,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.7,
+          "issued": "2021-05-26",
           "packages": [
             "nginx"
           ]
@@ -1244,6 +1526,9 @@
             "focal"
           ],
           "cve_count": 33,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2021-06-15",
           "packages": [
             "imagemagick"
           ]
@@ -1256,6 +1541,9 @@
             "focal"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2022-04-12",
           "packages": [
             "nginx"
           ]
@@ -1268,6 +1556,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2022-05-04",
           "packages": [
             "openssl"
           ]
@@ -1280,6 +1571,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2022-06-21",
           "packages": [
             "openssl"
           ]
@@ -1292,6 +1586,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 5.3,
+          "issued": "2022-07-05",
           "packages": [
             "openssl"
           ]
@@ -1304,6 +1601,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2022-11-15",
           "packages": [
             "nginx"
           ]
@@ -1316,6 +1616,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-01-18",
           "packages": [
             "sudo"
           ]
@@ -1328,6 +1631,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2023-03-15",
           "packages": [
             "imagemagick"
           ]
@@ -1340,6 +1646,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 5.3,
+          "issued": "2023-04-11",
           "packages": [
             "sudo"
           ]
@@ -1352,6 +1661,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2023-05-30",
           "packages": [
             "openssl"
           ]
@@ -1364,6 +1676,9 @@
             "focal"
           ],
           "cve_count": 8,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-06-16",
           "packages": [
             "linux"
           ]
@@ -1376,6 +1691,9 @@
             "focal"
           ],
           "cve_count": 14,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2023-07-04",
           "packages": [
             "imagemagick"
           ]
@@ -1388,6 +1706,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 5.5,
+          "issued": "2024-07-25",
           "packages": [
             "imagemagick"
           ]
@@ -1400,6 +1721,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 6.8,
+          "issued": "2023-10-31",
           "packages": [
             "linux"
           ]
@@ -1412,6 +1736,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.5,
+          "issued": "2023-11-21",
           "packages": [
             "linux"
           ]
@@ -1424,6 +1751,9 @@
             "focal"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2024-05-16",
           "packages": [
             "linux"
           ]
@@ -1436,6 +1766,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 4.7,
+          "issued": "2024-09-16",
           "packages": [
             "nginx"
           ]
@@ -1448,6 +1781,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 4.3,
+          "issued": "2025-02-24",
           "packages": [
             "nginx"
           ]
@@ -1460,6 +1796,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 5.5,
+          "issued": "2025-04-16",
           "packages": [
             "imagemagick"
           ]
@@ -1472,6 +1811,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2020-09-28",
           "packages": [
             "imagemagick"
           ]
@@ -1484,6 +1826,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 3.3,
+          "issued": "2020-12-15",
           "packages": [
             "imagemagick"
           ]
@@ -1496,6 +1841,9 @@
             "focal"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2022-04-20",
           "packages": [
             "bash"
           ]
@@ -1508,6 +1856,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2023-04-25",
           "packages": [
             "openssl"
           ]
@@ -1520,6 +1871,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 5.3,
+          "issued": "2023-10-25",
           "packages": [
             "openssl"
           ]
@@ -1532,6 +1886,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 5.5,
+          "issued": "2024-02-05",
           "packages": [
             "openssl"
           ]
@@ -1544,6 +1901,9 @@
             "focal"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2024-07-31",
           "packages": [
             "openssl"
           ]
@@ -1556,6 +1916,9 @@
             "focal"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2025-02-20",
           "packages": [
             "openssl"
           ]
@@ -1568,6 +1931,9 @@
             "focal"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2023-03-31",
           "packages": [
             "imagemagick"
           ]
@@ -1580,6 +1946,9 @@
             "focal"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2024-02-27",
           "packages": [
             "openssl"
           ]
@@ -1601,6 +1970,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 2,
+          "issued": "2025-10-02",
           "commands": [
             "sudo pro fix USN-7795-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1617,6 +1990,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 14,
+          "issued": "2026-07-28",
           "commands": [
             "sudo pro fix USN-8615-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1633,6 +2010,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 15,
+          "issued": "2026-08-20",
           "commands": [
             "sudo pro fix USN-8666-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1649,6 +2030,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 2,
+          "issued": "2026-09-30",
           "commands": [
             "sudo pro fix USN-8851-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1665,6 +2050,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 2,
+          "issued": "2026-10-13",
           "commands": [
             "sudo pro fix USN-8919-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1681,6 +2070,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.3,
+          "cves_network": 3,
+          "issued": "2026-11-10",
           "commands": [
             "sudo pro fix USN-9030-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1697,6 +2090,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 3,
+          "issued": "2025-06-19",
           "commands": [
             "sudo pro fix USN-7585-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1715,6 +2112,10 @@
           "binaries": [
             "sudo"
           ],
+          "attack_vector": "本機",
+          "cvss_max": 2.8,
+          "cves_network": 0,
+          "issued": "2025-06-30",
           "commands": [
             "sudo pro fix USN-7604-2",
             "sudo apt update && sudo apt install --only-upgrade sudo"
@@ -1731,6 +2132,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2025-07-25",
           "commands": [
             "sudo pro fix USN-7671-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1747,6 +2152,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 1,
+          "issued": "2025-08-19",
           "commands": [
             "sudo pro fix USN-7701-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1763,6 +2172,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2025-09-17",
           "commands": [
             "sudo pro fix USN-7754-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1779,6 +2192,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-11-19",
           "commands": [
             "sudo pro fix USN-7874-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1795,6 +2212,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-12-10",
           "commands": [
             "sudo pro fix USN-7922-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1811,6 +2232,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2026-01-30",
           "commands": [
             "sudo pro fix USN-7990-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1827,6 +2252,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2026-03-16",
           "commands": [
             "sudo pro fix USN-8098-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1843,6 +2272,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2026-04-22",
           "commands": [
             "sudo pro fix USN-8200-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1859,6 +2292,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 1,
+          "issued": "2026-05-19",
           "commands": [
             "sudo pro fix USN-8273-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1875,6 +2312,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2026-05-19",
           "commands": [
             "sudo pro fix USN-8280-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1894,6 +2335,10 @@
             "nginx",
             "nginx-core"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 10,
+          "issued": "2026-06-03",
           "commands": [
             "sudo pro fix USN-8375-1",
             "sudo apt update && sudo apt install --only-upgrade nginx nginx-core"
@@ -1910,6 +2355,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2026-06-04",
           "commands": [
             "sudo pro fix USN-8389-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1929,6 +2378,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 5,
+          "issued": "2026-06-09",
           "commands": [
             "sudo pro fix USN-8414-2",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -1945,6 +2398,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 4,
+          "issued": "2026-09-02",
           "commands": [
             "sudo pro fix USN-8714-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1964,6 +2421,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 4,
+          "issued": "2026-09-29",
           "commands": [
             "sudo pro fix USN-8847-2",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -1980,6 +2441,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 1,
+          "issued": "2026-11-03",
           "commands": [
             "sudo pro fix USN-8964-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -1996,6 +2461,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 1,
+          "issued": "2023-12-11",
           "commands": [
             "sudo pro fix USN-6548-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2012,6 +2481,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 8,
+          "issued": "2024-08-08",
           "commands": [
             "sudo pro fix USN-6951-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2028,6 +2501,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 20,
+          "issued": "2025-02-26",
           "commands": [
             "sudo pro fix USN-7293-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2047,6 +2524,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "cves_network": 1,
+          "issued": "2020-12-08",
           "commands": [
             "sudo pro fix USN-4662-1",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -2065,6 +2546,10 @@
           "binaries": [
             "sudo"
           ],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2021-01-26",
           "commands": [
             "sudo pro fix USN-4705-1",
             "sudo apt update && sudo apt install --only-upgrade sudo"
@@ -2084,6 +2569,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "cves_network": 1,
+          "issued": "2021-03-25",
           "commands": [
             "sudo pro fix USN-4891-1",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -2103,6 +2592,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 2,
+          "issued": "2021-08-24",
           "commands": [
             "sudo pro fix USN-5051-1",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -2122,6 +2615,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "cves_network": 1,
+          "issued": "2022-03-15",
           "commands": [
             "sudo pro fix USN-5328-1",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -2141,6 +2638,10 @@
             "libssl1.1",
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "cves_network": 4,
+          "issued": "2023-02-07",
           "commands": [
             "sudo pro fix USN-5844-1",
             "sudo apt update && sudo apt install --only-upgrade libssl1.1 openssl"
@@ -2157,6 +2658,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-06-01",
           "commands": [
             "sudo pro fix USN-6131-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2173,6 +2678,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-06-29",
           "commands": [
             "sudo pro fix USN-6193-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2189,6 +2698,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-07-26",
           "commands": [
             "sudo pro fix USN-6251-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2205,6 +2718,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.4,
+          "cves_network": 1,
+          "issued": "2023-08-11",
           "commands": [
             "sudo pro fix USN-6284-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2221,6 +2738,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-08-29",
           "commands": [
             "sudo pro fix USN-6317-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2237,6 +2758,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 10.0,
+          "cves_network": 1,
+          "issued": "2023-09-05",
           "commands": [
             "sudo pro fix USN-6340-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2253,6 +2778,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-09-19",
           "commands": [
             "sudo pro fix USN-6387-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2269,6 +2798,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 2,
+          "issued": "2023-10-04",
           "commands": [
             "sudo pro fix USN-6417-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2285,6 +2818,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.9,
+          "cves_network": 0,
+          "issued": "2023-10-19",
           "commands": [
             "sudo pro fix USN-6441-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2301,6 +2838,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2024-01-25",
           "commands": [
             "sudo pro fix USN-6605-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2317,6 +2858,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.3,
+          "cves_network": 1,
+          "issued": "2024-02-07",
           "commands": [
             "sudo pro fix USN-6625-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2333,6 +2878,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 1,
+          "issued": "2024-02-22",
           "commands": [
             "sudo pro fix USN-6648-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2349,6 +2898,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 1,
+          "issued": "2024-03-06",
           "commands": [
             "sudo pro fix USN-6681-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2365,6 +2918,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2024-03-19",
           "commands": [
             "sudo pro fix USN-6702-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2381,6 +2938,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 4,
+          "issued": "2024-04-09",
           "commands": [
             "sudo pro fix USN-6726-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2397,6 +2958,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.4,
+          "cves_network": 2,
+          "issued": "2024-04-19",
           "commands": [
             "sudo pro fix USN-6741-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2413,6 +2978,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.9,
+          "cves_network": 5,
+          "issued": "2024-05-07",
           "commands": [
             "sudo pro fix USN-6767-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2429,6 +2998,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 3,
+          "issued": "2024-06-12",
           "commands": [
             "sudo pro fix USN-6831-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2445,6 +3018,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 5.7,
+          "cves_network": 0,
+          "issued": "2024-07-03",
           "commands": [
             "sudo pro fix USN-6868-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2461,6 +3038,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 14,
+          "issued": "2024-07-12",
           "commands": [
             "sudo pro fix USN-6896-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2477,6 +3058,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "cves_network": 1,
+          "issued": "2024-07-29",
           "commands": [
             "sudo pro fix USN-6924-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2493,6 +3078,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.4,
+          "cves_network": 0,
+          "issued": "2024-08-21",
           "commands": [
             "sudo pro fix USN-6973-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2509,6 +3098,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 4,
+          "issued": "2024-09-12",
           "commands": [
             "sudo pro fix USN-7003-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2525,6 +3118,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 1,
+          "issued": "2024-09-18",
           "commands": [
             "sudo pro fix USN-7022-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2541,6 +3138,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2024-10-16",
           "commands": [
             "sudo pro fix USN-7073-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2557,6 +3158,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 16,
+          "issued": "2024-10-31",
           "commands": [
             "sudo pro fix USN-7088-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2573,6 +3178,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 3,
+          "issued": "2024-12-12",
           "commands": [
             "sudo pro fix USN-7159-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2589,6 +3198,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 1,
+          "issued": "2024-12-17",
           "commands": [
             "sudo pro fix USN-7173-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2605,6 +3218,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-01-28",
           "commands": [
             "sudo pro fix USN-7234-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2621,6 +3238,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.9,
+          "cves_network": 7,
+          "issued": "2025-03-28",
           "commands": [
             "sudo pro fix USN-7391-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2637,6 +3258,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-04-02",
           "commands": [
             "sudo pro fix USN-7408-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2653,6 +3278,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 2,
+          "issued": "2025-04-24",
           "commands": [
             "sudo pro fix USN-7461-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2669,6 +3298,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-05-06",
           "commands": [
             "sudo pro fix USN-7495-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2685,6 +3318,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 5,
+          "issued": "2025-05-16",
           "commands": [
             "sudo pro fix USN-7516-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -2939,6 +3576,9 @@
             "esm-infra"
           ],
           "cve_count": 35,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-03-05",
           "packages": [
             "linux"
           ]
@@ -2951,6 +3591,9 @@
             "esm-infra"
           ],
           "cve_count": 10,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-10-02",
           "packages": [
             "linux"
           ]
@@ -2963,6 +3606,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 20,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-08-13",
           "packages": [
             "linux"
           ]
@@ -2975,6 +3621,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 16,
+          "attack_vector": "網路",
+          "cvss_max": 9.4,
+          "issued": "2026-08-20",
           "packages": [
             "linux"
           ]
@@ -2987,6 +3636,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 8,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2026-09-04",
           "packages": [
             "linux"
           ]
@@ -2999,6 +3651,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2026-10-02",
           "packages": [
             "linux"
           ]
@@ -3011,6 +3666,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2021-07-20",
           "packages": [
             "linux"
           ]
@@ -3023,6 +3681,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.3,
+          "issued": "2021-08-12",
           "packages": [
             "linux"
           ]
@@ -3035,6 +3696,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 8.8,
+          "issued": "2021-09-08",
           "packages": [
             "linux"
           ]
@@ -3047,6 +3711,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 4.4,
+          "issued": "2022-01-06",
           "packages": [
             "linux"
           ]
@@ -3059,6 +3726,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 6.5,
+          "issued": "2022-03-09",
           "packages": [
             "linux"
           ]
@@ -3071,6 +3741,9 @@
             "esm-infra"
           ],
           "cve_count": 30,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2022-03-22",
           "packages": [
             "linux"
           ]
@@ -3083,6 +3756,9 @@
             "esm-infra"
           ],
           "cve_count": 13,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.3,
+          "issued": "2022-04-01",
           "packages": [
             "linux"
           ]
@@ -3095,6 +3771,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2022-05-12",
           "packages": [
             "linux"
           ]
@@ -3107,6 +3786,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 4.8,
+          "issued": "2022-06-08",
           "packages": [
             "linux"
           ]
@@ -3119,6 +3801,9 @@
             "esm-infra"
           ],
           "cve_count": 8,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2022-07-01",
           "packages": [
             "linux"
           ]
@@ -3131,6 +3816,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2022-07-29",
           "packages": [
             "linux"
           ]
@@ -3143,6 +3831,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 5.3,
+          "issued": "2022-08-09",
           "packages": [
             "linux"
           ]
@@ -3155,6 +3846,9 @@
             "esm-infra"
           ],
           "cve_count": 14,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2022-09-30",
           "packages": [
             "linux"
           ]
@@ -3167,6 +3861,9 @@
             "esm-infra"
           ],
           "cve_count": 13,
+          "attack_vector": "網路",
+          "cvss_max": 7.2,
+          "issued": "2022-12-01",
           "packages": [
             "linux"
           ]
@@ -3179,6 +3876,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2023-01-12",
           "packages": [
             "linux"
           ]
@@ -3191,6 +3891,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.7,
+          "issued": "2023-03-06",
           "packages": [
             "linux"
           ]
@@ -3203,6 +3906,9 @@
             "esm-infra"
           ],
           "cve_count": 50,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2023-04-12",
           "packages": [
             "linux"
           ]
@@ -3215,6 +3921,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2023-04-26",
           "packages": [
             "linux"
           ]
@@ -3227,6 +3936,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-06-08",
           "packages": [
             "linux"
           ]
@@ -3239,6 +3951,9 @@
             "esm-infra"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2023-07-12",
           "packages": [
             "linux"
           ]
@@ -3251,6 +3966,9 @@
             "esm-infra"
           ],
           "cve_count": 12,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2023-07-26",
           "packages": [
             "linux"
           ]
@@ -3263,6 +3981,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-08-28",
           "packages": [
             "linux"
           ]
@@ -3275,6 +3996,9 @@
             "esm-infra"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2023-09-19",
           "packages": [
             "linux"
           ]
@@ -3287,6 +4011,9 @@
             "esm-infra"
           ],
           "cve_count": 11,
+          "attack_vector": "網路",
+          "cvss_max": 8.9,
+          "issued": "2023-10-19",
           "packages": [
             "linux"
           ]
@@ -3299,6 +4026,9 @@
             "esm-infra"
           ],
           "cve_count": 9,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-12-05",
           "packages": [
             "linux"
           ]
@@ -3311,6 +4041,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2024-01-25",
           "packages": [
             "linux"
           ]
@@ -3323,6 +4056,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 5.8,
+          "issued": "2024-02-20",
           "packages": [
             "linux"
           ]
@@ -3335,6 +4071,9 @@
             "esm-infra"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2024-03-18",
           "packages": [
             "linux"
           ]
@@ -3347,6 +4086,9 @@
             "esm-infra"
           ],
           "cve_count": 17,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2024-04-19",
           "packages": [
             "linux"
           ]
@@ -3359,6 +4101,9 @@
             "esm-infra"
           ],
           "cve_count": 14,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2024-05-16",
           "packages": [
             "linux"
           ]
@@ -3371,6 +4116,9 @@
             "esm-infra"
           ],
           "cve_count": 8,
+          "attack_vector": "網路",
+          "cvss_max": 7.1,
+          "issued": "2024-07-03",
           "packages": [
             "linux"
           ]
@@ -3383,6 +4131,9 @@
             "esm-infra"
           ],
           "cve_count": 31,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2024-07-31",
           "packages": [
             "linux"
           ]
@@ -3395,6 +4146,9 @@
             "esm-infra"
           ],
           "cve_count": 27,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.4,
+          "issued": "2024-08-21",
           "packages": [
             "linux"
           ]
@@ -3407,6 +4161,9 @@
             "esm-infra"
           ],
           "cve_count": 22,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2024-09-26",
           "packages": [
             "linux"
           ]
@@ -3419,6 +4176,9 @@
             "esm-infra"
           ],
           "cve_count": 20,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2024-11-14",
           "packages": [
             "linux"
           ]
@@ -3431,6 +4191,9 @@
             "esm-infra"
           ],
           "cve_count": 40,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2024-12-10",
           "packages": [
             "linux"
           ]
@@ -3443,6 +4206,9 @@
             "esm-infra"
           ],
           "cve_count": 33,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2025-01-06",
           "packages": [
             "linux"
           ]
@@ -3455,6 +4221,9 @@
             "esm-infra"
           ],
           "cve_count": 10,
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "issued": "2025-02-10",
           "packages": [
             "linux"
           ]
@@ -3467,6 +4236,9 @@
             "esm-infra"
           ],
           "cve_count": 21,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2025-04-09",
           "packages": [
             "linux"
           ]
@@ -3479,6 +4251,9 @@
             "esm-infra"
           ],
           "cve_count": 32,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2025-05-12",
           "packages": [
             "linux"
           ]
@@ -3491,6 +4266,9 @@
             "esm-infra"
           ],
           "cve_count": 11,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2025-06-04",
           "packages": [
             "linux"
           ]
@@ -3503,6 +4281,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 2.8,
+          "issued": "2025-06-30",
           "packages": [
             "sudo"
           ]
@@ -3515,6 +4296,9 @@
             "esm-infra"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2025-07-01",
           "packages": [
             "linux"
           ]
@@ -3527,6 +4311,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-07-31",
           "packages": [
             "linux"
           ]
@@ -3539,6 +4326,9 @@
             "esm-infra"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "issued": "2025-08-28",
           "packages": [
             "linux"
           ]
@@ -3551,6 +4341,9 @@
             "esm-infra"
           ],
           "cve_count": 10,
+          "attack_vector": "本機",
+          "cvss_max": 7.4,
+          "issued": "2025-11-06",
           "packages": [
             "linux"
           ]
@@ -3563,6 +4356,9 @@
             "esm-infra"
           ],
           "cve_count": 17,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2025-12-15",
           "packages": [
             "linux"
           ]
@@ -3575,6 +4371,9 @@
             "esm-infra"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2026-01-29",
           "packages": [
             "linux"
           ]
@@ -3587,6 +4386,9 @@
             "esm-infra"
           ],
           "cve_count": 9,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2026-03-04",
           "packages": [
             "linux"
           ]
@@ -3599,6 +4401,9 @@
             "esm-infra"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2026-04-01",
           "packages": [
             "linux"
           ]
@@ -3611,6 +4416,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "issued": "2026-06-17",
           "packages": [
             "linux"
           ]
@@ -3623,6 +4431,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 2,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.7,
+          "issued": "2026-10-13",
           "packages": [
             "linux"
           ]
@@ -3635,6 +4446,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 8.2,
+          "issued": "2026-11-03",
           "packages": [
             "linux"
           ]
@@ -3647,6 +4461,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 19,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2026-11-10",
           "packages": [
             "linux"
           ]
@@ -3659,6 +4476,9 @@
             "esm-infra"
           ],
           "cve_count": 13,
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "issued": "2022-02-22",
           "packages": [
             "linux"
           ]
@@ -3671,6 +4491,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2022-03-07",
           "packages": [
             "glibc"
           ]
@@ -3683,6 +4506,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 7.1,
+          "issued": "2022-08-24",
           "packages": [
             "linux"
           ]
@@ -3695,6 +4521,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2023-01-18",
           "packages": [
             "sudo"
           ]
@@ -3707,6 +4536,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 5.3,
+          "issued": "2023-05-29",
           "packages": [
             "sudo"
           ]
@@ -3719,6 +4551,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2023-07-31",
           "packages": [
             "openssh"
           ]
@@ -3731,6 +4566,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2023-12-07",
           "packages": [
             "glibc"
           ]
@@ -3743,6 +4581,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2024-01-11",
           "packages": [
             "openssh"
           ]
@@ -3755,6 +4596,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2024-09-16",
           "packages": [
             "openssh"
           ]
@@ -3767,6 +4611,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "issued": "2024-05-02",
           "packages": [
             "glibc"
           ]
@@ -3779,6 +4626,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2024-05-31",
           "packages": [
             "glibc"
           ]
@@ -3791,6 +4641,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 6.2,
+          "issued": "2025-02-10",
           "packages": [
             "glibc"
           ]
@@ -3803,6 +4656,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.8,
+          "issued": "2025-02-18",
           "packages": [
             "openssh"
           ]
@@ -3815,6 +4671,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2025-02-25",
           "packages": [
             "linux"
           ]
@@ -3827,6 +4686,9 @@
             "esm-infra"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-02-03",
           "packages": [
             "glibc"
           ]
@@ -3839,6 +4701,9 @@
             "esm-infra"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 6.3,
+          "issued": "2026-05-19",
           "packages": [
             "linux"
           ]
@@ -3851,6 +4716,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-07-06",
           "packages": [
             "openssh"
           ]
@@ -3863,6 +4731,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 4.2,
+          "issued": "2026-07-21",
           "packages": [
             "openssh"
           ]
@@ -3875,6 +4746,9 @@
             "esm-infra-legacy"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 4.8,
+          "issued": "2026-09-22",
           "packages": [
             "openssh"
           ]
@@ -3887,6 +4761,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2022-04-20",
           "packages": [
             "bash"
           ]
@@ -3899,6 +4776,9 @@
             "esm-infra"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.0,
+          "issued": "2022-10-10",
           "packages": [
             "openssh"
           ]
@@ -3911,6 +4791,9 @@
             "esm-infra"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "issued": "2022-10-25",
           "packages": [
             "glibc"
           ]
@@ -3923,6 +4806,9 @@
             "esm-infra"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2022-12-08",
           "packages": [
             "glibc"
           ]
@@ -3935,6 +4821,9 @@
             "esm-infra"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2021-09-22",
           "packages": [
             "linux"
           ]
@@ -3947,6 +4836,9 @@
             "esm-infra"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2023-08-09",
           "packages": [
             "openssh"
           ]
@@ -3959,6 +4851,9 @@
             "xenial"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 6.4,
+          "issued": "2017-05-30",
           "packages": [
             "sudo"
           ]
@@ -3971,6 +4866,9 @@
             "xenial"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2018-01-17",
           "packages": [
             "glibc"
           ]
@@ -3983,6 +4881,9 @@
             "xenial"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2021-01-26",
           "packages": [
             "sudo"
           ]
@@ -3995,6 +4896,9 @@
             "xenial"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2017-03-21",
           "packages": [
             "glibc"
           ]
@@ -4007,6 +4911,9 @@
             "xenial"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 8.4,
+          "issued": "2017-05-17",
           "packages": [
             "bash"
           ]
@@ -4019,6 +4926,9 @@
             "xenial"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2017-06-19",
           "packages": [
             "glibc"
           ]
@@ -4031,6 +4941,9 @@
             "xenial"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 8.2,
+          "issued": "2019-05-06",
           "packages": [
             "sudo"
           ]
@@ -4043,6 +4956,9 @@
             "xenial"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2019-10-14",
           "packages": [
             "sudo"
           ]
@@ -4055,6 +4971,9 @@
             "xenial"
           ],
           "cve_count": 10,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2020-07-06",
           "packages": [
             "glibc"
           ]
@@ -4067,6 +4986,9 @@
             "xenial"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2019-07-15",
           "packages": [
             "bash"
           ]
@@ -4079,6 +5001,9 @@
             "xenial"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2020-02-03",
           "packages": [
             "sudo"
           ]
@@ -4091,6 +5016,9 @@
             "xenial"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 8.1,
+          "issued": "2021-05-14",
           "packages": [
             "glibc"
           ]
@@ -4103,6 +5031,9 @@
             "xenial"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2017-03-21",
           "packages": [
             "glibc"
           ]
@@ -4115,6 +5046,9 @@
             "xenial"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2021-04-22",
           "packages": [
             "linux"
           ]
@@ -4136,6 +5070,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 5,
+          "issued": "2025-03-05",
           "commands": [
             "sudo pro fix USN-7332-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4152,6 +5090,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 2,
+          "issued": "2025-10-02",
           "commands": [
             "sudo pro fix USN-7797-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4168,6 +5110,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 12,
+          "issued": "2026-08-13",
           "commands": [
             "sudo pro fix USN-8548-2",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4184,6 +5130,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.4,
+          "cves_network": 8,
+          "issued": "2026-08-20",
           "commands": [
             "sudo pro fix USN-8662-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4200,6 +5150,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 6,
+          "issued": "2026-09-04",
           "commands": [
             "sudo pro fix USN-8725-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4216,6 +5170,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 2,
+          "issued": "2026-10-02",
           "commands": [
             "sudo pro fix USN-8864-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4232,6 +5190,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2021-07-20",
           "commands": [
             "sudo pro fix USN-5014-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4248,6 +5210,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.3,
+          "cves_network": 0,
+          "issued": "2021-08-12",
           "commands": [
             "sudo pro fix USN-5039-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4264,6 +5230,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.8,
+          "cves_network": 0,
+          "issued": "2021-09-08",
           "commands": [
             "sudo pro fix USN-5062-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4280,6 +5250,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 4.4,
+          "cves_network": 0,
+          "issued": "2022-01-06",
           "commands": [
             "sudo pro fix USN-5211-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4296,6 +5270,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 6.5,
+          "cves_network": 0,
+          "issued": "2022-03-09",
           "commands": [
             "sudo pro fix USN-5319-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4312,6 +5290,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2022-03-22",
           "commands": [
             "sudo pro fix USN-5343-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4328,6 +5310,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.3,
+          "cves_network": 0,
+          "issued": "2022-04-01",
           "commands": [
             "sudo pro fix USN-5361-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4344,6 +5330,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 2,
+          "issued": "2022-05-12",
           "commands": [
             "sudo pro fix USN-5413-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4360,6 +5350,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 4.8,
+          "cves_network": 0,
+          "issued": "2022-06-08",
           "commands": [
             "sudo pro fix USN-5465-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4376,6 +5370,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2022-07-01",
           "commands": [
             "sudo pro fix USN-5500-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4392,6 +5390,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2022-07-29",
           "commands": [
             "sudo pro fix USN-5540-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4408,6 +5410,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 5.3,
+          "cves_network": 0,
+          "issued": "2022-08-09",
           "commands": [
             "sudo pro fix USN-5557-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4424,6 +5430,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "cves_network": 1,
+          "issued": "2022-09-30",
           "commands": [
             "sudo pro fix USN-5650-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4440,6 +5450,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.2,
+          "cves_network": 3,
+          "issued": "2022-12-01",
           "commands": [
             "sudo pro fix USN-5758-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4456,6 +5470,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 1,
+          "issued": "2023-01-12",
           "commands": [
             "sudo pro fix USN-5802-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4472,6 +5490,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.7,
+          "cves_network": 0,
+          "issued": "2023-03-06",
           "commands": [
             "sudo pro fix USN-5926-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4488,6 +5510,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 5,
+          "issued": "2023-04-12",
           "commands": [
             "sudo pro fix USN-6014-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4504,6 +5530,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 1,
+          "issued": "2023-04-26",
           "commands": [
             "sudo pro fix USN-6045-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4520,6 +5550,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-06-08",
           "commands": [
             "sudo pro fix USN-6149-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4536,6 +5570,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2023-07-12",
           "commands": [
             "sudo pro fix USN-6221-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4552,6 +5590,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2023-07-26",
           "commands": [
             "sudo pro fix USN-6254-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4568,6 +5610,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-08-28",
           "commands": [
             "sudo pro fix USN-6309-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4584,6 +5630,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2023-09-19",
           "commands": [
             "sudo pro fix USN-6388-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4600,6 +5650,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.9,
+          "cves_network": 1,
+          "issued": "2023-10-19",
           "commands": [
             "sudo pro fix USN-6439-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4616,6 +5670,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2023-12-05",
           "commands": [
             "sudo pro fix USN-6532-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4632,6 +5690,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2024-01-25",
           "commands": [
             "sudo pro fix USN-6602-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4648,6 +5710,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 5.8,
+          "cves_network": 0,
+          "issued": "2024-02-20",
           "commands": [
             "sudo pro fix USN-6646-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4664,6 +5730,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2024-03-18",
           "commands": [
             "sudo pro fix USN-6700-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4680,6 +5750,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 2,
+          "issued": "2024-04-19",
           "commands": [
             "sudo pro fix USN-6739-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4696,6 +5770,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 3,
+          "issued": "2024-05-16",
           "commands": [
             "sudo pro fix USN-6778-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4712,6 +5790,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.1,
+          "cves_network": 1,
+          "issued": "2024-07-03",
           "commands": [
             "sudo pro fix USN-6865-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4728,6 +5810,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 3,
+          "issued": "2024-07-31",
           "commands": [
             "sudo pro fix USN-6938-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4744,6 +5830,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.4,
+          "cves_network": 0,
+          "issued": "2024-08-21",
           "commands": [
             "sudo pro fix USN-6976-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4760,6 +5850,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 4,
+          "issued": "2024-09-26",
           "commands": [
             "sudo pro fix USN-7039-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4776,6 +5870,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 3,
+          "issued": "2024-11-14",
           "commands": [
             "sudo pro fix USN-7110-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4792,6 +5890,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 3,
+          "issued": "2024-12-10",
           "commands": [
             "sudo pro fix USN-7148-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4808,6 +5910,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 1,
+          "issued": "2025-01-06",
           "commands": [
             "sudo pro fix USN-7183-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4824,6 +5930,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "cves_network": 0,
+          "issued": "2025-02-10",
           "commands": [
             "sudo pro fix USN-7262-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4840,6 +5950,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 1,
+          "issued": "2025-04-09",
           "commands": [
             "sudo pro fix USN-7429-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4856,6 +5970,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 3,
+          "issued": "2025-05-12",
           "commands": [
             "sudo pro fix USN-7506-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4872,6 +5990,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2025-06-04",
           "commands": [
             "sudo pro fix USN-7554-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4890,6 +6012,10 @@
           "binaries": [
             "sudo"
           ],
+          "attack_vector": "本機",
+          "cvss_max": 2.8,
+          "cves_network": 0,
+          "issued": "2025-06-30",
           "commands": [
             "sudo pro fix USN-7604-2",
             "sudo apt update && sudo apt install --only-upgrade sudo"
@@ -4906,6 +6032,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2025-07-01",
           "commands": [
             "sudo pro fix USN-7607-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4922,6 +6052,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-07-31",
           "commands": [
             "sudo pro fix USN-7684-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4938,6 +6072,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "cves_network": 2,
+          "issued": "2025-08-28",
           "commands": [
             "sudo pro fix USN-7727-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4954,6 +6092,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.4,
+          "cves_network": 0,
+          "issued": "2025-11-06",
           "commands": [
             "sudo pro fix USN-7863-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4970,6 +6112,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2025-12-15",
           "commands": [
             "sudo pro fix USN-7930-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -4986,6 +6132,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2026-01-29",
           "commands": [
             "sudo pro fix USN-7987-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5002,6 +6152,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 7.8,
+          "cves_network": 1,
+          "issued": "2026-03-04",
           "commands": [
             "sudo pro fix USN-8070-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5018,6 +6172,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 2,
+          "issued": "2026-04-01",
           "commands": [
             "sudo pro fix USN-8143-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5034,6 +6192,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "cves_network": 0,
+          "issued": "2026-06-17",
           "commands": [
             "sudo pro fix USN-8361-3",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5050,6 +6212,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.7,
+          "cves_network": 0,
+          "issued": "2026-10-13",
           "commands": [
             "sudo pro fix USN-8923-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5066,6 +6232,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.2,
+          "cves_network": 0,
+          "issued": "2026-11-03",
           "commands": [
             "sudo pro fix USN-8966-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5082,6 +6252,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 5,
+          "issued": "2026-11-10",
           "commands": [
             "sudo pro fix USN-9033-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -5100,6 +6274,10 @@
           "binaries": [
             "sudo"
           ],
+          "attack_vector": "本機",
+          "cvss_max": 6.4,
+          "cves_network": 0,
+          "issued": "2017-05-30",
           "commands": [
             "sudo pro fix USN-3304-1",
             "sudo apt update && sudo apt install --only-upgrade sudo"
@@ -5118,6 +6296,10 @@
           "binaries": [
             "libc6"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 2,
+          "issued": "2018-01-17",
           "commands": [
             "sudo pro fix USN-3534-1",
             "sudo apt update && sudo apt install --only-upgrade libc6"
@@ -5136,6 +6318,10 @@
           "binaries": [
             "sudo"
           ],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2021-01-26",
           "commands": [
             "sudo pro fix USN-4705-1",
             "sudo apt update && sudo apt install --only-upgrade sudo"
@@ -5329,6 +6515,9 @@
             "esm-apps"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 7.0,
+          "issued": "2023-12-05",
           "packages": [
             "redis"
           ]
@@ -5341,6 +6530,9 @@
             "esm-apps"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.0,
+          "issued": "2025-03-05",
           "packages": [
             "redis"
           ]
@@ -5353,6 +6545,9 @@
             "jammy"
           ],
           "cve_count": 167,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2024-12-17",
           "packages": [
             "linux"
           ]
@@ -5365,6 +6560,9 @@
             "jammy"
           ],
           "cve_count": 249,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-03-27",
           "packages": [
             "linux"
           ]
@@ -5377,6 +6575,9 @@
             "jammy"
           ],
           "cve_count": 124,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-05-16",
           "packages": [
             "linux"
           ]
@@ -5389,6 +6590,9 @@
             "jammy"
           ],
           "cve_count": 178,
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "issued": "2025-12-04",
           "packages": [
             "linux"
           ]
@@ -5401,6 +6605,9 @@
             "jammy"
           ],
           "cve_count": 214,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-03-16",
           "packages": [
             "linux"
           ]
@@ -5413,6 +6620,9 @@
             "jammy"
           ],
           "cve_count": 64,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-07-01",
           "packages": [
             "linux"
           ]
@@ -5425,6 +6635,9 @@
             "jammy"
           ],
           "cve_count": 756,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-07-21",
           "packages": [
             "linux"
           ]
@@ -5437,6 +6650,9 @@
             "jammy"
           ],
           "cve_count": 18,
+          "attack_vector": "網路",
+          "cvss_max": 9.4,
+          "issued": "2026-08-12",
           "packages": [
             "linux"
           ]
@@ -5449,6 +6665,9 @@
             "jammy"
           ],
           "cve_count": 20,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-09-30",
           "packages": [
             "linux"
           ]
@@ -5461,6 +6680,9 @@
             "jammy"
           ],
           "cve_count": 950,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-10-06",
           "packages": [
             "linux"
           ]
@@ -5473,6 +6695,9 @@
             "jammy"
           ],
           "cve_count": 1067,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-11-03",
           "packages": [
             "linux"
           ]
@@ -5485,6 +6710,9 @@
             "jammy"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 9.4,
+          "issued": "2026-11-10",
           "packages": [
             "linux"
           ]
@@ -5497,6 +6725,9 @@
             "jammy"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2023-10-11",
           "packages": [
             "curl"
           ]
@@ -5509,6 +6740,9 @@
             "jammy"
           ],
           "cve_count": 14,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.8,
+          "issued": "2024-12-20",
           "packages": [
             "linux"
           ]
@@ -5521,6 +6755,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-01-28",
           "packages": [
             "linux"
           ]
@@ -5533,6 +6770,9 @@
             "jammy"
           ],
           "cve_count": 104,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2025-02-24",
           "packages": [
             "linux"
           ]
@@ -5545,6 +6785,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-03-05",
           "packages": [
             "linux"
           ]
@@ -5557,6 +6800,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-04-02",
           "packages": [
             "linux"
           ]
@@ -5569,6 +6815,9 @@
             "jammy"
           ],
           "cve_count": 12,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2025-04-24",
           "packages": [
             "linux"
           ]
@@ -5581,6 +6830,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-05-06",
           "packages": [
             "linux"
           ]
@@ -5593,6 +6845,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-06-03",
           "packages": [
             "linux"
           ]
@@ -5605,6 +6860,9 @@
             "jammy"
           ],
           "cve_count": 65,
+          "attack_vector": "網路",
+          "cvss_max": 8.6,
+          "issued": "2025-06-23",
           "packages": [
             "linux"
           ]
@@ -5617,6 +6875,9 @@
             "jammy"
           ],
           "cve_count": 9,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2025-07-01",
           "packages": [
             "linux"
           ]
@@ -5629,6 +6890,9 @@
             "jammy"
           ],
           "cve_count": 139,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2025-07-18",
           "packages": [
             "linux"
           ]
@@ -5641,6 +6905,9 @@
             "jammy"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "issued": "2025-07-31",
           "packages": [
             "linux"
           ]
@@ -5653,6 +6920,9 @@
             "jammy"
           ],
           "cve_count": 21,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2025-08-20",
           "packages": [
             "linux"
           ]
@@ -5665,6 +6935,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2025-08-28",
           "packages": [
             "linux"
           ]
@@ -5677,6 +6950,9 @@
             "jammy"
           ],
           "cve_count": 142,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2025-12-03",
           "packages": [
             "linux"
           ]
@@ -5689,6 +6965,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "issued": "2025-10-02",
           "packages": [
             "linux"
           ]
@@ -5701,6 +6980,9 @@
             "jammy"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2025-10-16",
           "packages": [
             "redis"
           ]
@@ -5713,6 +6995,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 5.5,
+          "issued": "2025-11-06",
           "packages": [
             "linux"
           ]
@@ -5725,6 +7010,9 @@
             "jammy"
           ],
           "cve_count": 9,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2025-12-11",
           "packages": [
             "linux"
           ]
@@ -5737,6 +7025,9 @@
             "jammy"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2026-02-04",
           "packages": [
             "linux"
           ]
@@ -5749,6 +7040,9 @@
             "jammy"
           ],
           "cve_count": 113,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2026-02-12",
           "packages": [
             "linux"
           ]
@@ -5761,6 +7055,9 @@
             "jammy"
           ],
           "cve_count": 2,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2026-02-24",
           "packages": [
             "linux"
           ]
@@ -5773,6 +7070,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2026-04-08",
           "packages": [
             "linux"
           ]
@@ -5785,6 +7085,9 @@
             "jammy"
           ],
           "cve_count": 79,
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "issued": "2026-04-16",
           "packages": [
             "linux"
           ]
@@ -5797,6 +7100,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-05-07",
           "packages": [
             "linux"
           ]
@@ -5809,6 +7115,9 @@
             "jammy"
           ],
           "cve_count": 11,
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "issued": "2026-05-19",
           "packages": [
             "linux"
           ]
@@ -5821,6 +7130,9 @@
             "jammy"
           ],
           "cve_count": 6,
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "issued": "2026-06-04",
           "packages": [
             "linux"
           ]
@@ -5833,6 +7145,9 @@
             "jammy"
           ],
           "cve_count": 10,
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "issued": "2026-06-09",
           "packages": [
             "openssl"
           ]
@@ -5845,6 +7160,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2026-08-20",
           "packages": [
             "linux"
           ]
@@ -5857,6 +7175,9 @@
             "jammy"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "issued": "2026-09-29",
           "packages": [
             "openssl"
           ]
@@ -5869,6 +7190,9 @@
             "jammy"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 5.9,
+          "issued": "2023-07-19",
           "packages": [
             "curl"
           ]
@@ -5881,6 +7205,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2023-10-24",
           "packages": [
             "openssl"
           ]
@@ -5893,6 +7220,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2023-12-06",
           "packages": [
             "curl"
           ]
@@ -5905,6 +7235,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "issued": "2024-03-18",
           "packages": [
             "bash"
           ]
@@ -5917,6 +7250,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 8.6,
+          "issued": "2024-03-27",
           "packages": [
             "curl"
           ]
@@ -5929,6 +7265,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2024-06-27",
           "packages": [
             "openssl"
           ]
@@ -5941,6 +7280,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.3,
+          "issued": "2024-08-05",
           "packages": [
             "curl"
           ]
@@ -5953,6 +7295,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2024-09-03",
           "packages": [
             "openssl"
           ]
@@ -5965,6 +7310,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2024-09-16",
           "packages": [
             "curl"
           ]
@@ -5977,6 +7325,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2025-09-30",
           "packages": [
             "openssl"
           ]
@@ -5989,6 +7340,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "本機",
+          "cvss_max": 6.8,
+          "issued": "2025-10-20",
           "packages": [
             "linux"
           ]
@@ -6001,6 +7355,9 @@
             "jammy"
           ],
           "cve_count": 8,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2026-01-27",
           "packages": [
             "openssl"
           ]
@@ -6013,6 +7370,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 6.3,
+          "issued": "2026-02-25",
           "packages": [
             "curl"
           ]
@@ -6025,6 +7385,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2026-03-11",
           "packages": [
             "curl"
           ]
@@ -6037,6 +7400,9 @@
             "jammy"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-04-08",
           "packages": [
             "openssl"
           ]
@@ -6049,6 +7415,9 @@
             "jammy"
           ],
           "cve_count": 7,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-05-04",
           "packages": [
             "curl"
           ]
@@ -6061,6 +7430,9 @@
             "jammy"
           ],
           "cve_count": 6,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-06-30",
           "packages": [
             "curl"
           ]
@@ -6073,6 +7445,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2026-08-19",
           "packages": [
             "curl"
           ]
@@ -6085,6 +7460,9 @@
             "jammy"
           ],
           "cve_count": 5,
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "issued": "2026-08-25",
           "packages": [
             "openssl"
           ]
@@ -6097,6 +7475,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "本機",
+          "cvss_max": 6.9,
+          "issued": "2026-09-07",
           "packages": [
             "linux"
           ]
@@ -6109,6 +7490,9 @@
             "jammy"
           ],
           "cve_count": 3,
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "issued": "2026-09-24",
           "packages": [
             "curl"
           ]
@@ -6121,6 +7505,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "相鄰網路",
+          "cvss_max": 7.1,
+          "issued": "2026-10-06",
           "packages": [
             "redis"
           ]
@@ -6133,6 +7520,9 @@
             "jammy"
           ],
           "cve_count": 8,
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "issued": "2026-10-14",
           "packages": [
             "curl"
           ]
@@ -6145,6 +7535,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2024-02-05",
           "packages": [
             "openssl"
           ]
@@ -6157,6 +7550,9 @@
             "jammy"
           ],
           "cve_count": 4,
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "issued": "2024-07-31",
           "packages": [
             "openssl"
           ]
@@ -6169,6 +7565,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 6.5,
+          "issued": "2024-11-18",
           "packages": [
             "curl"
           ]
@@ -6181,6 +7580,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 3.4,
+          "issued": "2024-12-16",
           "packages": [
             "curl"
           ]
@@ -6193,6 +7595,9 @@
             "jammy"
           ],
           "cve_count": 2,
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "issued": "2025-02-20",
           "packages": [
             "openssl"
           ]
@@ -6205,6 +7610,9 @@
             "jammy"
           ],
           "cve_count": 1,
+          "attack_vector": "網路",
+          "cvss_max": 7.5,
+          "issued": "2026-08-25",
           "packages": [
             "curl"
           ]
@@ -6217,6 +7625,9 @@
             "jammy"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2025-09-29",
           "packages": [
             "curl"
           ]
@@ -6229,6 +7640,9 @@
             "jammy"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2023-07-19",
           "packages": [
             "curl"
           ]
@@ -6241,6 +7655,9 @@
             "jammy"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2024-02-27",
           "packages": [
             "openssl"
           ]
@@ -6253,6 +7670,9 @@
             "jammy"
           ],
           "cve_count": 0,
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "issued": "2026-07-30",
           "packages": [
             "openssl"
           ]
@@ -6274,6 +7694,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 23,
+          "issued": "2024-12-17",
           "commands": [
             "sudo pro fix USN-7166-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6290,6 +7714,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 23,
+          "issued": "2025-03-27",
           "commands": [
             "sudo pro fix USN-7387-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6306,6 +7734,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 10,
+          "issued": "2025-05-16",
           "commands": [
             "sudo pro fix USN-7510-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6322,6 +7754,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.2,
+          "cves_network": 19,
+          "issued": "2025-12-04",
           "commands": [
             "sudo pro fix USN-7909-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6338,6 +7774,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 31,
+          "issued": "2026-03-16",
           "commands": [
             "sudo pro fix USN-8096-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6354,6 +7794,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 31,
+          "issued": "2026-07-01",
           "commands": [
             "sudo pro fix USN-8493-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6370,6 +7814,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 94,
+          "issued": "2026-07-21",
           "commands": [
             "sudo pro fix USN-8575-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6386,6 +7834,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.4,
+          "cves_network": 9,
+          "issued": "2026-08-12",
           "commands": [
             "sudo pro fix USN-8631-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6402,6 +7854,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 14,
+          "issued": "2026-09-30",
           "commands": [
             "sudo pro fix USN-8818-4",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6418,6 +7874,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 135,
+          "issued": "2026-10-06",
           "commands": [
             "sudo pro fix USN-8875-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6434,6 +7894,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 149,
+          "issued": "2026-11-03",
           "commands": [
             "sudo pro fix USN-8961-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6450,6 +7914,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.4,
+          "cves_network": 2,
+          "issued": "2026-11-10",
           "commands": [
             "sudo pro fix USN-9027-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6469,6 +7937,10 @@
             "curl",
             "libcurl4"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 2,
+          "issued": "2023-10-11",
           "commands": [
             "sudo pro fix USN-6429-1",
             "sudo apt update && sudo apt install --only-upgrade curl libcurl4"
@@ -6485,6 +7957,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "相鄰網路",
+          "cvss_max": 8.8,
+          "cves_network": 0,
+          "issued": "2024-12-20",
           "commands": [
             "sudo pro fix USN-7179-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6501,6 +7977,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-01-28",
           "commands": [
             "sudo pro fix USN-7235-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6517,6 +7997,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 9,
+          "issued": "2025-02-24",
           "commands": [
             "sudo pro fix USN-7288-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6533,6 +8017,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-03-05",
           "commands": [
             "sudo pro fix USN-7327-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6549,6 +8037,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-04-02",
           "commands": [
             "sudo pro fix USN-7406-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6565,6 +8057,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 2,
+          "issued": "2025-04-24",
           "commands": [
             "sudo pro fix USN-7455-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6581,6 +8077,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-05-06",
           "commands": [
             "sudo pro fix USN-7494-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6597,6 +8097,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-06-03",
           "commands": [
             "sudo pro fix USN-7550-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6613,6 +8117,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.6,
+          "cves_network": 7,
+          "issued": "2025-06-23",
           "commands": [
             "sudo pro fix USN-7591-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6629,6 +8137,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2025-07-01",
           "commands": [
             "sudo pro fix USN-7608-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6645,6 +8157,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 12,
+          "issued": "2025-07-18",
           "commands": [
             "sudo pro fix USN-7654-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6661,6 +8177,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "cves_network": 0,
+          "issued": "2025-07-31",
           "commands": [
             "sudo pro fix USN-7683-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6677,6 +8197,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 2,
+          "issued": "2025-08-20",
           "commands": [
             "sudo pro fix USN-7704-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6693,6 +8217,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2025-08-28",
           "commands": [
             "sudo pro fix USN-7726-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6709,6 +8237,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 10,
+          "issued": "2025-12-03",
           "commands": [
             "sudo pro fix USN-7774-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6725,6 +8257,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.3,
+          "cves_network": 0,
+          "issued": "2025-10-02",
           "commands": [
             "sudo pro fix USN-7793-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6743,6 +8279,10 @@
           "binaries": [
             "redis-server"
           ],
+          "attack_vector": "官方未提供",
+          "cvss_max": null,
+          "cves_network": 0,
+          "issued": "2025-10-16",
           "commands": [
             "sudo pro fix USN-7824-3",
             "sudo apt update && sudo apt install --only-upgrade redis-server"
@@ -6759,6 +8299,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 5.5,
+          "cves_network": 0,
+          "issued": "2025-11-06",
           "commands": [
             "sudo pro fix USN-7862-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6775,6 +8319,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2025-12-11",
           "commands": [
             "sudo pro fix USN-7928-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6791,6 +8339,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 1,
+          "issued": "2026-02-04",
           "commands": [
             "sudo pro fix USN-8013-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6807,6 +8359,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 17,
+          "issued": "2026-02-12",
           "commands": [
             "sudo pro fix USN-8033-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6823,6 +8379,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 7.8,
+          "cves_network": 0,
+          "issued": "2026-02-24",
           "commands": [
             "sudo pro fix USN-8060-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6839,6 +8399,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2026-04-08",
           "commands": [
             "sudo pro fix USN-8159-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6855,6 +8419,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.7,
+          "cves_network": 6,
+          "issued": "2026-04-16",
           "commands": [
             "sudo pro fix USN-8180-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6871,6 +8439,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 9.8,
+          "cves_network": 1,
+          "issued": "2026-05-07",
           "commands": [
             "sudo pro fix USN-8255-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6887,6 +8459,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.5,
+          "cves_network": 1,
+          "issued": "2026-05-19",
           "commands": [
             "sudo pro fix USN-8279-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6903,6 +8479,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "本機",
+          "cvss_max": 8.5,
+          "cves_network": 0,
+          "issued": "2026-06-04",
           "commands": [
             "sudo pro fix USN-8388-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6921,6 +8501,10 @@
           "binaries": [
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 9.1,
+          "cves_network": 10,
+          "issued": "2026-06-09",
           "commands": [
             "sudo pro fix USN-8414-1",
             "sudo apt update && sudo apt install --only-upgrade openssl"
@@ -6937,6 +8521,10 @@
             "linux"
           ],
           "binaries": [],
+          "attack_vector": "網路",
+          "cvss_max": 8.8,
+          "cves_network": 1,
+          "issued": "2026-08-20",
           "commands": [
             "sudo pro fix USN-8658-1",
             "sudo apt update && sudo apt upgrade（核心公告：安裝後要重開機才生效）"
@@ -6955,6 +8543,10 @@
           "binaries": [
             "openssl"
           ],
+          "attack_vector": "網路",
+          "cvss_max": 8.2,
+          "cves_network": 6,
+          "issued": "2026-09-29",
           "commands": [
             "sudo pro fix USN-8847-1",
             "sudo apt update && sudo apt install --only-upgrade openssl"

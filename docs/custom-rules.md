@@ -33,10 +33,11 @@
 | `thresholds.uptime_days_warn` | 連續運作幾天以上要提醒（預設 90） |
 | `thresholds.data_max_age_days` | 官方資料超過幾天要警告（預設 7） |
 | `thresholds.apt_update_stale_days` | 自動更新已開啟、但套件清單超過幾天沒成功更新時，提出「自動更新沒有成功」（預設 7，以收集當天計算） |
+| `thresholds.auto_update_lag_days` | 自動更新已開啟、套件清單也有更新，但有發布超過幾天的免費安全修補還沒裝時，提出「自動更新沒有實際安裝修補」（預設 7，依官方資料的公告發布日與收集當天計算） |
 | `thresholds.detail_rows_per_host` | report.md 附錄每台主機「免費」與「需 Pro」各列幾個套件；report.html 套件數不超過這個數字時，「免費就能修補」明細預設展開（預設 30） |
 | `usg_versions` | 哪些版本要提出 C 類「未使用 USG」建議 |
 | `severity_names` | 官方嚴重度的中文名稱 |
-| `findings.<代號>` | 每一種發現的開關、類別、嚴重度、標題、說明、建議。`short` 是放進「建議處理順序」的短名稱（沒寫就用標題）；`action_if_auto_update_failing` 是自動更新沒有成功時改用的建議 |
+| `findings.<代號>` | 每一種發現的開關、類別、嚴重度、標題、說明、建議。`short` 是放進「建議處理順序」的短名稱（沒寫就用標題）；`action_if_auto_update_failing` 是自動更新沒有成功時改用的建議，`action_if_auto_update_not_applying` 是自動更新有開卻沒有實際安裝修補時改用的建議 |
 | `report_text` | 報告標題、年限說明、建議處理順序、重大與高風險公告的說明、限制說明 |
 | `report_text.priority` | 「建議處理順序」每一步的文字。報告只列實際出現的步驟，`{hosts}` 換成主機代號、`{items}` 換成發現項目。舊版的 `priority_steps`（固定文字清單）仍可用：自訂規則有寫它時，報告照舊列出那幾行 |
 
@@ -62,6 +63,7 @@
 | `extra_uid0` | D | root 以外還有 UID 0 的帳號 |
 | `empty_password_accounts` | D | 有空密碼帳號（需要 sudo 收集） |
 | `auto_updates_failing` | D | 自動更新已開啟，但套件清單超過門檻天數沒有成功更新 |
+| `auto_updates_not_applying` | D | 自動更新已開啟、套件清單也有更新，但有發布超過門檻天數的免費安全修補還沒裝（要有官方資料比對） |
 | `no_auto_updates` | D | 沒有啟用自動安全更新 |
 | `third_party_packages` | D | 有非官方來源的套件 |
 
@@ -76,6 +78,7 @@
 | `kernel_not_running_newest` | `{running}`、`{newest}` |
 | `long_uptime` | `{days}` |
 | `auto_updates_failing` | `{days}` 幾天沒成功更新、`{last}` 最後一次成功的日期 |
+| `auto_updates_not_applying` | `{n}` 超過門檻的未安裝公告則數、`{days}` 門檻天數、`{oldest}` 最早一則的發布日期 |
 | `extra_uid0`、`empty_password_accounts`、`third_party_packages`、`pro_client_*` | `{n}` |
 
 `oval_*` 的嚴重度預設為 `auto`：有重大或高風險公告時為「高」，否則為「中」。要固定嚴重度，直接填「高」「中」「低」即可。

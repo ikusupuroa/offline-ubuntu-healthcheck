@@ -74,7 +74,7 @@ figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
 
 <section class="cover">
   <h1>Ubuntu 主機資安健檢工具<br>使用者手冊</h1>
-  <p class="sub">offline-ubuntu-healthcheck 0.6</p>
+  <p class="sub">offline-ubuntu-healthcheck 0.6.1</p>
   <p class="mut">2026 年 11 月</p>
   <p class="mut">工具下載：https://github.com/ikusupuroa/offline-ubuntu-healthcheck</p>
   <p class="mut" style="margin-top:40px">本工具不是 Canonical 的官方工具，與 Canonical 沒有隸屬關係，也沒有經過 Canonical 背書。Ubuntu 是 Canonical Ltd. 的商標。</p>
@@ -454,6 +454,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><td>有 root 以外的最高權限帳號</td><td>D</td><td>有其他 UID 為 0 的帳號</td><td>依建議欄的指令找出帳號，確認用途，不需要就移除</td></tr>
 <tr><td>有空密碼帳號</td><td>D</td><td>有帳號沒設密碼</td><td>依建議欄的指令找出帳號，設定密碼或鎖定</td></tr>
 <tr><td>已設定自動更新，但套件清單 N 天沒有成功更新</td><td>D</td><td>自動更新有開，但已經很久沒成功，修補不會自動安裝。常見原因是連不到套件來源（網路、Proxy、DNS）</td><td>在主機上執行 <code>sudo apt update</code>，看錯誤訊息，修好網路或來源設定；隔天再確認有更新</td></tr>
+<tr><td>已設定自動更新，但有 N 則發布超過 7 天的免費安全修補還沒安裝</td><td>D</td><td>自動更新有開、套件清單也有更新，修補卻沒有裝上。可能只下載不安裝、某些套件被排除或保留、安裝時出錯，或主機剛安裝、剛啟用自動更新。只手動裝一次，之後還會再累積</td><td>看 <code>/var/log/unattended-upgrades/</code> 的紀錄；執行 <code>sudo unattended-upgrade --dry-run --debug</code> 看哪些套件被略過</td></tr>
 <tr><td>未啟用自動安全更新</td><td>D</td><td>沒有每天自動裝安全更新</td><td>依變更管理規定決定；要啟用時執行 <code>sudo dpkg-reconfigure -plow unattended-upgrades</code></td></tr>
 <tr><td>有 N 個非 Ubuntu 官方來源的套件</td><td>D</td><td>第三方或來源不明的套件不在 Ubuntu 的修補範圍</td><td>盤點來源，向原廠確認更新方式</td></tr>
 </table></div>
@@ -487,7 +488,9 @@ sudo apt upgrade</pre>
   <li><code>sudo apt update &amp;&amp; sudo apt install --only-upgrade 套件…</code>：只升級這則公告點名、而且主機上真的有裝的套件。上面那種不能用時改用這行。</li>
   <li>核心公告合併成一列：新核心是不同的套件名稱，要用 <code>sudo apt update</code> 與 <code>sudo apt upgrade</code> 安裝，再重開機；停機困難時評估 Livepatch。</li>
   <li>寫「要先訂閱 Ubuntu Pro」的，修補只放在延伸維護，要先訂閱並執行 <code>sudo pro attach</code>。</li>
+  <li><b>攻擊途徑（CVSS）</b>：取自官方資料裡這則公告各 CVE 的 CVSS 向量，列出可及範圍最大的一種與最高分數，例如「網路（最高 9.2）」。「網路」代表不必先登入主機就可能被利用，對外服務的主機要先修這些；「相鄰網路」要在同一個網段；「本機」要先能登入或在主機上執行程式；「實體接觸」要能碰到機器；官方沒附 CVSS 時寫「官方未提供」。核心公告合併的那一列，取各則中範圍最大的途徑與最高分。分數是官方原值，CVSS 3.x 與 4.0 混用。這是「可能」的途徑，不代表一定能被利用。</li>
 </ul>
+<p>這一段可以收合：表格超過 10 列（核心公告合併算一列）時預設收起，點標題就能展開。列印或另存 PDF 時會自動全部展開。</p>
 <div class="note">只修重大與高風險時，其餘公告會一直累積。這是排不出時段時的權宜做法，仍要排時段執行 <code>sudo apt update</code> 與 <code>sudo apt upgrade</code> 全面更新。執行前一樣依變更管理規定，先在測試環境確認。</div>
 
 <h3>5.8 其他段落</h3>
@@ -605,6 +608,9 @@ ssh -p 2222 admin@10.0.0.5 'echo OK'</pre>
 
 <p><b>Q：報告說「已設定自動更新，但套件清單 N 天沒有成功更新」</b></p>
 <p>自動更新有開，但主機很久沒有成功取得新的套件清單，所以修補一直沒裝。在主機上執行 <code>sudo apt update</code>，看最後幾行的錯誤訊息：常見的是連不到套件來源、Proxy 沒設好，或內部鏡像站停止同步。修好後隔天再檢查一次。</p>
+
+<p><b>Q：報告說「已設定自動更新，但有 N 則發布超過 7 天的免費安全修補還沒安裝」</b></p>
+<p>套件清單有更新，代表網路和來源沒問題，但自動更新沒有把修補裝上。先看 <code>/var/log/unattended-upgrades/</code> 的紀錄，再執行 <code>sudo unattended-upgrade --dry-run --debug</code> 看哪些套件被略過；用 <code>apt-mark showhold</code> 確認有沒有被保留的套件。找出原因再手動更新，否則之後還會累積。</p>
 
 <p><b>Q：報告上數字跟主機上 <code>pro security-status</code> 不一樣</b></p>
 <p>報告算的是「安全公告則數」，<code>pro security-status</code> 算的是「套件數」，單位不同。兩邊應該同時為 0 或同時大於 0。</p>

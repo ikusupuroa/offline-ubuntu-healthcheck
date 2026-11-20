@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜統一入口（hc）
 
-版本：0.6
+版本：0.6.1
 一個指令完成收集與分析。只用 Python 3.6 以上的標準函式庫。
 
   ./hc scan hosts.txt          用 SSH 逐台收集並分析（主機上不留下收集腳本與收集檔）
