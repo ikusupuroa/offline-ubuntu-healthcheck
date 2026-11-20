@@ -124,7 +124,7 @@ GitHub 上的資料由 GitHub Actions 每天從 Canonical 官方網站取得，�
 
 ## 交給 AI 分析
 
-`skill/offline-ubuntu-healthcheck/` 是給 AI 用的分析指引（Agent Skill 格式）：`SKILL.md` 規定怎麼判讀，`template.md` 固定三輪回覆（初步分析、情境判讀、定稿交付）的輸出格式。兩個檔案可以和報告資料夾裡的 `findings-ai.json` 一起上傳到對話中使用，也可以安裝到 Claude、ChatGPT、Gemini 等平台。做法見使用者手冊第 6 章。
+`skill/offline-ubuntu-healthcheck/` 是給 AI 用的分析指引（Agent Skill 格式）：`SKILL.md` 規定怎麼判讀，`template.md` 固定三輪回覆（初步分析、情境判讀、定稿交付）的輸出格式，`report-template.html` 是給主管的報告範本（含圖表，可存成 PDF）。三個檔案可以和報告資料夾裡的 `findings-ai.json` 一起上傳到對話中使用，也可以安裝到 Claude、ChatGPT、Gemini 等平台。做法見使用者手冊第 6 章。
 
 `findings-ai.json` 每次分析都會產生，已經去識別化：主機代號改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。代號對照在 `report.html` 主機總覽的「AI 代號」欄，只留在地端。同一個資料夾的 `findings.json` 保留原代號，給機關內部的 AI 或程式使用，不要交給雲端 AI。
 
