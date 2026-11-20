@@ -85,4 +85,4 @@
 
 ## 更進一步
 
-規則檔處理的是「分類與文字」。要依單位的資安政策產出更完整的建議，可以把 `findings-ai.json`（去識別化）交給 AI，搭配 [skill/offline-ubuntu-healthcheck/SKILL.md](../skill/offline-ubuntu-healthcheck/SKILL.md) 的指引（做法見使用者手冊第 6 章），再加上自己單位的規範一起分析。
+規則檔處理的是「分類與文字」。要依單位的資安政策產出更完整的建議，可以把 `findings-ai.json`（去識別化）交給 AI，搭配 [skill/offline-ubuntu-healthcheck/SKILL.md](../skill/offline-ubuntu-healthcheck/SKILL.md) 的指引與 [template.md](../skill/offline-ubuntu-healthcheck/template.md) 的輸出範本（做法見使用者手冊第 6 章），再加上自己單位的規範一起分析。

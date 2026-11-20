@@ -503,7 +503,7 @@ sudo apt upgrade</pre>
 </ul>
 
 <h2>6. 交給 AI 分析</h2>
-<p>報告是固定格式。如果想依單位的資安政策產出更完整的建議，可以把 <code>findings-ai.json</code> 交給 AI，搭配本工具附的分析指引（skill）一起使用。分析指引就是 <code>skill/offline-ubuntu-healthcheck/SKILL.md</code> 這個檔案，裡面規定 AI 要怎麼讀資料、什麼話不能亂說、要輸出哪些段落。</p>
+<p>報告是固定格式。如果想依單位的資安政策產出更完整的建議，可以把 <code>findings-ai.json</code> 交給 AI，搭配本工具附的分析指引（skill）一起使用。分析指引在 <code>skill/offline-ubuntu-healthcheck/</code> 資料夾，有兩個檔案：<code>SKILL.md</code> 規定 AI 要怎麼讀資料、什麼話不能亂說；<code>template.md</code> 是輸出範本，固定每一輪回覆的標題、順序與表格，讓每次分析的格式都一樣。<b>兩個檔案要一起給 AI。</b></p>
 
 <h3>6.1 先做兩件事</h3>
 <div class="step"><b class="n">1</b><div><p><b>確認單位規定</b>：機關使用生成式 AI 有相關規定，先問資訊單位能不能把健檢結果交給雲端 AI，或是要用機關內部的 AI。</p></div></div>
@@ -513,14 +513,14 @@ sudo apt upgrade</pre>
 
 <h3>6.2 取得分析指引檔</h3>
 <ul>
-  <li>工具資料夾裡的 <code>skill/offline-ubuntu-healthcheck/SKILL.md</code>。</li>
+  <li>工具資料夾裡的 <code>skill/offline-ubuntu-healthcheck/SKILL.md</code> 與 <code>template.md</code>。</li>
   <li>或到專案的 Releases 頁面下載 <code>offline-ubuntu-healthcheck-skill.zip</code>，這是可以直接上傳到 AI 平台的壓縮檔。</li>
 </ul>
 
 <h3>6.3 做法一：一次性使用（任何 AI 平台）</h3>
-<p>不用安裝，每次開新對話時把兩個檔案一起上傳：</p>
-<div class="step"><b class="n">1</b><div><p>開一個新對話，上傳 <code>SKILL.md</code> 和 <code>findings-ai.json</code>。</p><p>平台不接受 <code>.md</code> 檔時（例如 Claude 的官方支援清單沒有列 <code>.md</code>），把檔名改成 <code>SKILL.txt</code> 再上傳，或直接把內容貼進對話框。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>輸入：</p><pre>請依照 SKILL 檔的指引，分析 findings-ai.json 的健檢結果。</pre></div></div>
+<p>不用安裝，每次開新對話時把三個檔案一起上傳：</p>
+<div class="step"><b class="n">1</b><div><p>開一個新對話，上傳 <code>SKILL.md</code>、<code>template.md</code> 和 <code>findings-ai.json</code>。</p><p>平台不接受 <code>.md</code> 檔時（例如 Claude 的官方支援清單沒有列 <code>.md</code>），把檔名改成 <code>SKILL.txt</code>、<code>template.txt</code> 再上傳，或直接把內容貼進對話框。</p><p>用 ChatGPT 的「專案」時，可以把 <code>SKILL.md</code> 和 <code>template.md</code> 放進專案檔案，之後每個新對話只要上傳 <code>findings-ai.json</code>。</p></div></div>
+<div class="step"><b class="n">2</b><div><p>輸入：</p><pre>請依照 SKILL 檔的指引與 template 檔的格式，分析 findings-ai.json 的健檢結果。</pre></div></div>
 <p>機關內部自建的 AI 也是同樣做法。</p>
 
 <h3>6.4 做法二：做成固定的 skill</h3>
@@ -531,7 +531,7 @@ sudo apt upgrade</pre>
 <div class="step"><b class="n">2</b><div><p>到 Customize → Skills，按「+」→ Create skill → Upload a skill，上傳 <code>offline-ubuntu-healthcheck-skill.zip</code>。</p></div></div>
 <div class="step"><b class="n">3</b><div><p>在 skill 清單裡把它切到開啟。</p></div></div>
 <ul>
-  <li>壓縮檔裡最上層必須是 <code>offline-ubuntu-healthcheck/</code> 資料夾，裡面放 <code>SKILL.md</code>。Releases 提供的壓縮檔已經是這個結構；自己壓縮時，要壓整個資料夾，不是只壓檔案。</li>
+  <li>壓縮檔裡最上層必須是 <code>offline-ubuntu-healthcheck/</code> 資料夾，裡面放 <code>SKILL.md</code> 與 <code>template.md</code>。Releases 提供的壓縮檔已經是這個結構；自己壓縮時，要壓整個資料夾，不是只壓檔案。</li>
   <li>企業版（Team、Enterprise）：管理員可能關閉了自行上傳。管理員可以在組織設定直接派發給全組織。</li>
   <li>免費方案能不能用，官方兩份說明寫法不一致，未確認。</li>
   <li>官方說明：https://support.claude.com/en/articles/12512180-using-skills-in-claude</li>
@@ -557,13 +557,20 @@ cp -r skill/offline-ubuntu-healthcheck ~/.claude/skills/</pre>
 <h3>Gemini</h3>
 <p>Gemini 網頁版與 App 已經從 Gems 改成 skills。</p>
 <div class="step"><b class="n">1</b><div><p>到 Customize → Skills → Create → Create manually。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>名稱填 <code>offline-ubuntu-healthcheck</code>，描述與指示分別貼上 <code>SKILL.md</code> 開頭的 description 與「# Ubuntu 健檢結果分析指引」以下的內容，再按 Create。也可以直接上傳 <code>SKILL.md</code> 匯入。</p></div></div>
+<div class="step"><b class="n">2</b><div><p>名稱填 <code>offline-ubuntu-healthcheck</code>，描述與指示分別貼上 <code>SKILL.md</code> 開頭的 description 與「# Ubuntu 健檢結果分析指引」以下的內容，再把 <code>template.md</code> 的全文接在指示後面，然後按 Create。也可以直接上傳 <code>SKILL.md</code> 匯入，匯入後同樣要把 <code>template.md</code> 的全文加進指示（指示長度上限未確認，尚未實測）。</p></div></div>
 <div class="warn">Gemini 的 skills 目前只開放 18 歲以上的個人 Google 帳號。<b>工作與學校帳號（包含機關的 Google Workspace）還沒開放</b>，開放日期未公布。用機關帳號時請先用做法一。</div>
 <p>Gemini CLI 的放置位置：自己用放 <code>~/.gemini/skills/</code>，專案用放 <code>專案資料夾/.gemini/skills/</code>。</p>
 <p class="mut">官方說明：https://support.google.com/gemini/answer/18560919 、https://geminicli.com/docs/cli/skills/</p>
 
 <h3>6.5 AI 會給你什麼</h3>
-<p>依分析指引，AI 會依序輸出：整體風險、三句話總結、處理清單（含優先順序、要不要停機、要不要採購；未能檢查的項目列在表格下方）、Ubuntu Pro 能解決的部分、Ubuntu Pro 解決不了的部分、維護責任建議、需要人工確認的事、結論。你補充主機用途、能不能停機等情境時，AI 會再依情境調整處理順序，並寫出判斷的前提。</p>
+<p>輸出範本把分析固定成三輪，每一輪的標題、順序與表格欄位都一樣：</p>
+<div class="tw"><table>
+<tr><th>輪</th><th>你要做的事</th><th>AI 給你什麼</th></tr>
+<tr><td>第 1 輪：初步分析</td><td>上傳檔案，說「請分析這份健檢結果」</td><td>整體風險與主機概況、三句話總結、處理清單（含期限）、可能的攻擊路徑、Ubuntu Pro 能與不能解決的部分、維護責任、需要人工確認的事、給主管的結論，最後是一份情境問卷</td></tr>
+<tr><td>第 2 輪：情境判讀</td><td>回答問卷（打編號或直接打字都可以）</td><td>依你提供的主機用途、可達性、重要性重新排序，標出需立即處理的公告並附指令與期限，留下情境判讀紀錄</td></tr>
+<tr><td>第 3 輪：定稿交付</td><td>說「整理成定稿」</td><td>正式報告：主管摘要、給維護廠商的處理追蹤表（留有完成日期與確認人欄位）、Ubuntu Pro 評估、仍待確認的事</td></tr>
+</table></div>
+<p>範本能固定格式，但說明文字的用字每次仍會有些不同。如果 AI 的回覆開頭寫「沒有收到 template.md」，代表範本沒有一起上傳，請補傳再重問一次。</p>
 <div class="note">交付前請人工核對 AI 的分析，特別是數字與建議的指令。分析指引已要求 AI 只根據檔案內容、不自己編 CVE 或指令，但仍可能出錯。</div>
 
 <h2>7. 更新官方資料與常見問題</h2>

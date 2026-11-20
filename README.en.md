@@ -41,7 +41,7 @@ It reads the fix pocket named in the official OVAL criteria (`esm-infra`, `esm-a
 ## More
 
 - `docs/user-guide.pdf`: step-by-step user guide, including how to read the report
-- `skill/offline-ubuntu-healthcheck/`: an Agent Skill for analysing the results with an AI assistant. Upload `findings-ai.json`, which every run writes next to the report: host tags are replaced with H01, H02… and the mapping stays in `report.html` only. `findings.json` keeps the original tags for local use.
+- `skill/offline-ubuntu-healthcheck/`: an Agent Skill for analysing the results with an AI assistant. `SKILL.md` holds the analysis rules and `template.md` fixes the output format of the three default rounds (initial analysis, context review, final report); upload both. Upload `findings-ai.json`, which every run writes next to the report: host tags are replaced with H01, H02… and the mapping stays in `report.html` only. `findings.json` keeps the original tags for local use.
 - `tests/lxd-quicktest.sh`: one-command test across Ubuntu releases in LXD VMs
 - `rules/default-rules.json`: categories, advice texts and thresholds; override with `--rules`
 - Critical and high advisories show an attack vector and the highest CVSS score, taken from the CVSS vectors in Canonical's OVAL data (CVSS 3.x and 4.0 mixed). It shows how an issue could be reached, not that it has been confirmed exploitable.
