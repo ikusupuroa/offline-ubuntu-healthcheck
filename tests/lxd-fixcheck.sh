@@ -1,6 +1,6 @@
 #!/bin/bash
 # offline-ubuntu-healthcheck｜「只修這一則」指令的 LXD 驗證（tests/lxd-fixcheck.sh）
-# 版本：0.6.3
+# 版本：0.6.5
 #
 # 驗證 v0.6 報告「重大與高風險公告」附的兩行指令：
 #   sudo pro fix USN-…                                   （主機要能連到 Canonical）
@@ -27,6 +27,7 @@
 #   tests/lxd-fixcheck.sh 24.04              # 指定版本
 #   HC_MAX_FIXES=3 tests/lxd-fixcheck.sh     # 每個版本最多測幾則公告（0＝只產生報告，不測修補指令）
 #   HC_AFTER_UPGRADE=0 tests/lxd-fixcheck.sh # 不做第 6 步（不產生更新後的報告）
+#   HC_DATA=git tests/lxd-fixcheck.sh        # 不向 Canonical 下載，改用 git clone 內附的官方資料（官方網站故障時用）
 #   HC_POOL=default tests/lxd-fixcheck.sh    # 指定儲存池；沒指定時自動挑 btrfs 或 zfs 的儲存池（快照與還原快很多），都沒有才用預設
 #   tests/lxd-fixcheck.sh --cleanup          # 刪除本腳本建立的測試機（名稱開頭 hc-f-）
 #
@@ -42,6 +43,7 @@ PREFIX="hc-f-"
 SNAP="hc-base"
 MAX_FIXES="${HC_MAX_FIXES:-6}"
 AFTER="${HC_AFTER_UPGRADE:-1}"
+DATA_SRC="${HC_DATA:-canonical}"
 POOL="${HC_POOL:-}"
 # 要降版的原始碼套件（awk 正規表示式；不用反斜線，mawk 與 gawk 都能用）
 # python3-defaults（python3 指令本身）要跟 python3.X 一起降，否則版本相依會卡住
@@ -56,7 +58,7 @@ for a in "$@"; do
       if [ -z "$names" ]; then echo "沒有要刪除的測試機。"; exit 0; fi
       for n in $names; do lxc delete --force "$n" && echo "已刪除 $n"; done
       exit 0 ;;
-    -h|--help) sed -n '2,36p' "$0"; exit 0 ;;
+    -h|--help) sed -n '2,37p' "$0"; exit 0 ;;
     [0-9][0-9].[0-9][0-9]) VERSIONS+=("$a") ;;
     *) echo "不認得的參數：$a"; exit 2 ;;
   esac
@@ -160,8 +162,44 @@ echo "== 降版結果"; cat /root/downgrade-status.tsv
 EOS
 
 log "下載官方資料"
-python3 update-data.py --dest "$OUT/data" --releases "$(IFS=,; echo "${VERSIONS[*]}")" > "$OUT/logs/update.log" 2>&1 \
-  || { echo "官方資料下載失敗，見 $OUT/logs/update.log"; exit 1; }
+# 從 git clone 一起下載的 data 分支取官方資料（不需要網路）
+from_git() {
+  python3 - "$OUT/data" >> "$OUT/logs/update.log" 2>&1 <<'PYG'
+import importlib.util, sys
+spec = importlib.util.spec_from_file_location("updater", "update-data.py")
+m = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(m)
+n = m.sync_from_git(sys.argv[1], quiet=False)
+print("git 內附資料：%s" % ("找不到（不是用 git clone 下載，或沒有 data 分支）" if n is None else "放入 %d 個檔案" % n))
+sys.exit(1 if n is None else 0)
+PYG
+}
+# 每個要測的版本都要有資料檔
+have_all() {
+  python3 - "$OUT/data" "${VERSIONS[@]}" <<'PYC'
+import json, os, sys
+lc = json.load(open("rules/default-rules.json", encoding="utf-8"))["lifecycle"]
+miss = [v for v in sys.argv[2:] if not os.path.isfile(os.path.join(
+    sys.argv[1], "oci.com.ubuntu.%s.usn.oval.xml.bz2" % lc.get(v, {}).get("codename", "?")))]
+if miss:
+    print("缺少這些版本的官方資料：" + "、".join(miss))
+sys.exit(1 if miss else 0)
+PYC
+}
+if [ "$DATA_SRC" = git ]; then
+  log "HC_DATA=git：不下載，改用 git clone 內附的官方資料"
+  from_git
+else
+  # 官方網站偶爾回 HTTP 503 等暫時錯誤：最多試 3 次，每次間隔 60 秒；仍失敗就改用 git 內附的資料
+  ok=0
+  for i in 1 2 3; do
+    python3 update-data.py --dest "$OUT/data" --releases "$(IFS=,; echo "${VERSIONS[*]}")" >> "$OUT/logs/update.log" 2>&1 && { ok=1; break; }
+    [ $i -lt 3 ] && { log "官方資料下載有失敗（第 $i 次），60 秒後重試"; sleep 60; }
+  done
+  [ $ok = 1 ] || { log "向 Canonical 下載失敗三次，改用 git clone 內附的官方資料"; from_git; }
+fi
+have_all || { echo "官方資料不齊，見 $OUT/logs/update.log"; exit 1; }
+log "官方資料：$(cd "$OUT/data" && ls oci.com.ubuntu.*.usn.oval.xml.bz2 | tr '\n' ' ')"
 
 for V in "${VERSIONS[@]}"; do
   VM="${PREFIX}${V/./}"
