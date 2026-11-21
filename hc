@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜統一入口（hc）
 
-版本：0.6.1
+版本：0.7.0
 一個指令完成收集與分析。只用 Python 3.6 以上的標準函式庫。
 
   ./hc scan hosts.txt          用 SSH 逐台收集並分析（主機上不留下收集腳本與收集檔）
@@ -329,7 +329,7 @@ def ssh_hint(err, target, extra=()):
 
 
 def collected_dir(args):
-    """收集檔含原始代號與套件清單：去識別化時放在報告資料夾外面，免得整包交給 AI 時一起送出。"""
+    """收集檔含原始代號與套件清單：去識別化時放在報告資料夾外面，免得整包交給顧問時一起送出。"""
     return (args.out + "-collected") if args.deidentify else os.path.join(args.out, "collected")
 
 

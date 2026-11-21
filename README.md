@@ -49,7 +49,7 @@ cd offline-ubuntu-healthcheck
 flowchart LR
   A["分析電腦<br>./hc scan hosts.txt --sudo"] -- "① 經 SSH 送入收集腳本" --> B["受檢主機<br>H01、H02…"]
   B -- "② 收集結果傳回<br>（主機上不留收集檔）" --> A
-  A -- "③ 與 data/ 的官方資料比對" --> C["reports/日期時間/<br>report.html"]
+  A -- "③ 與 data/ 的官方資料比對" --> C["reports/日期時間/<br>report-日期時間.html"]
 ```
 
 先複製主機清單範本，再編輯成你要檢查的主機，一行一台，格式是「代號　SSH 登入目標　［其他 ssh 參數，可省略］」：
@@ -79,7 +79,7 @@ H02   ops@10.0.0.6     -p 2222
 flowchart LR
   A["分析電腦"] -- "① 把 collect.sh<br>交給主機管理者" --> B["受檢主機<br>sudo bash collect.sh --tag H01"]
   B -- "② 交回<br>hc-H01-日期時間.tar.gz" --> A
-  A -- "③ ./hc report" --> C["reports/日期時間/<br>report.html"]
+  A -- "③ ./hc report" --> C["reports/日期時間/<br>report-日期時間.html"]
 ```
 
 管理者在主機上執行，會在目前的資料夾產生 `hc-H01-<日期時間>.tar.gz`：
@@ -102,7 +102,9 @@ sudo chown $USER hc-H01-*.tar.gz
 
 分析完，請管理者刪除主機上的 `collect.sh` 與 `hc-*.tar.gz`。
 
-跑完之後，用瀏覽器打開畫面最後一行的 `report.html`。
+跑完之後，用瀏覽器打開畫面最後一行的 `report-日期時間.html`。
+
+每次分析在 `reports/日期時間/` 產生三個檔：`report-日期時間.html`（報告）、`findings-ai-日期時間.json`（去識別化的結果，交給顧問分析用）、`oval-detail.json`（完整比對明細，自己留存）。檔名裡的日期時間是分析當下的時間。
 
 想先看看報告長什麼樣子，可以用三台虛構主機試跑：
 
@@ -122,11 +124,16 @@ sudo chown $USER hc-H01-*.tar.gz
 
 GitHub 上的資料由 GitHub Actions 每天從 Canonical 官方網站取得，放在 `data` 分支（只保留最新一份）與 Releases 的 `data-latest`，檔案未經修改。細節見 [docs/offline-data.md](docs/offline-data.md)。
 
-## 交給 AI 分析
+## 交給顧問分析
 
-`skill/offline-ubuntu-healthcheck/` 是給 AI 用的分析指引（Agent Skill 格式）：`SKILL.md` 規定怎麼判讀，`template.md` 固定三輪回覆（初步分析、情境判讀、定稿交付）的輸出格式，`report-template.html` 是給主管的報告範本（含圖表，可存成 PDF）。三個檔案可以和報告資料夾裡的 `findings-ai.json` 一起上傳到對話中使用，也可以安裝到 Claude、ChatGPT、Gemini 等平台。做法見使用者手冊第 6 章。
+`findings-ai-日期時間.json` 已經去識別化：主機代號改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。代號對照在報告主機總覽的「交件代號」欄，只留在地端。
 
-`findings-ai.json` 每次分析都會產生，已經去識別化：主機代號改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。代號對照在 `report.html` 主機總覽的「AI 代號」欄，只留在地端。同一個資料夾的 `findings.json` 保留原代號，給機關內部的 AI 或程式使用，不要交給雲端 AI。
+把這個檔交給健檢顧問，回答一份主機情境問卷，顧問會提供給主管看的報告。兩種交法：
+
+- **上傳網頁**：<https://ikusupuroa.github.io/offline-ubuntu-healthcheck/upload/>（原始檔在 `docs/upload/index.html`）。檔案在瀏覽器裡讀取，依每台主機勾選問卷後送出；也可以選「不上傳，下載回答檔」，再用 Email 寄出。
+- **Email**：直接把檔案寄給顧問，顧問會回信請你填問卷。
+
+做法見使用者手冊第 6 章。
 
 ## 其他文件
 

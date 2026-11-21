@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """offline-ubuntu-healthcheck｜分析程式（analyze.py）
 
-版本：0.6.1
+版本：0.7.0
 在分析用的電腦執行（Python 3.6 以上，只用標準函式庫，不需連網）。
 
 用法：
@@ -18,11 +18,10 @@
   both     兩個都跑並比較結果，用來驗證內建比對（需要 oscap）
 
 產出：
-  report.md         健檢報告
-  report.html       同一份報告的網頁版，用瀏覽器打開
-  findings.json     結構化結果摘要（原代號），給地端 AI 或程式使用
-  findings-ai.json  同一份摘要的去識別化版本，可直接交給 AI 分析（skill/offline-ubuntu-healthcheck/SKILL.md）
-  oval-detail.json  官方弱點比對的完整明細（含每則公告的 CVE 清單與套件版本）
+  report-<日期時間>.html       健檢報告，用瀏覽器打開
+  findings-ai-<日期時間>.json  去識別化的結果摘要（主機代號改成 H01、H02…），交給顧問分析
+  oval-detail.json             官方弱點比對的完整明細（含每則公告的 CVE 清單與套件版本），自己留存即可
+  <日期時間>是分析當下的時間，格式 YYYYMMDD-HHMMSS，和報告資料夾名稱同一個時間
 
 判讀規則（分類、嚴重度、建議文字、維護時程）在 rules/default-rules.json，可用 --rules 覆蓋。
 """
@@ -44,7 +43,7 @@ import unicodedata
 import xml.etree.ElementTree as ET
 from html import escape as html_escape
 
-TOOL_VERSION = "0.6.1"
+TOOL_VERSION = "0.7.0"
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -1112,7 +1111,7 @@ def cat_counts(h):
 # ---------------------------------------------------------------------------
 def fix_rows(fx, sevname):
     """報告用的列：一般套件逐則列出；核心公告合併成一列（新核心是不同的套件名稱，處理方式都一樣）。
-    回傳 [(公告, 嚴重度, 攻擊途徑, 套件, 前置說明, [指令])]。findings.json 仍逐則保留。"""
+    回傳 [(公告, 嚴重度, 攻擊途徑, 套件, 前置說明, [指令])]。findings-ai 檔仍逐則保留。"""
     rows, kern = [], []
     for f in fx:
         if f["kernel"]:
@@ -1136,140 +1135,6 @@ def fix_rows(fx, sevname):
     return rows
 
 
-def _m(x):
-    """Markdown 表格儲存格：避免「|」把欄位切開、尖括號被當成 HTML。"""
-    return str(x).replace("|", "／").replace("<", "&lt;").replace(">", "&gt;").replace("\n", " ")
-
-
-def render_report(hosts, args, rules, datasets, warnings=()):
-    rt = rules["report_text"]
-    cats = rules["categories"]
-    sevname = rules.get("severity_names", {})
-    L = []
-    w = L.append
-    cnt = {c: 0 for c in cats}
-    for h in hosts:
-        for k, v in cat_counts(h).items():
-            cnt[k] = cnt.get(k, 0) + v
-    total = sum(cnt.values()) or 1
-    w("# %s\n" % rt["title"])
-    for x in warnings:
-        w("> 注意：%s\n" % _m(x))
-    w("| 項目 | 內容 |\n|---|---|")
-    w("| 受檢單位 | %s |" % _m(args.agency or "（未填）"))
-    w("| 執行單位 | %s |" % _m(args.dealer or "（未填）"))
-    w("| 判斷基準月份 | %s |" % args.date)
-    w("| 受檢主機數 | %d |" % len(hosts))
-    w("| 分析程式版本 | offline-ubuntu-healthcheck %s |" % TOOL_VERSION)
-    used = {c: ds for c, ds in datasets.items() if ds.get("used")}
-    if used:
-        w("| 弱點比對資料 | Canonical 官方 OVAL（security-metadata.canonical.com，CC BY-SA 4.0） |")
-        w("| 比對引擎 | %s |" % args.engine_label)
-    else:
-        w("| 弱點比對資料 | 未使用官方資料檔；僅參考主機上的 Ubuntu Pro 用戶端 |")
-    if args.rules:
-        w("| 判讀規則 | 預設規則＋自訂規則（%s） |" % os.path.basename(args.rules))
-    w("")
-    if used:
-        w("**官方資料檔明細**\n")
-        w("| 版本 | 檔案 | 官方產生時間 | 距分析日 | SHA-256（前 16 碼） | 與下載紀錄 |\n|---|---|---|---|---|---|")
-        for code, ds in sorted(used.items()):
-            i = ds["info"]
-            rec = {True: "一致", False: "**不一致，請重新下載**", None: "無紀錄"}[i["recorded"]]
-            age = "%d 天" % i["age_days"] if i["age_days"] is not None else "?"
-            w("| %s | %s | %s | %s | %s | %s |" % (code_label(rules, code), i["file"], i["timestamp"] or "?", age,
-                                                i["sha256"][:16], rec))
-        stale = stale_codes(datasets, rules)
-        if stale:
-            w("\n> 警告：%s 的官方資料已超過 %d 天，之後公布的弱點不在比對範圍內。建議先更新資料再出報告。"
-              % ("、".join(code_label(rules, c) for c in stale), rules["thresholds"]["data_max_age_days"]))
-        w("")
-    w("## 一、摘要\n")
-    risky = [h for h in hosts if h["support_status"] in ("esm", "legacy", "eol", "nonlts")]
-    w("- 共 %d 台主機，其中 **%d 台已過標準維護期**。" % (len(hosts), len(risky)))
-    w("- 發現事項共 %d 項，依「Ubuntu Pro 能否解決」分成四類：\n" % sum(cnt.values()))
-    w("| 類別 | 說明 | 項數 | 占比 | Ubuntu Pro 能否解決 |\n|---|---|---|---|---|")
-    for c in sorted(cats):
-        w("| %s | %s | %d | %d%% | %s |" % (c, cats[c]["name"], cnt.get(c, 0), round(cnt.get(c, 0) * 100 / total),
-                                         cats[c]["pro_helps"]))
-    w("\n> D 類與 Ubuntu Pro 無關，本報告同樣列出，讓受檢單位掌握完整風險。\n")
-    w("## 二、主機總覽\n")
-    show_ai = not args.deidentify
-    w("| 主機 |%s 版本 | 維護狀態 | 執行中核心 | 未重開機天數 | 需 Pro 才能取得的修補 | 未套用的免費修補 | 資料來源 |\n"
-      "|---|%s---|---|---|---|---|---|---|" % (" AI 代號 |" if show_ai else "", "---|" if show_ai else ""))
-    for h in hosts:
-        p = h["patches"]
-        unit = p.get("unit", "")
-        w("| %s |%s %s | %s | %s | %s | %s | %s | %s |" % (
-            _m(h["tag"]), (" %s |" % h.get("ai_tag", "")) if show_ai else "", _m(h["os"]), STATUS_LABEL.get(h["support_status"], "?"), _m(h["running_kernel"] or "?"),
-            h["uptime_days"] if h["uptime_days"] is not None else "?",
-            ("%d %s" % (p["needs_pro"], unit)) if p["source"] != "none" else "?",
-            ("%d %s" % (p["free_not_applied"], unit)) if p["source"] != "none" else "?",
-            SRC_LABEL.get(p["source"], "?")))
-    w("\n%s\n" % rt["year_note"])
-    if show_ai:
-        w("AI 代號是 findings-ai.json（去識別化，可交給 AI 分析）裡的主機代號；這張對照表只在本報告，不要一起交給雲端 AI。\n")
-    w("## 三、發現事項（依主機）\n")
-    for h in hosts:
-        w("### %s（%s）\n" % (_m(h["tag"]), _m(h["os"])))
-        if h.get("error"):
-            w("> %s\n" % h["error"])
-            continue
-        w("維護狀態：%s\n" % h["support_text"])
-        if not h["run_as_root"]:
-            w("> 以一般使用者收集（預設）：SSH 設定、防火牆、空密碼帳號需要 sudo 才能檢查，列在「未能檢查」。\n")
-        w("| 類別 | 嚴重度 | 發現 | 說明 | 建議 | Pro 能否解決 |\n|---|---|---|---|---|---|")
-        for x in h["findings"]:
-            w("| %s | %s | %s | %s | %s | %s |" % (x["category"], x["severity"], _m(x["title"]),
-                                               _m(x["detail"]), _m(x["action"]), x["pro_helps"]))
-        if h["unchecked"]:
-            w("\n未能檢查的項目（不計入上表）：" + "；".join(h["unchecked"]))
-        if h.get("engine_check"):
-            e = h["engine_check"]
-            w("\n比對引擎對照：OpenSCAP %d 則、內建 %d 則；只有 OpenSCAP 有 %d 則、只有內建有 %d 則。"
-              % (e["oscap"], e["builtin"], len(e["only_oscap"]), len(e["only_builtin"])))
-        fx = h.get("crit_high_fixes") or []
-        if fx:
-            w("\n**重大與高風險公告（%d 則）：只修這一則的指令**\n" % len(fx))
-            w("> %s\n" % rt.get("crit_high_note", ""))
-            w("| 安全公告 | 嚴重度 | 攻擊途徑（CVSS） | 套件 | 指令 |\n|---|---|---|---|---|")
-            for title, sev, av, pk, pre, cmds in fix_rows(fx, sevname):
-                w("| %s | %s | %s | %s | %s |" % (_m(title), sev, _m(av), _m(pk), _m(pre + "　或　".join(cmds))))
-        w("")
-    w("## 四、建議處理順序\n")
-    for i, s in enumerate(priority_steps(hosts, rules), 1):
-        w("%d. %s" % (i, s))
-    w("\n## 五、檢查範圍與限制\n")
-    for s in rt["limitations"]:
-        w("- %s" % s)
-    w("")
-    n = rules["thresholds"]["detail_rows_per_host"]
-    if any(h.get("oval_matches") for h in hosts):
-        w("## 附錄：官方弱點資料比對（依套件彙整）\n")
-        w("免費就能修補的排前面，每一組最多列 %d 個套件；逐則公告的完整清單在 oval-detail.json 與 report.html。\n" % n)
-        for h in hosts:
-            matches = h.get("oval_matches") or []
-            if not matches:
-                continue
-            w("### %s\n" % _m(h["tag"]))
-            for label, group, _ in detail_groups(matches):
-                rows = group_by_package(group)
-                w("**%s**：%d 個套件、%d 則公告\n" % (label, len(rows), len(group)))
-                w("| 套件（原始碼套件名稱） | 最高嚴重度 | 公告數 | 修補來源 | 已安裝 → 修補版本 |\n|---|---|---|---|---|")
-                for e in rows[:n]:
-                    w("| %s | %s | %d | %s | %s → %s |" % (
-                        _m(e["source"]), sevname.get(e["severity"], e["severity"]), len(e["usns"]),
-                        pocket_label(e["pockets"]),
-                        _m("/".join(sorted(e["installed"])[:2]) or "?"), _m(e["fixed"] or "?")))
-                if len(rows) > n:
-                    w("\n（另有 %d 個套件未列出）" % (len(rows) - n))
-                w("")
-    return "\n".join(L)
-
-
-# ---------------------------------------------------------------------------
-# 8. 報告：HTML（單一檔案，用瀏覽器打開）
-# ---------------------------------------------------------------------------
 def _e(x):
     return html_escape(str(x), quote=True)
 
@@ -1325,7 +1190,7 @@ def render_html(hosts, args, rules, datasets, warnings=()):
       "每一項發現的「建議」欄寫了處理方式；各類別的意思與處理步驟，見使用者手冊（docs/user-guide.pdf）第 5 章。</p>")
     # 主機總覽
     show_ai = not args.deidentify
-    w("<h2>二、主機總覽</h2><div class=\"tw\"><table><tr><th>主機</th>%s<th>版本</th>" % ("<th>AI 代號</th>" if show_ai else "") + "<th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th>"
+    w("<h2>二、主機總覽</h2><div class=\"tw\"><table><tr><th>主機</th>%s<th>版本</th>" % ("<th>交件代號</th>" if show_ai else "") + "<th>維護狀態</th><th>A</th><th>B</th><th>C</th><th>D</th>"
       "<th>需 Pro 才能取得的修補</th><th>未套用的免費修補</th><th>執行中核心</th><th>未重開機天數</th></tr>")
     for h in hosts:
         p, c = h["patches"], cat_counts(h)
@@ -1337,7 +1202,7 @@ def render_html(hosts, args, rules, datasets, warnings=()):
             _e(h["running_kernel"] or "?"), _e(h["uptime_days"] if h["uptime_days"] is not None else "?")))
     w("</table></div><p class=\"mut\">%s</p>" % _e(rt["year_note"]))
     if show_ai:
-        w('<p class="mut">AI 代號是 findings-ai.json（去識別化，可交給 AI 分析）裡的主機代號；這張對照表只在本報告，不要一起交給雲端 AI。</p>')
+        w('<p class="mut">交件代號是 findings-ai-%s.json（交給顧問分析的去識別化檔案）裡的主機代號；這張對照表只在本報告，請不要一起寄出。</p>' % _e(args.stamp))
     # 各主機
     w("<h2>三、發現事項（依主機）</h2>")
     n = rules["thresholds"]["detail_rows_per_host"]
@@ -1540,11 +1405,9 @@ def run_analysis(loaded, args, rules, log=None):
         hosts = deidentify(hosts)
         args.agency = "（已去識別化）"
     os.makedirs(args.out, exist_ok=True)
-    with open(os.path.join(args.out, "report.md"), "w", encoding="utf-8") as f:
-        f.write(render_report(hosts, args, rules, datasets, warnings))
-    with open(os.path.join(args.out, "report.html"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.out, "report-%s.html" % args.stamp), "w", encoding="utf-8") as f:
         f.write(render_html(hosts, args, rules, datasets, warnings))
-    # 完整比對明細另存一檔；findings.json 只留摘要，方便交給 AI 分析
+    # 完整比對明細另存一檔，給客戶自己留存；findings-ai 只留摘要，交給顧問分析
     detail = [{"tag": h["tag"], "oval_matches": h.get("oval_matches", [])} for h in hosts]
     with open(os.path.join(args.out, "oval-detail.json"), "w", encoding="utf-8") as f:
         json.dump(detail, f, ensure_ascii=False, indent=1)
@@ -1564,35 +1427,34 @@ def run_analysis(loaded, args, rules, log=None):
                                 for e in group_by_package(matches)]
         for x in h.get("findings", []):
             x.pop("short", None)
-    out = {"schema": "offline-ubuntu-healthcheck/0.6", "tool_version": TOOL_VERSION, "basis_month": args.date,
+    out = {"schema": "offline-ubuntu-healthcheck/0.7", "tool_version": TOOL_VERSION, "basis_month": args.date,
+           "generated_at": args.stamp,
            "deidentified": args.deidentify, "warnings": warnings_ai if args.deidentify else warnings,
            "engine": args.engine_label if any(ds.get("used") for ds in datasets.values()) else None,
            "data": {c: ds["info"] for c, ds in datasets.items() if ds.get("used")},
            "categories": rules["categories"], "priority_steps": priority_steps(hosts, rules), "hosts": slim}
     steps_ai = priority_steps([dict(h, tag=h["ai_tag"]) for h in hosts], rules)
-    if rules["report_text"].get("priority_steps"):  # 自訂的固定文字裡可能寫了主機代號，逐一換成 AI 代號
+    if rules["report_text"].get("priority_steps"):  # 自訂的固定文字裡可能寫了主機代號，逐一換成交件代號
         m = {h["tag"]: h["ai_tag"] for h in hosts}
         rx = re.compile(r"(?<![A-Za-z0-9._-])(%s)(?![A-Za-z0-9._-])" % "|".join(
             re.escape(t) for t in sorted(m, key=len, reverse=True)))
         steps_ai = [rx.sub(lambda g: m[g.group(1)], x) for x in steps_ai]
     ai = ai_view(out, warnings_ai, steps_ai)
-    with open(os.path.join(args.out, "findings.json"), "w", encoding="utf-8") as f:
-        json.dump(ai if args.deidentify else out, f, ensure_ascii=False, indent=2)
-    with open(os.path.join(args.out, "findings-ai.json"), "w", encoding="utf-8") as f:
+    with open(os.path.join(args.out, "findings-ai-%s.json" % args.stamp), "w", encoding="utf-8") as f:
         json.dump(ai, f, ensure_ascii=False, indent=2)
     return hosts, datasets, warnings
 
 
 def ai_view(out, warnings_ai, steps_ai):
-    """去識別化版本：主機代號改用 AI 代號（H01、H02…），收集時間只留日期，警告不出現原代號，
-    不放代號對照。加 --deidentify 時 findings.json 也寫這一份，兩個檔案內容相同。"""
+    """去識別化版本：主機代號改用交件代號（H01、H02…），收集時間只留日期，警告不出現原代號，
+    不放代號對照。"""
     ai = copy.deepcopy(out)
     ai["deidentified"] = True
     ai["warnings"] = list(warnings_ai)
     for h in ai["hosts"]:
         h["tag"] = h.pop("ai_tag", h["tag"])
         h["collected_at"] = str(h.get("collected_at", ""))[:10]
-    ai["priority_steps"] = list(steps_ai)  # 用 AI 代號重新產生，不在文字裡替換代號
+    ai["priority_steps"] = list(steps_ai)  # 用交件代號重新產生，不在文字裡替換代號
     return ai
 
 
@@ -1637,14 +1499,15 @@ def print_summary(hosts, datasets, warnings, args, rules, stream=None):
             code_label(rules, c), (i["timestamp"] or "?")[:10], i["age_days"] if i["age_days"] is not None else "?",
             {True: "一致", False: "不一致！", None: "無紀錄"}[i["recorded"]]))
     p()
-    p("報告：%s　← 用瀏覽器打開" % os.path.join(args.out, "report.html"))
-    p("其他：report.md（可編輯）、findings.json（含原代號，給地端 AI 或程式用）、oval-detail.json（完整明細）")
+    p("報告：%s　← 用瀏覽器打開" % os.path.join(args.out, "report-%s.html" % args.stamp))
+    p("完整明細：oval-detail.json（自己留存即可，不必寄出）")
     p("怎麼看報告：使用者手冊 docs/user-guide.pdf 第 5 章")
-    p("給 AI 分析：請上傳 findings-ai.json（已去識別化，主機代號改成 H01、H02…，對照在 report.html 的「AI 代號」欄）")
+    p("交給顧問：%s（已去識別化，主機代號改成 H01、H02…%s）" % (os.path.join(args.out, "findings-ai-%s.json" % args.stamp),
+      "" if args.deidentify else "，對照在報告的「交件代號」欄"))
 
 
-def default_out():
-    return os.path.join("reports", datetime.datetime.now().strftime("%Y-%m-%d-%H%M%S"))
+def default_out(now):
+    return os.path.join("reports", now.strftime("%Y-%m-%d-%H%M%S"))
 
 
 def add_common_args(ap):
@@ -1654,7 +1517,7 @@ def add_common_args(ap):
                     help="比對引擎（預設 auto：有 oscap 就用，否則內建）")
     ap.add_argument("--rules", help="自訂規則檔（JSON），覆蓋在 rules/default-rules.json 上")
     ap.add_argument("--deidentify", action="store_true",
-                    help="整份報告都去識別化：主機代號改為 H01、H02…（findings-ai.json 每次都會產生，不必加這個參數）")
+                    help="整份報告都去識別化：主機代號改為 H01、H02…（findings-ai 檔每次都是去識別化版本，不必加這個參數）")
     ap.add_argument("--agency", default="", help="受檢單位（報告表頭）")
     ap.add_argument("--assessor", dest="dealer", default="", help="執行單位（報告表頭）")
     ap.add_argument("--date", default=datetime.date.today().strftime("%Y-%m"), help="判斷基準月份 YYYY-MM（預設本月）")
@@ -1670,8 +1533,10 @@ def validate_common(ap, args):
         rules = load_rules(args.rules)
     except (OSError, ValueError) as e:
         ap.error("規則檔讀取失敗：%s" % e)
+    now = datetime.datetime.now()
+    args.stamp = now.strftime("%Y%m%d-%H%M%S")  # 輸出檔名與 generated_at 用同一個時間
     if not args.out:
-        args.out = default_out() + ("-deid" if args.deidentify else "")
+        args.out = default_out(now) + ("-deid" if args.deidentify else "")
     return rules
 
 

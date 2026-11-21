@@ -233,8 +233,9 @@ for V in "${VERSIONS[@]}"; do
   tar -czf - -C "$ROOT" hc analyze.py collect.sh update-data.py rules | lxc exec "$VM" -- tar -xzf - -C /root/hc
   tar -czf - -C "$OUT/data" . | lxc exec "$VM" -- tar -xzf - -C /root/hc/data
   lxc exec "$VM" -- sh -c 'cd /root/hc && python3 hc local --update no --tag U'"${V/./}"' --out /root/out' </dev/null > "$L/hc-local.log" 2>&1
-  lxc exec "$VM" -- cat /root/out/findings.json </dev/null > "$L/findings.json" 2>/dev/null
-  # 整份報告（report.html、findings-ai.json 等）也帶出來，方便看報告與測 AI skill
+  # 0.7.0 起只產生 findings-ai-<日期時間>.json；單台主機，內容與舊的 findings.json 相同（代號改成 H01）
+  lxc exec "$VM" -- sh -c 'cat /root/out/findings-ai-*.json' </dev/null > "$L/findings.json" 2>/dev/null
+  # 整份報告（report-*.html、findings-ai-*.json 等）也帶出來，方便看報告與測試顧問端的分析
   mkdir -p "$L/report"
   lxc exec "$VM" -- tar -czf - -C /root/out . </dev/null 2>/dev/null | tar -xzf - -C "$L/report" 2>/dev/null
 
@@ -321,7 +322,7 @@ combine() {  # $1＝report 或 report-after，$2＝輸出資料夾名稱，$3＝
   [ ${#files[@]} -gt 0 ] || { log "沒有 $1 的收集檔，略過 $2"; return 0; }
   python3 hc report "${files[@]}" --data "$OUT/data" --engine builtin --update no \
     --agency "LXD 測試機（虛構）" --assessor "$3" --out "$OUT/$2" </dev/null > "$OUT/logs/$2.log" 2>&1 \
-    && log "合成報告：$OUT/$2/report.html" || log "合成 $2 失敗，見 $OUT/logs/$2.log"
+    && log "合成報告：$(ls "$OUT/$2"/report-*.html 2>/dev/null | head -1)" || log "合成 $2 失敗，見 $OUT/logs/$2.log"
 }
 combine report combined-before "更新前"
 [ "$AFTER" = 1 ] && combine report-after combined-after "更新後（apt upgrade 之後）"

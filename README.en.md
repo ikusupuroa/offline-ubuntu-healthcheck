@@ -23,7 +23,7 @@ A plain `git clone` also fetches the `data` branch, which GitHub Actions refresh
 
 `./hc scan` pipes the collector over SSH and streams the result back, so the collector and its output are never written on the host (the Ubuntu Pro client and sudo still write their own logs). `--sudo` is optional in all three cases. It adds three checks (SSH config, ufw, empty passwords); without it they are listed as not checked. `hc local --sudo` asks for your sudo password; `hc scan --sudo` needs passwordless sudo on the hosts and otherwise falls back to a normal user. A collector file made with `sudo bash collect.sh` is owned by root: run `sudo chown $USER hc-H01-*.tar.gz` before copying it.
 
-Open `report.html` in a browser for the full report.
+Open `report-<timestamp>.html` in a browser for the full report. Each run writes three files to `reports/<timestamp>/`: the report, `findings-ai-<timestamp>.json` (de-identified results to send to your consultant) and `oval-detail.json` (full matching details, keep it yourself).
 
 ## OVAL data
 
@@ -41,7 +41,7 @@ It reads the fix pocket named in the official OVAL criteria (`esm-infra`, `esm-a
 ## More
 
 - `docs/user-guide.pdf`: step-by-step user guide, including how to read the report
-- `skill/offline-ubuntu-healthcheck/`: an Agent Skill for analysing the results with an AI assistant. `SKILL.md` holds the analysis rules `template.md` fixes the output format of the three default rounds (initial analysis, context review, final report), and `report-template.html` renders the executive report (with charts, printable to PDF); upload all three. Upload `findings-ai.json`, which every run writes next to the report: host tags are replaced with H01, H02… and the mapping stays in `report.html` only. `findings.json` keeps the original tags for local use.
+- `docs/upload/`: a questionnaire page (served by GitHub Pages) for sending `findings-ai-<timestamp>.json` with a short host-context questionnaire to the consultant. The file is read in the browser; host tags are H01, H02… and the mapping stays in the local report only.
 - `tests/lxd-quicktest.sh`: one-command test across Ubuntu releases in LXD VMs
 - `rules/default-rules.json`: categories, advice texts and thresholds; override with `--rules`
 - Critical and high advisories show an attack vector and the highest CVSS score, taken from the CVSS vectors in Canonical's OVAL data (CVSS 3.x and 4.0 mixed). It shows how an issue could be reached, not that it has been confirmed exploitable.

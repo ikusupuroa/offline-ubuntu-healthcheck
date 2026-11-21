@@ -34,7 +34,7 @@
 | `thresholds.data_max_age_days` | 官方資料超過幾天要警告（預設 7） |
 | `thresholds.apt_update_stale_days` | 自動更新已開啟、但套件清單超過幾天沒成功更新時，提出「自動更新沒有成功」（預設 7，以收集當天計算） |
 | `thresholds.auto_update_lag_days` | 自動更新已開啟、套件清單也有更新，但有發布超過幾天的免費安全修補還沒裝時，提出「自動更新沒有實際安裝修補」（預設 7，依官方資料的公告發布日與收集當天計算） |
-| `thresholds.detail_rows_per_host` | report.md 附錄每台主機「免費」與「需 Pro」各列幾個套件；report.html 套件數不超過這個數字時，「免費就能修補」明細預設展開（預設 30） |
+| `thresholds.detail_rows_per_host` | 報告（report-日期時間.html）每台主機的套件數不超過這個數字時，「免費就能修補」明細預設展開（預設 30） |
 | `usg_versions` | 哪些版本要提出 C 類「未使用 USG」建議 |
 | `severity_names` | 官方嚴重度的中文名稱 |
 | `findings.<代號>` | 每一種發現的開關、類別、嚴重度、標題、說明、建議。`short` 是放進「建議處理順序」的短名稱（沒寫就用標題）；`action_if_auto_update_failing` 是自動更新沒有成功時改用的建議，`action_if_auto_update_not_applying` 是自動更新有開卻沒有實際安裝修補時改用的建議 |
@@ -85,4 +85,4 @@
 
 ## 更進一步
 
-規則檔處理的是「分類與文字」。要依單位的資安政策產出更完整的建議，可以把 `findings-ai.json`（去識別化）交給 AI，搭配 [skill/offline-ubuntu-healthcheck/SKILL.md](../skill/offline-ubuntu-healthcheck/SKILL.md) 的指引、[template.md](../skill/offline-ubuntu-healthcheck/template.md) 的輸出範本與 [report-template.html](../skill/offline-ubuntu-healthcheck/report-template.html) 的主管報告範本（做法見使用者手冊第 6 章），再加上自己單位的規範一起分析。
+規則檔處理的是「分類與文字」。要依主機的實際用途排出處理順序、產出給主管看的報告，可以把 `findings-ai-日期時間.json`（去識別化）交給健檢顧問分析，做法見使用者手冊第 6 章。

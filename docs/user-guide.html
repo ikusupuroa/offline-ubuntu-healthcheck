@@ -74,7 +74,7 @@ figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
 
 <section class="cover">
   <h1>Ubuntu 主機資安健檢工具<br>使用者手冊</h1>
-  <p class="sub">offline-ubuntu-healthcheck 0.6.1</p>
+  <p class="sub">offline-ubuntu-healthcheck 0.7.0</p>
   <p class="mut">2026 年 11 月</p>
   <p class="mut">工具下載：https://github.com/ikusupuroa/offline-ubuntu-healthcheck</p>
   <p class="mut" style="margin-top:40px">本工具不是 Canonical 的官方工具，與 Canonical 沒有隸屬關係，也沒有經過 Canonical 背書。Ubuntu 是 Canonical Ltd. 的商標。</p>
@@ -88,7 +88,7 @@ figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
     <li>準備主機清單與 SSH 登入</li>
     <li>收集資料並產生報告</li>
     <li>看懂報告</li>
-    <li>交給 AI 分析</li>
+    <li>交給顧問分析</li>
     <li>更新官方資料與常見問題</li>
     <li>附錄：指令速查</li>
   </ol>
@@ -106,7 +106,7 @@ figure.arch ol.legend li{padding-left:1.6em;text-indent:-1.6em}
 <p>比對用的是 Canonical 官方公開的 OVAL 弱點資料。受檢主機上不必安裝任何東西，也不需要連網。</p>
 
 <h3>整個流程</h3>
-<div class="flow"><span>① 準備分析電腦</span>→<span>② 準備主機清單</span>→<span>③ 收集並產生報告</span>→<span>④ 看報告</span>→<span>⑤（選用）交給 AI 分析</span></div>
+<div class="flow"><span>① 準備分析電腦</span>→<span>② 準備主機清單</span>→<span>③ 收集並產生報告</span>→<span>④ 看報告</span>→<span>⑤（選用）交給顧問分析</span></div>
 <p>各步驟在哪台電腦上做、資料怎麼流動，請看第 2 章的圖 1（下載與更新）和第 4 章的圖 2（掃描主機）。</p>
 
 <h3>會做與不會做的事</h3>
@@ -271,10 +271,10 @@ H02   ops@10.0.0.6     -p 2222</pre>
 A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決）　C＝合規工具　D＝與 Pro 無關
 官方資料：focal（20.04），產生於 2026-11-15（1 天前），雜湊核對：一致
 
-報告：reports/2026-11-16-151406/report.html　← 用瀏覽器打開</pre>
+報告：reports/2026-11-16-151406/report-20261116-151406.html　← 用瀏覽器打開</pre>
 <p>這段畫面的意思：H01 是 20.04，標準維護期已經過了；有 178 則安全公告的修補要訂閱 Ubuntu Pro 才拿得到，另外 3 則是免費的、只是還沒裝。A、B、C、D 是發現事項的類別，第 5 章會詳細說明。</p>
 </div></div>
-<div class="step"><b class="n">3</b><div><p>用瀏覽器打開最後一行的 <code>report.html</code>。</p></div></div>
+<div class="step"><b class="n">3</b><div><p>用瀏覽器打開最後一行的報告檔（<code>report-日期時間.html</code>）。</p></div></div>
 
 <figure class="arch">
 <div class="keep">
@@ -308,12 +308,12 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <rect class="wb" x="40" y="290" width="220" height="54" rx="6"/>
 <circle class="bd" cx="56" cy="317" r="10"/><text class="bn" x="56" y="321" text-anchor="middle">6</text>
 <text class="c" x="72" y="306">reports/日期時間/</text>
-<text class="s" x="72" y="322">report.html、findings-ai.json</text>
+<text class="s" x="72" y="322">report-….html、findings-ai-….json</text>
 <text class="s" x="72" y="337">collected/（收集到的資料）</text>
 <path class="ln" d="M150 344V375" marker-end="url(#ah2)"/>
 <rect class="hl" x="28" y="378" width="244" height="44" rx="8"/>
 <circle class="bd" cx="46" cy="400" r="10"/><text class="bn" x="46" y="404" text-anchor="middle">7</text>
-<text x="62" y="405">用瀏覽器打開 report.html</text>
+<text x="62" y="405">用瀏覽器打開報告檔</text>
 <!-- 受檢主機 -->
 <rect class="z" x="420" y="10" width="250" height="430" rx="10"/>
 <text class="zl" x="432" y="30">受檢主機（單位內部網路）</text>
@@ -350,7 +350,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
   <li>④ 收集結果傳回分析電腦，主機上不會留下腳本或收集檔。</li>
   <li>⑤ 在分析電腦上和 <code>data/</code> 裡的官方資料比對，不必上網。</li>
   <li>⑥ 報告與相關檔案存進 <code>reports/日期時間/</code>（4.2 節）。</li>
-  <li>⑦ 用瀏覽器打開 <code>report.html</code>，第 5 章說明怎麼看。</li>
+  <li>⑦ 用瀏覽器打開 <code>report-日期時間.html</code>，第 5 章說明怎麼看。</li>
 </ol>
 </figure>
 
@@ -367,7 +367,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><th>參數</th><th>作用</th></tr>
 <tr><td><code>--agency "受檢單位名稱"</code></td><td>寫在報告表頭</td></tr>
 <tr><td><code>--assessor "執行單位名稱"</code></td><td>寫在報告表頭</td></tr>
-<tr><td><code>--deidentify</code></td><td>整份報告都去識別化：主機代號改成 H01、H02…，受檢單位遮掉。只要交 AI 分析的話不必加，每次都會產生 <code>findings-ai.json</code>（第 6 章）；加了之後 <code>findings.json</code> 的內容和 <code>findings-ai.json</code> 相同</td></tr>
+<tr><td><code>--deidentify</code></td><td>整份報告都去識別化：主機代號改成 H01、H02…，受檢單位遮掉。只要交給顧問分析的話不必加，<code>findings-ai-日期時間.json</code> 每次都是去識別化的版本（第 6 章）。加了之後，報告資料夾名稱結尾多 <code>-deid</code>，收集檔改放在資料夾外面的 <code>…-deid-collected/</code>，報告裡也不會有「交件代號」欄</td></tr>
 <tr><td><code>--refresh-data</code></td><td>開始收集前，先向 Canonical 檢查有沒有新的官方資料，有就下載（每次連線最多等 15 秒）。連不上就用已下載的資料，不會中斷</td></tr>
 </table></div>
 <p>開始收集前，畫面會先說明這次用的官方資料是哪一天產生的、從哪裡來，例如：</p>
@@ -376,14 +376,12 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <p>沒加 <code>--refresh-data</code> 時寫「使用已下載的資料」；加了但連不上時寫「無法連線，改用已下載的資料」。</p>
 
 <h3>4.2 產出哪些檔案</h3>
-<p>每次分析都會在 <code>reports/日期時間/</code> 產生：</p>
+<p>每次分析都會在 <code>reports/日期時間/</code> 產生下面這些檔案。檔名裡的日期時間是分析當下的時間（YYYYMMDD-HHMMSS），和資料夾名稱一致，方便分辨是哪一次的結果：</p>
 <div class="tw"><table>
 <tr><th>檔案</th><th>用途</th></tr>
-<tr><td><code>report.html</code></td><td>報告，用瀏覽器打開</td></tr>
-<tr><td><code>report.md</code></td><td>同一份報告的文字版，可以修改後交付</td></tr>
-<tr><td><code>findings-ai.json</code></td><td>去識別化的結構化結果，要交給 AI 分析時上傳這個（第 6 章）。主機代號改成 H01、H02…，收集時間只留日期，不含受檢單位名稱</td></tr>
-<tr><td><code>findings.json</code></td><td>同一份結構化結果，保留原本的主機代號，給機關內部的 AI 或程式使用</td></tr>
-<tr><td><code>oval-detail.json</code></td><td>每則安全公告的完整比對明細</td></tr>
+<tr><td><code>report-日期時間.html</code></td><td>報告，用瀏覽器打開，自己看或交付</td></tr>
+<tr><td><code>findings-ai-日期時間.json</code></td><td>去識別化的結構化結果，<b>交給顧問分析時只要這個檔</b>（第 6 章）。主機代號改成 H01、H02…，收集時間只留日期，不含受檢單位名稱</td></tr>
+<tr><td><code>oval-detail.json</code></td><td>每則安全公告的完整比對明細，自己留存即可，不必交給顧問</td></tr>
 <tr><td><code>collected/</code></td><td>收集到的原始資料，含套件清單，請依單位的資料分級規定保管</td></tr>
 </table></div>
 
@@ -419,7 +417,7 @@ A＝訂閱 Ubuntu Pro 可解決　B＝要重開機（Livepatch 可部分解決�
 <tr><td>需 Pro 才能取得的修補</td><td>要訂閱才拿得到的安全公告則數</td></tr>
 <tr><td>未套用的免費修補</td><td>免費、但還沒裝的安全公告則數。這個數字大，代表例行修補沒有在做</td></tr>
 <tr><td>未重開機天數</td><td>超過 90 天會在 B 類提醒</td></tr>
-<tr><td>AI 代號</td><td>這台主機在 <code>findings-ai.json</code> 裡的代號（H01、H02…）。AI 的分析結果寫 H01 時，用這一欄對回原本的主機。這張對照只在報告裡，不要一起交給雲端 AI</td></tr>
+<tr><td>交件代號</td><td>這台主機在 <code>findings-ai-日期時間.json</code> 裡的代號（H01、H02…）。顧問的分析報告寫 H01 時，用這一欄對回原本的主機。這張對照只在報告裡，不要一起寄出</td></tr>
 </table></div>
 
 <h3>5.3 發現事項：每一列怎麼讀</h3>
@@ -502,77 +500,41 @@ sudo apt upgrade</pre>
   <li><b>附錄：資料來源</b>：這次用的官方資料是哪一天產生的、檔案有沒有被改過。「與下載紀錄」要是「一致」。</li>
 </ul>
 
-<h2>6. 交給 AI 分析</h2>
-<p>報告是固定格式。如果想依單位的資安政策產出更完整的建議，可以把 <code>findings-ai.json</code> 交給 AI，搭配本工具附的分析指引（skill）一起使用。分析指引在 <code>skill/offline-ubuntu-healthcheck/</code> 資料夾，有兩個檔案：<code>SKILL.md</code> 規定 AI 要怎麼讀資料、什麼話不能亂說；<code>template.md</code> 是輸出範本，固定每一輪回覆的標題、順序與表格，讓每次分析的格式都一樣；<code>report-template.html</code> 是給主管的報告範本，AI 會用它產生可以存成 PDF 的報告檔。<b>三個檔案要一起給 AI。</b></p>
+<h2>6. 交給顧問分析</h2>
+<p>報告列出了每台主機還沒裝的更新與設定問題，但看不到主機做什麼用、誰連得到，所以排不出最合適的處理順序。把去識別化的結果檔交給健檢顧問，再回答一份主機情境問卷，顧問會依您的情況提供給主管看的報告：整體建議、請主管決定的事、各主機狀況、建議處理時程與 Ubuntu Pro 評估，可以存成 PDF，也可以直接截圖放進簡報。</p>
 
-<h3>6.1 先做兩件事</h3>
-<div class="step"><b class="n">1</b><div><p><b>確認單位規定</b>：機關使用生成式 AI 有相關規定，先問資訊單位能不能把健檢結果交給雲端 AI，或是要用機關內部的 AI。</p></div></div>
-<div class="step"><b class="n">2</b><div><p><b>找到去識別化的檔案</b>：每次分析都會在報告資料夾產生 <code>findings-ai.json</code>，主機代號已經改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。交給 AI 的就是這個檔案，不必另外再跑一次。</p>
-<p>AI 的分析結果會寫 H01、H02，用 <code>report.html</code> 主機總覽的「AI 代號」欄對回原本的主機。同一個資料夾裡的 <code>findings.json</code> 保留原代號，不要交給雲端 AI。</p>
-<p>連報告本身都要去識別化（例如要把整份報告交給外部人員）時，才在原本的指令後面加 <code>--deidentify</code>。</p></div></div>
+<h3>6.1 先確認兩件事</h3>
+<div class="step"><b class="n">1</b><div><p><b>確認單位規定</b>：先問資訊單位能不能把去識別化的健檢結果交給外部顧問。</p></div></div>
+<div class="step"><b class="n">2</b><div><p><b>找到要交的檔案</b>：報告資料夾裡的 <code>findings-ai-日期時間.json</code>。主機代號已經改成 H01、H02…，不含受檢單位名稱，收集時間只留日期。報告檔與 <code>oval-detail.json</code> 自己留著，不必交。</p>
+<p>顧問的報告會寫 H01、H02，用報告主機總覽的「交件代號」欄對回原本的主機。</p></div></div>
 
-<h3>6.2 取得分析指引檔</h3>
+<h3>6.2 做法一：用上傳網頁（建議）</h3>
+<p>網址：<code>https://ikusupuroa.github.io/offline-ubuntu-healthcheck/upload/</code></p>
+<div class="step"><b class="n">1</b><div><p>用瀏覽器打開上傳網頁，選擇 <code>findings-ai-日期時間.json</code>。檔案只在您的瀏覽器裡讀取，按下最後的「送出」之前不會傳到任何地方。</p></div></div>
+<div class="step"><b class="n">2</b><div><p>每台主機一個區塊，點標題可以展開或收合。依實際情況勾選：</p>
 <ul>
-  <li>工具資料夾裡的 <code>skill/offline-ubuntu-healthcheck/</code>：<code>SKILL.md</code>、<code>template.md</code>、<code>report-template.html</code>。</li>
-  <li>或到專案的 Releases 頁面下載 <code>offline-ubuntu-healthcheck-skill.zip</code>，這是可以直接上傳到 AI 平台的壓縮檔。</li>
+  <li><b>必答</b>（標 <span style="color:#c62828">*</span>）：用途、可達性、重要性。沒答完不能送出，按下方的「前往未答的題目」可以直接跳過去。</li>
+  <li><b>選答</b>：維護窗口、處理方向、補償控制（可達性不是「只限管理網段」或「完全隔離」、而且這台主機有可能經由網路受影響的更新時才會出現）。沒填會出現紅字提醒，因為會影響判讀的準確度。</li>
+  <li>不清楚的題目選「不確定」，也算已回答。不需要提供 IP、主機名稱、帳號或設定檔。</li>
+</ul></div></div>
+<div class="step"><b class="n">3</b><div><p>填寫聯絡資料（機關名稱、單位、聯絡人、Email，電話選填），閱讀個人資料蒐集告知後勾選同意，按「送出」。</p></div></div>
+<div class="step"><b class="n">4</b><div><p>畫面會顯示送件編號（例如 <code>HC-20261121-1502-K7Q3</code>），請記下來，聯絡顧問時提供即可。</p></div></div>
+<p>送出的內容只有 <code>findings-ai-日期時間.json</code>、問卷答案與聯絡資料，存放在顧問的 Google 雲端硬碟；結案後滿 90 天刪除（雲端硬碟的垃圾桶會再保留 30 天後永久清除）。</p>
+<div class="note">按「送出」時，瀏覽器會把資料傳到 Google 的服務（<code>script.google.com</code>）。所在網路擋住 Google 服務時會送不出去，網頁會自動改成下載回答檔，請改用做法二。</div>
+
+<h3>6.3 做法二：用 Email 寄給顧問</h3>
+<ul>
+  <li><b>先填問卷再寄</b>：照做法一打開上傳網頁、選檔、勾選，最後按「不上傳，下載回答檔」，會下載 <code>answers-送件編號.json</code>。把 <code>findings-ai-日期時間.json</code> 和這個回答檔一起寄給顧問。這種做法不用填聯絡資料，檔案也不會經過網路上傳。</li>
+  <li><b>只寄結果檔</b>：直接把 <code>findings-ai-日期時間.json</code> 寄給顧問，顧問會回信請您填問卷；打不開網頁時，顧問會改寄純文字問卷，在選項前打 x 回信即可。</li>
 </ul>
 
-<h3>6.3 做法一：一次性使用（任何 AI 平台）</h3>
-<p>不用安裝，每次開新對話時把四個檔案一起上傳：</p>
-<div class="step"><b class="n">1</b><div><p>開一個新對話，上傳 <code>SKILL.md</code>、<code>template.md</code>、<code>report-template.html</code> 和 <code>findings-ai.json</code>。</p><p>平台不接受 <code>.md</code> 檔時（例如 Claude 的官方支援清單沒有列 <code>.md</code>），把檔名改成 <code>SKILL.txt</code>、<code>template.txt</code> 再上傳，或直接把內容貼進對話框。</p><p>用 ChatGPT 的「專案」時，可以把 <code>SKILL.md</code>、<code>template.md</code>、<code>report-template.html</code> 放進專案檔案，之後每個新對話只要上傳 <code>findings-ai.json</code>。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>輸入：</p><pre>請依照 SKILL 檔的指引與 template 檔的格式，分析 findings-ai.json 的健檢結果。</pre></div></div>
-<p>機關內部自建的 AI 也是同樣做法。</p>
-
-<h3>6.4 做法二：做成固定的 skill</h3>
-<p>裝好之後，之後只要上傳 <code>findings-ai.json</code> 並說「請分析這份健檢結果」，AI 就會自動套用指引。各平台的選單名稱常改版，以下是 2026 年 11 月查證時的做法，操作前請以官方說明為準。</p>
-
-<h3>Claude 網頁版與桌面版</h3>
-<div class="step"><b class="n">1</b><div><p>到設定的 Capabilities，開啟「Code execution and file creation」（新版介面叫「Create and edit files」）。這一步一定要做，skill 才能用。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>到 Customize → Skills，按「+」→ Create skill → Upload a skill，上傳 <code>offline-ubuntu-healthcheck-skill.zip</code>。</p></div></div>
-<div class="step"><b class="n">3</b><div><p>在 skill 清單裡把它切到開啟。</p></div></div>
-<ul>
-  <li>壓縮檔裡最上層必須是 <code>offline-ubuntu-healthcheck/</code> 資料夾，裡面放 <code>SKILL.md</code>、<code>template.md</code> 與 <code>report-template.html</code>。Releases 提供的壓縮檔已經是這個結構；自己壓縮時，要壓整個資料夾，不是只壓檔案。</li>
-  <li>企業版（Team、Enterprise）：管理員可能關閉了自行上傳。管理員可以在組織設定直接派發給全組織。</li>
-  <li>免費方案能不能用，官方兩份說明寫法不一致，未確認。</li>
-  <li>官方說明：https://support.claude.com/en/articles/12512180-using-skills-in-claude</li>
-</ul>
-
-<h3>Claude Code</h3>
-<p>把 <code>skill/offline-ubuntu-healthcheck</code> 整個資料夾複製到下面其中一個位置：</p>
+<h3>6.4 顧問會給您什麼</h3>
 <div class="tw"><table>
-<tr><th>範圍</th><th>放置位置</th></tr>
-<tr><td>只給自己用（所有專案）</td><td><code>~/.claude/skills/offline-ubuntu-healthcheck/SKILL.md</code></td></tr>
-<tr><td>給某個專案的所有成員用</td><td><code>專案資料夾/.claude/skills/offline-ubuntu-healthcheck/SKILL.md</code></td></tr>
+<tr><th>內容</th><th>說明</th></tr>
+<tr><td>主管報告</td><td>給不熟技術的主管看：整體建議、請主管決定的事（含要不要預算）、各主機狀況、建議處理時程、Ubuntu Pro 評估、仍待確認的事。報告檔是 16:9 的投影片版面，用瀏覽器開啟後按「下載 PDF」可存成 PDF，每頁也可以直接截圖貼進簡報</td></tr>
+<tr><td>處理追蹤表</td><td>給系統維護廠商：每個項目的做法、建議期限與負責單位，以及要優先安裝的更新與指令</td></tr>
 </table></div>
-<pre>mkdir -p ~/.claude/skills
-cp -r skill/offline-ubuntu-healthcheck ~/.claude/skills/</pre>
-<p>官方說明：https://code.claude.com/docs/en/skills</p>
-
-<h3>ChatGPT</h3>
-<p>ChatGPT 有 Skills 功能，遵循同一套 skill 格式。官方說明目前寫的適用方案是 Business、Enterprise、Healthcare、Edu，Plus 與免費方案未確認。</p>
-<div class="step"><b class="n">1</b><div><p>到 Skills → Create → Upload from your computer，上傳 <code>offline-ubuntu-healthcheck-skill.zip</code>。上傳後 ChatGPT 會先掃描，通過才能用。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>工作區管理員要先開啟「Enable skills」與「Enable skill uploading」。</p></div></div>
-<p class="mut">以上依官方說明的摘要整理，尚未實測。官方說明：https://help.openai.com/en/articles/20001066-skills-in-chatgpt</p>
-
-<h3>Gemini</h3>
-<p>Gemini 網頁版與 App 已經從 Gems 改成 skills。</p>
-<div class="step"><b class="n">1</b><div><p>到 Customize → Skills → Create → Create manually。</p></div></div>
-<div class="step"><b class="n">2</b><div><p>名稱填 <code>offline-ubuntu-healthcheck</code>，描述與指示分別貼上 <code>SKILL.md</code> 開頭的 description 與「# Ubuntu 健檢結果分析指引」以下的內容，再把 <code>template.md</code> 的全文接在指示後面，然後按 Create；<code>report-template.html</code> 在對話中另外上傳。也可以直接上傳 <code>SKILL.md</code> 匯入，匯入後同樣要把 <code>template.md</code> 的全文加進指示（指示長度上限未確認，尚未實測）。</p></div></div>
-<div class="warn">Gemini 的 skills 目前只開放 18 歲以上的個人 Google 帳號。<b>工作與學校帳號（包含機關的 Google Workspace）還沒開放</b>，開放日期未公布。用機關帳號時請先用做法一。</div>
-<p>Gemini CLI 的放置位置：自己用放 <code>~/.gemini/skills/</code>，專案用放 <code>專案資料夾/.gemini/skills/</code>。</p>
-<p class="mut">官方說明：https://support.google.com/gemini/answer/18560919 、https://geminicli.com/docs/cli/skills/</p>
-
-<h3>6.5 AI 會給你什麼</h3>
-<p>輸出範本把分析固定成三輪，每一輪的標題、順序與表格欄位都一樣：</p>
-<div class="tw"><table>
-<tr><th>輪</th><th>你要做的事</th><th>AI 給你什麼</th></tr>
-<tr><td>第 1 輪：初步分析</td><td>上傳檔案，說「請分析這份健檢結果」</td><td>整體風險與主機概況、三句話總結、處理清單（含期限）、可能的攻擊路徑、Ubuntu Pro 能與不能解決的部分、維護責任、需要人工確認的事、給主管的結論，最後是一份勾選式的情境問卷</td></tr>
-<tr><td>第 2 輪：情境判讀</td><td>在問卷勾選後送出（也可以照文字版打編號，或直接打字說明）</td><td>只寫依情境改變的地方：哪些項目的結論或期限變了（並標出第 1 輪對應的段落）、需立即處理的公告與指令、情境判讀紀錄</td></tr>
-<tr><td>第 3 輪：定稿交付</td><td>說「整理成定稿」</td><td>給高階主管的報告（不談技術：整體風險、請主管決定的事、各主機狀況、處理時程、Ubuntu Pro 評估），附錄是給維護廠商的處理追蹤表；另外提供一個報告檔，用瀏覽器開啟後按「下載 PDF」即可存成含圖表的 PDF</td></tr>
-</table></div>
-<p>範本能固定格式，但說明文字的用字每次仍會有些不同。如果 AI 的回覆開頭寫「沒有收到 template.md」，代表範本沒有一起上傳，請補傳再重問一次。</p>
-<p>AI 無法直接產生報告檔時，會改給一段以 { 開頭的報告資料：用瀏覽器開啟 <code>report-template.html</code>，按「載入報告資料」，把那段資料整段貼上，再按「顯示報告」。報告檔不連網，資料只在你的電腦處理。</p>
-<div class="note">交付前請人工核對 AI 的分析，特別是數字與建議的指令。分析指引已要求 AI 只根據檔案內容、不自己編 CVE 或指令，但仍可能出錯。</div>
+<div class="note">報告依健檢資料與您提供的主機用途整理，不是實際的入侵測試。期限是顧問建議，機關有自己的規定時以規定為準。</div>
 
 <h2>7. 更新官方資料與常見問題</h2>
 
@@ -638,7 +600,7 @@ ssh -p 2222 admin@10.0.0.5 'echo OK'</pre>
 <tr><td>用 SSH 收集並分析</td><td><code>./hc scan hosts.txt --sudo</code></td></tr>
 <tr><td>主機管理者自己收集</td><td><code>sudo bash collect.sh --tag H01</code></td></tr>
 <tr><td>分析交回來的收集檔</td><td><code>./hc report hc-*.tar.gz</code></td></tr>
-<tr><td>交給 AI 分析</td><td>上傳報告資料夾裡的 <code>findings-ai.json</code>（每次都會產生）</td></tr>
+<tr><td>交給顧問分析</td><td>用上傳網頁送出報告資料夾裡的 <code>findings-ai-日期時間.json</code>（第 6 章）</td></tr>
 <tr><td>整份報告去識別化</td><td>原本的指令後面加 <code>--deidentify</code></td></tr>
 <tr><td>掃描前先檢查新的官方資料</td><td>原本的指令後面加 <code>--refresh-data</code></td></tr>
 <tr><td>看完整參數說明</td><td><code>./hc scan -h</code>、<code>./hc report -h</code></td></tr>

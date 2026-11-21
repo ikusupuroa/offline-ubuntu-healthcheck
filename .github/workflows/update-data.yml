@@ -1,7 +1,8 @@
 # 每天從 Canonical 官方網站下載 OVAL 弱點資料，更新到兩個地方：
 #   1. data 分支：只保留最新一份（每次覆蓋，不累積歷史）。git clone 時會一起下載，
 #      hc 第一次執行時自動放進 data/，所以下載後馬上就有一份可用的資料。
-#   2. Releases 的 data-latest：完整壓縮檔（工具＋最新資料），以及可以直接上傳到 AI 平台的 skill 壓縮檔。
+#   2. Releases 的 data-latest：完整壓縮檔（工具＋最新資料）。
+#      0.7.0 起不再打包 skill；Releases 上舊的 skill 壓縮檔先保留，0.8 時再刪除。
 # 官方資料下載或內容檢查失敗時整個流程停止，不會蓋掉前一天的資料。
 name: 每日更新官方弱點資料
 
@@ -51,7 +52,7 @@ jobs:
           git push -q -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" data
           echo "data 分支已更新"
 
-      - name: 打包完整壓縮檔與 skill 壓縮檔，更新 Releases
+      - name: 打包完整壓縮檔，更新 Releases
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -62,7 +63,6 @@ jobs:
           rm -rf build/offline-ubuntu-healthcheck/data
           cp -r data-out build/offline-ubuntu-healthcheck/data
           (cd build && zip -qr ../offline-ubuntu-healthcheck-full.zip offline-ubuntu-healthcheck)
-          (cd skill && zip -qr ../offline-ubuntu-healthcheck-skill.zip offline-ubuntu-healthcheck)
           NOTES="每天自動更新。完整壓縮檔＝工具＋最新官方弱點資料，解壓後即可在離線環境使用。
           官方資料產生時間：
           $(python3 update-data.py --dest data-out --list)
@@ -72,7 +72,7 @@ jobs:
           else
             gh release edit data-latest --notes "$NOTES"
           fi
-          gh release upload data-latest offline-ubuntu-healthcheck-full.zip offline-ubuntu-healthcheck-skill.zip --clobber
+          gh release upload data-latest offline-ubuntu-healthcheck-full.zip --clobber
 
       - name: 保持排程運作的提交（每月 1 日與 15 日）
         # GitHub 會在公開專案 60 天沒有活動時自動停用排程，每月兩次在主分支更新一個小檔案避免停用。

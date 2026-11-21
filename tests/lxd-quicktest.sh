@@ -161,13 +161,16 @@ if [ -z "$B" ]; then echo "沒有任何收集檔，無法分析。"; else
   python3 - "$OUT" "$ENGINE" <<'EOF' >> "$RES"
 import json, sys, os
 out, engine = sys.argv[1], sys.argv[2]
+import glob
 try:
-    d = json.load(open(os.path.join(out, "report", "findings.json"), encoding="utf-8"))
+    d = json.load(open(glob.glob(os.path.join(out, "report", "findings-ai-*.json"))[0], encoding="utf-8"))
+    # findings-ai 的代號是 H01、H02…；oval-detail.json 的主機順序相同、保留原代號，用來對回 -user／-sudo
+    tags = [x["tag"] for x in json.load(open(os.path.join(out, "report", "oval-detail.json"), encoding="utf-8"))]
+    assert len(tags) == len(d["hosts"])
 except Exception as e:
-    print("all\t分析\t不通過\t找不到 findings.json（%s），見 logs/analyze.log" % e); sys.exit()
-for h in d["hosts"]:
+    print("all\t分析\t不通過\t找不到 findings-ai 或 oval-detail.json（%s），見 logs/analyze.log" % e); sys.exit()
+for h, tag in zip(d["hosts"], tags):
     v = h.get("version_id", "?")
-    tag = h["tag"]
     if h.get("error"):
         print("%s\t分析-%s\t不通過\t%s" % (v, tag, h["error"])); continue
     e = h.get("engine_check")
@@ -202,5 +205,5 @@ fi
 } > "$OUT/RESULTS.md"
 cat "$OUT/RESULTS.md"
 echo
-[ -f "$OUT/report/report.html" ] && echo "報告：$OUT/report/report.html（用瀏覽器打開）"
+R=$(ls "$OUT"/report/report-*.html 2>/dev/null | head -1); [ -n "$R" ] && echo "報告：$R（用瀏覽器打開）"
 echo "測試機都保留著，可以直接重跑；要刪除請執行：tests/lxd-quicktest.sh --cleanup"
